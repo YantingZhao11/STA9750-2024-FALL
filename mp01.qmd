@@ -1,3 +1,43 @@
 ---
 title: "Mini-Project #01 Yanting Zhao"
 ---
+
+# Load necessary libraries
+if(!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
+library(readxl)
+
+# Fare revenue file path
+fare_revenue_file <- "C:\\Users\\w3038\\Downloads\\2022_fare_revenue.xlsx"
+
+# Load fare revenue data
+FARES <- readxl::read_xlsx(fare_revenue_file) |>
+    select(-`State/Parent NTD ID`, 
+           -`Reporter Type`,
+           -`Reporting Module`,
+           -`TOS`,
+           -`Passenger Paid Fares`,
+           -`Organization Paid Fares`) |>
+    filter(`Expense Type` == "Funds Earned During Period") |>
+    select(-`Expense Type`)
+
+# Expenses file path
+expenses_file <- "C:\\Users\\w3038\\Downloads\\2022_expenses.csv"
+
+# Load expenses data
+EXPENSES <- readr::read_csv(expenses_file) |>
+    select(`NTD ID`, 
+           `Agency`,
+           `Total`, 
+           `Mode`) |>
+    mutate(`NTD ID` = as.integer(`NTD ID`)) |>
+    rename(Expenses = Total) |>
+    group_by(`NTD ID`, `Mode`) |>
+    summarize(Expenses = sum(Expenses)) |>
+    ungroup()
+
+# Join fares and expenses data
+FINANCIALS <- inner_join(FARES, EXPENSES, by = c("NTD ID", "Mode"))
+
+# View the result
+print(FINANCIALS)

@@ -114,8 +114,36 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="load-necessary-libraries" class="level1">
+<h1>Load necessary libraries</h1>
+<p>if(!require(“tidyverse”)) install.packages(“tidyverse”) library(tidyverse) library(readxl)</p>
+</section>
+<section id="fare-revenue-file-path" class="level1">
+<h1>Fare revenue file path</h1>
+<p>fare_revenue_file &lt;- “C:\Users\w3038\Downloads\2022_fare_revenue.xlsx”</p>
+</section>
+<section id="load-fare-revenue-data" class="level1">
+<h1>Load fare revenue data</h1>
+<p>FARES &lt;- readxl::read_xlsx(fare_revenue_file) |&gt; select(-<code>State/Parent NTD ID</code>, -<code>Reporter Type</code>, -<code>Reporting Module</code>, -<code>TOS</code>, -<code>Passenger Paid Fares</code>, -<code>Organization Paid Fares</code>) |&gt; filter(<code>Expense Type</code> == “Funds Earned During Period”) |&gt; select(-<code>Expense Type</code>)</p>
+</section>
+<section id="expenses-file-path" class="level1">
+<h1>Expenses file path</h1>
+<p>expenses_file &lt;- “C:\Users\w3038\Downloads\2022_expenses.csv”</p>
+</section>
+<section id="load-expenses-data" class="level1">
+<h1>Load expenses data</h1>
+<p>EXPENSES &lt;- readr::read_csv(expenses_file) |&gt; select(<code>NTD ID</code>, <code>Agency</code>, <code>Total</code>, <code>Mode</code>) |&gt; mutate(<code>NTD ID</code> = as.integer(<code>NTD ID</code>)) |&gt; rename(Expenses = Total) |&gt; group_by(<code>NTD ID</code>, <code>Mode</code>) |&gt; summarize(Expenses = sum(Expenses)) |&gt; ungroup()</p>
+</section>
+<section id="join-fares-and-expenses-data" class="level1">
+<h1>Join fares and expenses data</h1>
+<p>FINANCIALS &lt;- inner_join(FARES, EXPENSES, by = c(“NTD ID”, “Mode”))</p>
+</section>
+<section id="view-the-result" class="level1">
+<h1>View the result</h1>
+<p>print(FINANCIALS)</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
