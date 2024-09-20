@@ -2,6 +2,7 @@
 title: "Mini-Project #01 Yanting Zhao"
 ---
 
+```{r, echo=TRUE, message=FALSE}
 # Load necessary libraries
 if(!require("tidyverse")) install.packages("tidyverse")
 library(tidyverse)
@@ -38,7 +39,9 @@ EXPENSES <- readr::read_csv(expenses_file) |>
 
 # Join fares and expenses data
 FINANCIALS <- inner_join(FARES, EXPENSES, by = c("NTD ID", "Mode"))
+```
 
+```{r, echo=TRUE, message=FALSE}
 # Monthly Transit Numbers
 library(tidyverse)
 
@@ -77,14 +80,16 @@ MILES <- readxl::read_xlsx(ridership_file, sheet="VRM") |>
     mutate(month = my(month))  # Parse month-year date specs using lubridate
 
 # Join Trips and Miles data
-USAGE <- inner_join(TRIPS, MILES, by = c("NTD ID", "Agency", "UZA Name", "Mode", "3 Mode", "month")) |>
-    mutate(`NTD ID` = as.integer(`NTD ID`))
+USAGE <- inner_join(TRIPS, MILES) %>%
+  mutate(`NTD ID` = as.integer(`NTD ID`))
+```
 
+```{r message=FALSE}
 if(!require("DT")) install.packages("DT")
 library(DT)
 
 sample_n(USAGE, 1000) |> 
     mutate(month=as.character(month)) |> 
     DT::datatable()
-
+```
 
