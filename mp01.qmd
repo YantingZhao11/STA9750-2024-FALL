@@ -2,6 +2,7 @@
 title: "Mini-Project #01 Yanting Zhao"
 ---
 
+```{r echo=FALSE}
 # Load necessary libraries
 if(!require("tidyverse")) install.packages("tidyverse")
 library(tidyverse)
@@ -88,3 +89,4 @@ sample_n(USAGE, 1000) |>
     mutate(month=as.character(month)) |> 
     DT::datatable()
 
+```
