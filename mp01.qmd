@@ -1,7 +1,6 @@
 ---
 title: "Mini-Project #01 Yanting Zhao"
 ---
-
 ```{r echo=FALSE}
 # Load necessary libraries
 if(!require("tidyverse")) install.packages("tidyverse")
@@ -77,9 +76,25 @@ MILES <- readxl::read_xlsx(ridership_file, sheet="VRM") |>
     ungroup() |>
     mutate(month = my(month))  # Parse month-year date specs using lubridate
 
+unique_modes <- USAGE |> 
+  distinct(`Mode`)
+
 # Join Trips and Miles data
-USAGE <- inner_join(TRIPS, MILES) %>%
-  mutate(`NTD ID` = as.integer(`NTD ID`))
+USAGE <- inner_join(TRIPS, MILES, by = c("NTD ID", "Agency", "UZA Name", "Mode", "3 Mode", "month")) |>
+  mutate(`NTD ID` = as.integer(`NTD ID`)) |>
+  rename(metro_area = 'UZA Name') |>  #task1
+  mutate(`Mode` = case_when(
+        `Mode` == "HR" ~ "Heavy Rail", 
+        `Mode` == "LR" ~ "Light Rail",
+        `Mode` == "MB" ~ "Motorbus",
+        `Mode` == "TB" ~ "Trolleybus",
+        `Mode` == "CR" ~ "Commuter Rail",
+        `Mode` == "DR" ~ "Demand Response",
+        TRUE ~ "Unknown"
+    )) #task2
+
+# Check the first few rows to ensure it worked correctly
+head(USAGE)
 
 
 if(!require("DT")) install.packages("DT")
@@ -89,4 +104,20 @@ sample_n(USAGE, 1000) |>
     mutate(month=as.character(month)) |> 
     DT::datatable()
 
+#3.1What transit agency had the most total VRM in this sample?
+USAGE %>%
+  drop_na() %>%
+  group_by(Agency) %>%
+  summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
+  arrange(desc(total_VRM))%>%
+  slice(1)
+
+#3.2What transit mode had the most total VRM in this sample?
+USAGE %>%
+  drop_na() %>%
+  group_by(Mode) %>%
+  summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
+  arrange(desc(total_VRM))%>%
+  slice(1)
 ```
+
