@@ -39,5 +39,52 @@ EXPENSES <- readr::read_csv(expenses_file) |>
 # Join fares and expenses data
 FINANCIALS <- inner_join(FARES, EXPENSES, by = c("NTD ID", "Mode"))
 
-# View the result
-print(FINANCIALS)
+# Monthly Transit Numbers
+library(tidyverse)
+
+# Expenses file path
+ridership_file <- "C:\\Users\\w3038\\Downloads\\ridership.xlsx"
+
+# Load Trips data (UPT)
+TRIPS <- readxl::read_xlsx(ridership_file, sheet="UPT") |>
+    filter(`Mode/Type of Service Status` == "Active") |>
+    select(-`Legacy NTD ID`, 
+           -`Reporter Type`, 
+           -`Mode/Type of Service Status`, 
+           -`UACE CD`, 
+           -`TOS`) |>
+    pivot_longer(-c(`NTD ID`:`3 Mode`), 
+                 names_to="month", 
+                 values_to="UPT") |>
+    drop_na() |>
+    mutate(month = my(month))  # Parse month-year date specs using lubridate
+
+# Load Miles data (VRM)
+MILES <- readxl::read_xlsx(ridership_file, sheet="VRM") |>
+    filter(`Mode/Type of Service Status` == "Active") |>
+    select(-`Legacy NTD ID`, 
+           -`Reporter Type`, 
+           -`Mode/Type of Service Status`, 
+           -`UACE CD`, 
+           -`TOS`) |>
+    pivot_longer(-c(`NTD ID`:`3 Mode`), 
+                 names_to="month", 
+                 values_to="VRM") |>
+    drop_na() |>
+    group_by(`NTD ID`, `Agency`, `UZA Name`, `Mode`, `3 Mode`, month) |>
+    summarize(VRM = sum(VRM)) |>
+    ungroup() |>
+    mutate(month = my(month))  # Parse month-year date specs using lubridate
+
+# Join Trips and Miles data
+USAGE <- inner_join(TRIPS, MILES, by = c("NTD ID", "Agency", "UZA Name", "Mode", "3 Mode", "month")) |>
+    mutate(`NTD ID` = as.integer(`NTD ID`))
+
+if(!require("DT")) install.packages("DT")
+library(DT)
+
+sample_n(USAGE, 1000) |> 
+    mutate(month=as.character(month)) |> 
+    DT::datatable()
+
+
