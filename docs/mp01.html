@@ -138,9 +138,27 @@ ul.task-list li input[type="checkbox"] {
 <h1>Join fares and expenses data</h1>
 <p>FINANCIALS &lt;- inner_join(FARES, EXPENSES, by = c(“NTD ID”, “Mode”))</p>
 </section>
-<section id="view-the-result" class="level1">
-<h1>View the result</h1>
-<p>print(FINANCIALS)</p>
+<section id="monthly-transit-numbers" class="level1">
+<h1>Monthly Transit Numbers</h1>
+<p>library(tidyverse)</p>
+</section>
+<section id="expenses-file-path-1" class="level1">
+<h1>Expenses file path</h1>
+<p>ridership_file &lt;- “C:\Users\w3038\Downloads\ridership.xlsx”</p>
+</section>
+<section id="load-trips-data-upt" class="level1">
+<h1>Load Trips data (UPT)</h1>
+<p>TRIPS &lt;- readxl::read_xlsx(ridership_file, sheet=“UPT”) |&gt; filter(<code>Mode/Type of Service Status</code> == “Active”) |&gt; select(-<code>Legacy NTD ID</code>, -<code>Reporter Type</code>, -<code>Mode/Type of Service Status</code>, -<code>UACE CD</code>, -<code>TOS</code>) |&gt; pivot_longer(-c(<code>NTD ID</code>:<code>3 Mode</code>), names_to=“month”, values_to=“UPT”) |&gt; drop_na() |&gt; mutate(month = my(month)) # Parse month-year date specs using lubridate</p>
+</section>
+<section id="load-miles-data-vrm" class="level1">
+<h1>Load Miles data (VRM)</h1>
+<p>MILES &lt;- readxl::read_xlsx(ridership_file, sheet=“VRM”) |&gt; filter(<code>Mode/Type of Service Status</code> == “Active”) |&gt; select(-<code>Legacy NTD ID</code>, -<code>Reporter Type</code>, -<code>Mode/Type of Service Status</code>, -<code>UACE CD</code>, -<code>TOS</code>) |&gt; pivot_longer(-c(<code>NTD ID</code>:<code>3 Mode</code>), names_to=“month”, values_to=“VRM”) |&gt; drop_na() |&gt; group_by(<code>NTD ID</code>, <code>Agency</code>, <code>UZA Name</code>, <code>Mode</code>, <code>3 Mode</code>, month) |&gt; summarize(VRM = sum(VRM)) |&gt; ungroup() |&gt; mutate(month = my(month)) # Parse month-year date specs using lubridate</p>
+</section>
+<section id="join-trips-and-miles-data" class="level1">
+<h1>Join Trips and Miles data</h1>
+<p>USAGE &lt;- inner_join(TRIPS, MILES, by = c(“NTD ID”, “Agency”, “UZA Name”, “Mode”, “3 Mode”, “month”)) |&gt; mutate(<code>NTD ID</code> = as.integer(<code>NTD ID</code>))</p>
+<p>if(!require(“DT”)) install.packages(“DT”) library(DT)</p>
+<p>sample_n(USAGE, 1000) |&gt; mutate(month=as.character(month)) |&gt; DT::datatable()</p>
 
 
 </section>
