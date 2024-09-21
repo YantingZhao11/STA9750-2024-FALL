@@ -37,7 +37,17 @@ EXPENSES <- readr::read_csv(expenses_file) |>
     ungroup()
 
 # Join fares and expenses data
-FINANCIALS <- inner_join(FARES, EXPENSES, by = c("NTD ID", "Mode"))
+FINANCIALS <- inner_join(FARES, EXPENSES, by = c("NTD ID", "Mode"))|>
+   mutate(`Mode` = case_when(
+        `Mode` == "HR" ~ "Heavy Rail", 
+        `Mode` == "LR" ~ "Light Rail",
+        `Mode` == "MB" ~ "Motorbus",
+        `Mode` == "TB" ~ "Trolleybus",
+        `Mode` == "CR" ~ "Commuter Rail",
+        `Mode` == "DR" ~ "Demand Response",
+        TRUE ~ "Unknown"
+    ))
+
 
 # Monthly Transit Numbers
 library(tidyverse)
@@ -104,6 +114,92 @@ sample_n(USAGE, 1000) |>
     mutate(month=as.character(month)) |> 
     DT::datatable()
 
+#3.1What transit agency had the most total VRM in this sample?
+USAGE %>%
+  drop_na() %>%
+  group_by(Agency) %>%
+  summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
+  arrange(desc(total_VRM))%>%
+  slice(1)
+
+#3.2What transit mode had the most total VRM in this sample?
+USAGE %>%
+  drop_na() %>%
+  group_by(Mode) %>%
+  summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
+  arrange(desc(total_VRM))%>%
+  slice(1)
+
+#3.3How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?
+
+library(lubridate)  # Ensure lubridate is loaded for date parsing
+
+# Filter for Heavy Rail in NYC for May 2024
+NYC_Subway_trip_may_24 <- USAGE %>%
+  mutate(month = format(ymd(month), "%Y-%m")) %>%  # Convert to yyyy-mm format
+  filter(Mode == "Heavy Rail", 
+         metro_area == "New York, NY",  # Ensure it's NYC Subway
+         month == "2024-05") %>%  # Filter for May 2024
+  summarize(total_trip = sum(UPT, na.rm = TRUE))  # Sum the trips (UPT)
+
+NYC_Subway_trip_may_24
+
+#3.4What mode of transport had the longest average trip in May 2024?
+longest_avg_trip <- USAGE %>%
+  group_by(Mode) %>%
+  summarize(total_VRM = sum(VRM, na.rm = TRUE), 
+            total_UPT = sum(UPT, na.rm = TRUE)) %>%  
+  mutate(avg_trip_length = total_VRM / total_UPT) %>%  
+  arrange(desc(avg_trip_length)) %>%  
+  slice(1)  
+
+longest_avg_trip
+
+#3.5How much did NYC subway ridership fall between April 2019 and April 2020?
+
+#4Find three more interesting transit facts in this data other than those above.
+#4.1 What transit agency had the least total VRM in this sample?
+USAGE %>%
+  drop_na() %>%
+  group_by(Agency) %>%
+  summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
+  arrange(total_VRM)%>%
+  slice(1)
+
+#4.2What transit mode had the least total VRM in this sample?
+USAGE %>%
+  drop_na() %>%
+  group_by(Mode) %>%
+  summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
+  arrange(total_VRM)%>%
+  slice(1)
+
+#4.3What transit agency had the least total UPT in this sample?
+USAGE %>%
+  drop_na() %>%
+  group_by(Agency) %>%
+  summarize(total_UPT = sum(UPT, na.rm=TRUE)) %>%
+  arrange(total_UPT)%>%
+  slice(1)
+
+#5
+USAGE_2022_ANNUAL <- USAGE %>%
+  filter(year(month) == 2022) %>%             # Filter for the year 2022
+  group_by(`NTD ID`, Agency, metro_area, Mode) %>%
+  summarize(UPT = sum(UPT, na.rm = TRUE),   
+            VRM = sum(VRM, na.rm = TRUE), .groups = 'drop') %>%  
+  ungroup()  # Ungroup the data after summarizing
+
+# View the result
+USAGE_2022_ANNUAL
+
+#merge table together
+USAGE_AND_FINANCIALS <- left_join(USAGE_2022_ANNUAL, 
+           FINANCIALS, 
+           join_by(`NTD ID`, Mode)) |>
+    drop_na()
+
+USAGE_AND_FINANCIALS
 
 ```
 
