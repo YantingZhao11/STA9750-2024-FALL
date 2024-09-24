@@ -1,11 +1,54 @@
 ---
-title: "Mini-Project #01 Yanting Zhao"
+title: "Transit System Analysis Report"
 ---
+
+This project focuses on analyzing farebox recovery, the fraction of transit revenue generated from fares, using data from the National Transit Database (NTD). The analysis examines key metrics, including farebox revenues, operating expenses, ridership (total number of trips), and vehicle miles traveled (VMT). Given the disruptions caused by the COVID-19 pandemic, the data reflects some post-pandemic irregularities. For consistency, we utilize 2022 data across all categories, recognizing the lag in reporting. The goal is not to make long-term forecasts but to gain insights into the performance and financial sustainability of various transit agencies.\
+
+
+## Total Vehicle Revenue Miles (VRM) by Transit Agency
+In this sample, the transit agency with the most total Vehicle Revenue Miles (VRM) was the Aerial Tramway service, which reported a total of 292,860 VRM. This highlights the prominence of this specific agency in terms of operational miles.\
+
+## Total Vehicle Revenue Miles (VRM) by Transit Mode
+When analyzing the data by transit mode, the Motorbus mode had the most significant operational miles, with a total of 49,444,494,088 VRM. This indicates that Motorbuses are the most utilized form of transportation in terms of distance covered.\
+
+## NYC Subway Ridership in May 2024
+For the month of May 2024, a total of 180,458,819 trips were taken on the New York City Subway (Heavy Rail). This figure represents the scale of ridership in one of the largest transit systems in the U.S. during that period.\
+
+## Longest Average Trip in May 2024
+Demand Response, a transit mode typically serving passengers with disabilities or special needs, recorded the longest average trip length in May 2024. The total VRM for Demand Response was 103,661,593 miles, and the total Unlinked Passenger Trips (UPT) were 8,053,723, resulting in an average trip length of 12.87 miles per trip.\
+
+## NYC Subway Ridership Decline from April 2019 to April 2020
+During the COVID-19 pandemic, NYC subway ridership fell dramatically between April 2019 and April 2020. The decline in total UPT was 261,525,797 trips, showcasing the severe impact of the pandemic on public transit systems.\
+
+## Additional Transit Insights
+* Agency with the Least Total VRM: The Barnegat Bay Decoy & Baymen's Museum had the least total VRM in this sample, reporting only 2,312 VRM. This suggests minimal operational activity for this agency.
+
+* Mode with the Least Total VRM: The Aerial Tramway mode had the least VRM among transit modes, with a total of 292,860 VRM, highlighting its smaller operational footprint compared to other modes.
+
+* Agency with the Least Total UPT: Enterprise Holdings, LLC had the fewest total Unlinked Passenger Trips, with only 858 trips in the dataset. This reflects the lower passenger activity of this particular agency.
+
+
 ```{r echo=FALSE, message=FALSE}
 # Load necessary libraries
-if(!require("tidyverse")) install.packages("tidyverse")
-library(tidyverse)
-library(readxl)
+suppressWarnings({
+  # Load required packages
+  if(!require("tidyverse")) install.packages("tidyverse")
+  library(tidyverse)
+
+  if(!require("knitr")) install.packages("knitr")
+  if(!require("kableExtra")) install.packages("kableExtra")
+  library(knitr)
+  library(kableExtra)
+
+  if(!require("lubridate")) install.packages("lubridate")
+  library(lubridate)
+
+  if(!require("readxl")) install.packages("readxl")
+  library(readxl)
+  
+  if(!require("DT")) install.packages("DT")
+library(DT)
+})
 
 # Fare revenue file path
 fare_revenue_file <- "C:\\Users\\w3038\\Downloads\\2022_fare_revenue.xlsx"
@@ -38,19 +81,29 @@ EXPENSES <- readr::read_csv(expenses_file) |>
 
 # Join fares and expenses data
 FINANCIALS <- inner_join(FARES, EXPENSES, by = c("NTD ID", "Mode"))|>
-   mutate(`Mode` = case_when(
-        `Mode` == "HR" ~ "Heavy Rail", 
-        `Mode` == "LR" ~ "Light Rail",
-        `Mode` == "MB" ~ "Motorbus",
-        `Mode` == "TB" ~ "Trolleybus",
-        `Mode` == "CR" ~ "Commuter Rail",
-        `Mode` == "DR" ~ "Demand Response",
-        TRUE ~ "Unknown"
-    ))
+  mutate(`Mode` = case_when(
+    `Mode` == "DR" ~ "Demand Response",
+    `Mode` == "MB" ~ "Motorbus",
+    `Mode` == "CR" ~ "Commuter Rail",
+    `Mode` == "CC" ~ "Cable Car",
+    `Mode` == "LR" ~ "Light Rail",
+    `Mode` == "PB" ~ "Publico",
+    `Mode` == "SR" ~ "Streetcar Rail",
+    `Mode` == "VP" ~ "Vanpool",
+    `Mode` == "CB" ~ "Commuter Bus",
+    `Mode` == "TB" ~ "Trolleybus",
+    `Mode` == "FB" ~ "Ferryboat",
+    `Mode` == "TR" ~ "Aerial Tramway",
+    `Mode` == "HR" ~ "Heavy Rail",
+    `Mode` == "MG" ~ "Monorail/Automated Guideway",
+    `Mode` == "RB" ~ "Bus Rapid Transit",
+    `Mode` == "OR" ~ "Other Rail",
+    `Mode` == "YR" ~ "Hybrid Rail",
+    `Mode` == "AR" ~ "Alaska Railroad",
+    `Mode` == "IP" ~ "Inclined Plane",
+    TRUE ~ "Unknown"
+  ))
 
-
-# Monthly Transit Numbers
-library(tidyverse)
 
 # Expenses file path
 ridership_file <- "C:\\Users\\w3038\\Downloads\\ridership.xlsx"
@@ -91,12 +144,25 @@ USAGE <- inner_join(TRIPS, MILES, by = c("NTD ID", "Agency", "UZA Name", "Mode",
   mutate(`NTD ID` = as.integer(`NTD ID`)) |>
   rename(metro_area = 'UZA Name') |>  #task1
   mutate(`Mode` = case_when(
-        `Mode` == "HR" ~ "Heavy Rail", 
-        `Mode` == "LR" ~ "Light Rail",
-        `Mode` == "MB" ~ "Motorbus",
-        `Mode` == "TB" ~ "Trolleybus",
-        `Mode` == "CR" ~ "Commuter Rail",
         `Mode` == "DR" ~ "Demand Response",
+        `Mode` == "MB" ~ "Motorbus",
+        `Mode` == "CR" ~ "Commuter Rail",
+        `Mode` == "CC" ~ "Cable Car",
+        `Mode` == "LR" ~ "Light Rail",
+        `Mode` == "PB" ~ "Publico",
+        `Mode` == "SR" ~ "Streetcar Rail",
+        `Mode` == "VP" ~ "Vanpool",
+        `Mode` == "CB" ~ "Commuter Bus",
+        `Mode` == "TB" ~ "Trolleybus",
+        `Mode` == "FB" ~ "Ferryboat",
+        `Mode` == "TR" ~ "Aerial Tramway",
+        `Mode` == "HR" ~ "Heavy Rail",
+        `Mode` == "MG" ~ "Monorail/Automated Guideway",
+        `Mode` == "RB" ~ "Bus Rapid Transit",
+        `Mode` == "OR" ~ "Other Rail",
+        `Mode` == "YR" ~ "Hybrid Rail",
+        `Mode` == "AR" ~ "Alaska Railroad",
+        `Mode` == "IP" ~ "Inclined Plane",
         TRUE ~ "Unknown"
     )) #task2
 
@@ -105,10 +171,6 @@ unique_modes <- USAGE |>
 
 # Check the first few rows to ensure it worked correctly
 head(USAGE)
-
-
-if(!require("DT")) install.packages("DT")
-library(DT)
 
 sample_n(USAGE, 1000) |> 
     mutate(month=as.character(month)) |> 
@@ -132,30 +194,44 @@ USAGE %>%
 
 #3.3How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?
 
-library(lubridate)  # Ensure lubridate is loaded for date parsing
-
 # Filter for Heavy Rail in NYC for May 2024
 NYC_Subway_trip_may_24 <- USAGE %>%
-  mutate(month = format(ymd(month), "%Y-%m")) %>%  # Convert to yyyy-mm format
+  mutate(month = format(ymd(month), "%Y-%m")) %>% 
   filter(Mode == "Heavy Rail", 
-         metro_area == "New York, NY",  # Ensure it's NYC Subway
+         Agency == "MTA New York City Transit",  # Ensure it's NYC Subway
          month == "2024-05") %>%  # Filter for May 2024
   summarize(total_trip = sum(UPT, na.rm = TRUE))  # Sum the trips (UPT)
 
 NYC_Subway_trip_may_24
 
 #3.4What mode of transport had the longest average trip in May 2024?
-longest_avg_trip <- USAGE %>%
+longest_avg_trip_may_24 <- USAGE %>%
+  mutate(month = format(ymd(month), "%Y-%m")) %>%  
+  filter(month == "2024-05") %>%  # Filter for May 2024
   group_by(Mode) %>%
-  summarize(total_VRM = sum(VRM, na.rm = TRUE), 
-            total_UPT = sum(UPT, na.rm = TRUE)) %>%  
-  mutate(avg_trip_length = total_VRM / total_UPT) %>%  
-  arrange(desc(avg_trip_length)) %>%  
-  slice(1)  
+  summarize(total_VRM = sum(VRM, na.rm = TRUE),  # Total Vehicle Revenue Miles
+            total_UPT = sum(UPT, na.rm = TRUE)) %>%  # Total Unlinked Passenger Trips
+  mutate(avg_trip_length = total_VRM / total_UPT) %>%  # Calculate average trip length
+  arrange(desc(avg_trip_length)) %>%
+  slice(1)
 
-longest_avg_trip
+# View the result
+longest_avg_trip_may_24
 
 #3.5How much did NYC subway ridership fall between April 2019 and April 2020?
+nyc_ridership_fall <- USAGE %>%
+  mutate(month = format(ymd(month), "%Y-%m")) %>%  
+  filter(Agency == "MTA New York City Transit", 
+         month %in% c("2019-04", "2020-04")) %>%  
+  group_by(month) %>%
+  summarize(total_UPT = sum(UPT, na.rm = TRUE)) %>%
+  arrange(month)
+
+ridership_fall <- nyc_ridership_fall %>%
+  summarize(fall = total_UPT[month == "2019-04"] - total_UPT[month == "2020-04"])
+
+ridership_fall
+
 
 #4Find three more interesting transit facts in this data other than those above.
 #4.1 What transit agency had the least total VRM in this sample?
@@ -201,5 +277,58 @@ USAGE_AND_FINANCIALS <- left_join(USAGE_2022_ANNUAL,
 
 USAGE_AND_FINANCIALS
 
+#6.1Which transit system (agency and mode) had the most UPT in 2022?
+most_UPT_2022 <- USAGE_AND_FINANCIALS %>%
+  arrange(desc(UPT)) %>%  
+  slice_max(UPT, n = 1)   
+
+most_UPT_2022
+
+#6.2Which transit system (agency and mode) had the highest farebox recovery, defined as the highest ratio of Total Fares to Expenses?
+# Calculate farebox recovery and find the transit system with the highest ratio
+highest_farebox_recovery <- USAGE_AND_FINANCIALS %>%
+  mutate(farebox_recovery = `Total Fares` / Expenses) %>% 
+  arrange(desc(farebox_recovery)) %>%  
+  slice_max(farebox_recovery, n = 1)
+
+highest_farebox_recovery
+
+#6.3Which transit system (agency and mode) has the lowest expenses per UPT?
+lowest_expenses_per_UPT <- USAGE_AND_FINANCIALS %>%
+  mutate(expenses_per_UPT = Expenses / UPT) %>%  # 
+  arrange(expenses_per_UPT) %>%  
+  slice_min(expenses_per_UPT, n = 1) 
+
+lowest_expenses_per_UPT
+
+#6.4Which transit system (agency and mode) has the highest total fares per UPT?
+highest_fares_per_UPT <- USAGE_AND_FINANCIALS %>%
+  mutate(fares_per_UPT = `Total Fares` / UPT)  %>%  
+  arrange(desc(fares_per_UPT)) %>%  
+  slice_max(fares_per_UPT, n = 1) 
+
+highest_fares_per_UPT
+
+#6.5Which transit system (agency and mode) has the lowest expenses per VRM?
+lowest_expense_per_VRM <- USAGE_AND_FINANCIALS %>%
+  mutate(expense_per_VRM = Expenses / VRM)  %>%  
+  arrange(expense_per_VRM) %>%  
+  slice_min(expense_per_VRM, n = 1) 
+
+lowest_expense_per_VRM
+
+#6.6Which transit system (agency and mode) has the highest total fares per VRM?
+
+
+# Calculate fares_per_VRM and display the table with borders and caption
+USAGE_AND_FINANCIALS %>%
+  mutate(fares_per_VRM = `Total Fares` / VRM) %>%  # Calculate fares per VRM
+  arrange(desc(fares_per_VRM)) %>%  # Arrange in descending order
+  slice_max(fares_per_VRM, n = 1) %>%  # Get the top 1 row
+  select(Mode, UPT, VRM, `Agency Name`, `Total Fares`, Expenses, fares_per_VRM) %>%  # Select relevant columns
+  kable(caption = "Highest Total Fares per VRM") %>%  # Add a caption as the headline
+  kable_styling(full_width = FALSE, position = "center", bootstrap_options = c("striped", "hover")) %>%  # Add styling
+  add_header_above(c(" " = 4, "Financials" = 3)) %>%  # Adjust header grouping (4 general, 3 financial columns)
+  column_spec(1:7, border_left = TRUE, border_right = TRUE)  
 ```
 
