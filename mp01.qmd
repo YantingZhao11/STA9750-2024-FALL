@@ -6,7 +6,7 @@ This project focuses on analyzing farebox recovery, the fraction of transit reve
 
 
 ## Total Vehicle Revenue Miles (VRM) by Transit Agency
-In this sample, the transit agency with the most total Vehicle Revenue Miles (VRM) was the Aerial Tramway service, which reported a total of 292,860 VRM. This highlights the prominence of this specific agency in terms of operational miles.\
+In this sample, the transit agency with the most total Vehicle Revenue Miles (VRM) was MTA New York City Transit, which reported a total of 10,832,855,350 VRM. This highlights the immense scale of operations for New York City's transit system, reflecting its critical role in serving one of the largest metropolitan areas in the United States.\
 
 ## Total Vehicle Revenue Miles (VRM) by Transit Mode
 When analyzing the data by transit mode, the Motorbus mode had the most significant operational miles, with a total of 49,444,494,088 VRM. This indicates that Motorbuses are the most utilized form of transportation in terms of distance covered.\
@@ -32,9 +32,9 @@ Several key questions were addressed using this enriched dataset:
 
 1. **Most UPT in 2022**: The New York City Subway (Heavy Rail) operated by the MTA had the highest UPT in 2022, with an impressive 1.79 billion trips. The system also reported 338 million VRM and collected over $2.32 billion in fares, making it the largest transit system by ridership.
 
-2. **Highest Farebox Recovery Ratio**: The Transit Authority in Elizabeth, NJ (Vanpool) achieved the highest farebox recovery rate, defined by the highest ratio of total fares to expenses. Despite its small size, with 9,640 UPT and 94,027 VRM, it collected $97,300 in fares, demonstrating efficient cost recovery.
+2. **Highest Farebox Recovery Ratio**: The Transit Authority of Central Kentucky in the Elizabethtown–Radcliff, KY metro area achieved the highest farebox recovery ratio. Operating in the Vanpool mode, it reported 9,640 UPT and 94,027 VRM, collecting $97,300 in total fares. With operating expenses of $40,801, the agency achieved a farebox recovery ratio of 2.38, demonstrating highly efficient cost recovery despite its smaller operational scale.
 
-3. **Lowest Expenses per UPT**: The North Carolina Motorbus system, based in Raleigh, had the lowest expenses per UPT. With 2.31 million UPT and 531,555 VRM, it operated at low costs, although it reported zero fares, reflecting heavy subsidy reliance or a fare-free model.
+3. **Lowest Expenses per UPT**: The North Carolina State University Motorbus system, based in Raleigh, NC, had the lowest expenses per UPT among motorbus services. With 2.31 million UPT and 531,555 VRM, it operated at low costs, reporting $2,727,412 in total expenses and zero fares, likely reflecting a fare-free model or heavy subsidy reliance. The motorbus system achieved an expense per UPT ratio of $1.18, highlighting its cost-effective operation despite not generating revenue from fares.
 
 4. **Highest Fares per UPT**: The Altoona Metro Transit (Demand Response) in Altoona, PA, had the highest total fares per UPT, despite its very small scale. With just 26 trips, it managed to collect $17,058 in fares, indicating a significant fare collection per passenger trip.
 
@@ -203,8 +203,10 @@ head(USAGE)
 sample_n(USAGE, 1000) |> 
     mutate(month=as.character(month)) |> 
     DT::datatable()
+```
 
-cat("3.1What transit agency had the most total VRM in this sample?\n")
+3.1) What transit agency had the most total VRM in this sample?
+```{r}
 #3.1What transit agency had the most total VRM in this sample?
 USAGE %>%
   drop_na() %>%
@@ -212,8 +214,10 @@ USAGE %>%
   summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
   arrange(desc(total_VRM))%>%
   slice(1)
+```
 
-cat("3.2What transit mode had the most total VRM in this sample?\n")
+3.2)What transit mode had the most total VRM in this sample?
+```{r}
 #3.2What transit mode had the most total VRM in this sample?
 USAGE %>%
   drop_na() %>%
@@ -221,9 +225,10 @@ USAGE %>%
   summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
   arrange(desc(total_VRM))%>%
   slice(1)
+```
 
-
-cat("3.3How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?\n")
+3.3)How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?
+```{r}
 #3.3How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?
 
 # Filter for Heavy Rail in NYC for May 2024
@@ -235,8 +240,11 @@ NYC_Subway_trip_may_24 <- USAGE %>%
   summarize(total_trip = sum(UPT, na.rm = TRUE)) 
 
 NYC_Subway_trip_may_24
+```
 
-cat("3.5How much did NYC subway ridership fall between April 2019 and April 2020?\n")
+3.5)How much did NYC subway ridership fall between April 2019 and April 2020?
+
+```{r}
 #3.5How much did NYC subway ridership fall between April 2019 and April 2020?
 nyc_ridership_fall <- USAGE %>%
   mutate(month = format(ymd(month), "%Y-%m")) %>%  
@@ -250,8 +258,10 @@ ridership_fall <- nyc_ridership_fall %>%
   summarize(fall = total_UPT[month == "2019-04"] - total_UPT[month == "2020-04"])
 
 ridership_fall
+```
 
-cat("4.1 What transit agency had the least total VRM in this sample?\n")
+4.1) What transit agency had the least total VRM in this sample?
+```{r}
 #4Find three more interesting transit facts in this data other than those above.
 #4.1 What transit agency had the least total VRM in this sample?
 USAGE %>%
@@ -260,8 +270,11 @@ USAGE %>%
   summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
   arrange(total_VRM)%>%
   slice(1)
+```
 
-cat("4.2What transit mode had the least total VRM in this sample?\n")
+4.2)What transit mode had the least total VRM in this sample?
+
+```{r}
 #4.2What transit mode had the least total VRM in this sample?
 USAGE %>%
   drop_na() %>%
@@ -269,8 +282,11 @@ USAGE %>%
   summarize(total_VRM = sum(VRM, na.rm=TRUE)) %>%
   arrange(total_VRM)%>%
   slice(1)
+```
 
-cat("4.3What transit agency had the least total UPT in this sample?\n")
+4.3)What transit agency had the least total UPT in this sample?
+
+```{r}
 #4.3What transit agency had the least total UPT in this sample?
 USAGE %>%
   drop_na() %>%
@@ -278,8 +294,11 @@ USAGE %>%
   summarize(total_UPT = sum(UPT, na.rm=TRUE)) %>%
   arrange(total_UPT)%>%
   slice(1)
+```
 
-cat("Usage 2022 Annual:\n")
+5)Usage 2022 Annual:
+
+```{r}
 #5
 USAGE_2022_ANNUAL <- USAGE %>%
   filter(year(month) == 2022) %>%            
@@ -290,8 +309,11 @@ USAGE_2022_ANNUAL <- USAGE %>%
 
 # View the result
 USAGE_2022_ANNUAL
+```
 
-cat("Usage and Financials: \n")
+Usage and Financials:
+
+```{r}
 #merge table together
 USAGE_AND_FINANCIALS <- left_join(USAGE_2022_ANNUAL, 
            FINANCIALS, 
@@ -300,25 +322,35 @@ USAGE_AND_FINANCIALS <- left_join(USAGE_2022_ANNUAL,
 
 USAGE_AND_FINANCIALS
 
-cat("6.1Which transit system (agency and mode) had the most UPT in 2022? \n")
+```
+
+6.1)Which transit system (agency and mode) had the most UPT in 2022? 
+
+```{r}
 #6.1Which transit system (agency and mode) had the most UPT in 2022?
 most_UPT_2022 <- USAGE_AND_FINANCIALS %>%
   arrange(desc(UPT)) %>%  
   slice_max(UPT, n = 1)   
 
 most_UPT_2022
+```
 
-cat("6.2Which transit system (agency and mode) had the highest farebox recovery, defined as the highest ratio of Total Fares to Expenses? \n")
+6.2)Which transit system (agency and mode) had the highest farebox recovery, defined as the highest ratio of Total Fares to Expenses? 
+
+```{r}
 #6.2Which transit system (agency and mode) had the highest farebox recovery, defined as the highest ratio of Total Fares to Expenses?
-# Calculate farebox recovery and find the transit system with the highest ratio
+
 highest_farebox_recovery <- USAGE_AND_FINANCIALS %>%
   mutate(farebox_recovery = `Total Fares` / Expenses) %>% 
   arrange(desc(farebox_recovery)) %>%  
   slice_max(farebox_recovery, n = 1)
 
 highest_farebox_recovery
+```
 
-cat("6.3Which transit system (agency and mode) has the lowest expenses per UPT? \n")
+6.3)Which transit system (agency and mode) has the lowest expenses per UPT?
+
+```{r}
 #6.3Which transit system (agency and mode) has the lowest expenses per UPT?
 lowest_expenses_per_UPT <- USAGE_AND_FINANCIALS %>%
   mutate(expenses_per_UPT = Expenses / UPT) %>%  # 
@@ -326,8 +358,11 @@ lowest_expenses_per_UPT <- USAGE_AND_FINANCIALS %>%
   slice_min(expenses_per_UPT, n = 1) 
 
 lowest_expenses_per_UPT
+```
 
-cat("6.4Which transit system (agency and mode) has the highest total fares per UPT? \n")
+6.4)Which transit system (agency and mode) has the highest total fares per UPT? 
+
+```{r}
 #6.4Which transit system (agency and mode) has the highest total fares per UPT?
 highest_fares_per_UPT <- USAGE_AND_FINANCIALS %>%
   mutate(fares_per_UPT = `Total Fares` / UPT)  %>%  
@@ -335,8 +370,11 @@ highest_fares_per_UPT <- USAGE_AND_FINANCIALS %>%
   slice_max(fares_per_UPT, n = 1) 
 
 highest_fares_per_UPT
+```
 
-cat("6.5Which transit system (agency and mode) has the lowest expenses per VRM? \n")
+6.5)Which transit system (agency and mode) has the lowest expenses per VRM?
+
+```{r}
 #6.5Which transit system (agency and mode) has the lowest expenses per VRM?
 lowest_expense_per_VRM <- USAGE_AND_FINANCIALS %>%
   mutate(expense_per_VRM = Expenses / VRM)  %>%  
@@ -344,8 +382,11 @@ lowest_expense_per_VRM <- USAGE_AND_FINANCIALS %>%
   slice_min(expense_per_VRM, n = 1) 
 
 lowest_expense_per_VRM
+```
 
-cat("6.6Which transit system (agency and mode) has the highest total fares per VRM? \n")
+6.6)Which transit system (agency and mode) has the highest total fares per VRM? 
+
+```{r}
 #6.6Which transit system (agency and mode) has the highest total fares per VRM?
 
 highest_fares_per_VRM <- USAGE_AND_FINANCIALS %>%
