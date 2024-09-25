@@ -13,5 +13,5 @@ website:
     
 format:
   html:
-    theme: Sandstone
+    theme: Spacelab
     toc: false
