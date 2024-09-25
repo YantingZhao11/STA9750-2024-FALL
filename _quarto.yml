@@ -13,5 +13,5 @@ website:
     
 format:
   html:
-    theme: sandstone
+    theme: Sandstone
     toc: false
