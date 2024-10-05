@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "STA 9750 2024 Submission Material"
+  title: "STA 9750 2024 Submission Material 1"
   description:
     Course Projects for STA 9750 at Baruch College
   site-url: "https://<YantingZhao11>.github.io/STA9750-2024-FALL/"
