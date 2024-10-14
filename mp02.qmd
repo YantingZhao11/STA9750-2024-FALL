@@ -8,8 +8,17 @@ title: "Report 2"
   if(!require("stringr")) install.packages("stringr")
 library(stringr)
 
+if(!require("gt")) install.packages("gt")
+library(gt)
+
   if(!require("dplyr")) install.packages("dplyr")
 library(dplyr)
+
+ if(!require("ggplot2")) install.packages("ggplot2")
+library(ggplot2)
+
+ if(!require("tidyverse")) install.packages("tidyverse")
+library (tidyverse)
 
 get_imdb_file <- function(fname, path){
     fname_ext <- file.path(path, paste0(fname, "_small.csv"))
@@ -57,9 +66,367 @@ TITLE_PRINCIPALS <- TITLE_PRINCIPALS |>
 
 rm(TITLE_EPISODES_1)
 rm(TITLE_EPISODES_2)
+```
 
+```{r}
+
+#Task#1
 NAME_BASICS <- NAME_BASICS |>
     mutate(birthYear = as.numeric(str_replace_all(birthYear, "[^0-9]", "")),
            deathYear = as.numeric(str_replace_all(deathYear, "[^0-9]", "")))
+TITLE_BASICS <- TITLE_BASICS |>
+  mutate(isAdult = as.logical(as.numeric(isAdult)),
+         startYear = as.numeric(startYear),
+         endYear = as.numeric(endYear),
+         runtimeMinutes = as.numeric(str_replace_all(runtimeMinutes, "[^0-9]", "")))
+
+TITLE_EPISODES <- TITLE_EPISODES |>
+  mutate(seasonNumber = as.numeric(seasonNumber),
+         episodeNumber = as.numeric(episodeNumber))
+
+```
+
+```{r}
+
+
+#Task2.1 How many movies are in our data set? How many TV series? How many TV episodes?
+
+num_movies <- TITLE_BASICS |>
+  filter(titleType == "movie") |>
+  count()
+
+num_tv_series <- TITLE_BASICS |>
+  filter(titleType == "tvSeries") |>
+  count()
+
+num_tv_episodes <- TITLE_BASICS |>
+  filter(titleType == "tvEpisode") |>
+  count()
+
+cat("Movie total:", num_movies$n, "\n")
+cat("TV Series total:", num_tv_series$n, "\n")
+cat("TV Episodes total:", num_tv_episodes$n, "\n")
+
+```
+
+```{r}
+#Task2.2 Who is the oldest living person in our data set?
+oldest_living_person <- NAME_BASICS |>
+  filter(is.na(deathYear)) |>
+  arrange(birthYear) |>
+  slice(1)
+
+# Print the details of the oldest living person
+cat("The oldest living person in the dataset is:", 
+    oldest_living_person$primaryName, 
+    "born in", oldest_living_person$birthYear, "\n")
+```
+
+```{r}
+#Task2.3There is one TV Episode in this data set with a perfect 10/10 rating and 200,000 IMDb ratings. What is it? What series does it belong to?
+
+perfect_episode <- TITLE_RATINGS |>
+  filter(averageRating == 10, numVotes == 200000) |>
+  left_join(TITLE_BASICS, by = "tconst") |>
+  select(primaryTitle, titleType, genres)
+
+# Step 2: Print the results in a table format
+perfect_episode |> 
+  gt() 
+
+
+```
+
+```{r}
+#Task2.4What four projects is the actor Mark Hammill most known for?
+
+# Find Mark Hamill's nconst
+mark_hamill <- NAME_BASICS |>
+  filter(primaryName == "Mark Hamill")
+
+# Check if Mark Hamill was found
+if(nrow(mark_hamill) > 0) {
+  mark_hamill_nconst <- mark_hamill$nconst
+  
+  # Get the projects Mark Hamill is known for
+  known_projects <- TITLE_PRINCIPALS |>
+    filter(nconst == mark_hamill_nconst) |>
+    inner_join(TITLE_BASICS, by = "tconst") |>
+    select(primaryTitle, titleType) |>
+    arrange(desc(titleType)) |>  # Sort by titleType
+    slice(1:4)  # Get the top 4 projects
+  
+  # Print the projects
+  cat("Mark Hamill is most known for the following projects:\n")
+  print(known_projects)
+} else {
+  cat("Mark Hamill not found in the dataset.\n")
+  
+}
+```
+
+```{r}
+#Task#2.5 What TV series, with more than 12 episodes, has the highest average rating?
+
+# Step 1: Count the number of episodes for each series
+episode_counts <- TITLE_EPISODES |>
+  group_by(parentTconst) |>
+  summarise(episode_count = n(), .groups = 'drop')
+
+# Step 2: Join episode counts with Title Ratings
+# We need to join with TITLE_BASICS to get the title name and ensure we're working with TV series
+average_ratings <- episode_counts |>
+  inner_join(TITLE_RATINGS, by = c("parentTconst" = "tconst")) |>
+  inner_join(TITLE_BASICS, by = c("parentTconst" = "tconst")) |>
+  filter(titleType == "tvSeries") |>
+  select(seriesTitle = primaryTitle, episode_count, averageRating)
+
+# Step 3: Filter for series with more than 12 episodes
+filtered_series <- average_ratings |>
+  filter(episode_count > 12)
+
+# Step 4: Find the series with the highest average rating
+top_series <- filtered_series |>
+  arrange(desc(averageRating)) |>
+  slice(1)
+
+# Print the result
+if (nrow(top_series) > 0) {
+  cat("The TV series with more than 12 episodes and the highest average rating is:\n")
+  print(top_series)
+} else {
+  cat("No TV series found with more than 12 episodes.\n")
+  
+}
+```
+
+```{r}
+#Task2.6 Is it true that episodes from later seasons of Happy Days have lower average ratings than the early seasons?
+
+# Step 1: Get tconst for Happy Days
+happy_days_tconst <- TITLE_BASICS |>
+  filter(primaryTitle == "Happy Days") |>
+  select(tconst)
+
+# Step 2: Filter episodes for Happy Days and get their ratings
+happy_days_episodes <- TITLE_EPISODES |>
+  filter(parentTconst %in% happy_days_tconst$tconst) |>
+  inner_join(TITLE_RATINGS, by = "tconst") |>
+  mutate(seasonNumber = as.integer(seasonNumber))
+
+# Step 3: Classify seasons into early and later
+# Let's assume seasons 1-5 are early, and seasons 6-11 are later for this example
+happy_days_episodes <- happy_days_episodes |>
+  mutate(season_group = ifelse(seasonNumber <= 5, "Early", "Later"))
+
+# Step 4: Calculate average ratings for early and later seasons
+average_ratings <- happy_days_episodes |>
+  group_by(season_group) |>
+  summarise(average_rating = mean(averageRating, na.rm = TRUE), .groups = 'drop')
+
+# Step 5: Print the results
+print(average_ratings)
+
+# Step 6: Check if later seasons have lower average ratings
+if (nrow(average_ratings) == 2) {
+  if (average_ratings$average_rating[average_ratings$season_group == "Later"] < 
+      average_ratings$average_rating[average_ratings$season_group == "Early"]) {
+    cat("True: Later seasons of Happy Days have lower average ratings than early seasons.\n")
+  } else {
+    cat("False: Later seasons of Happy Days do not have lower average ratings than early seasons.\n")
+  }
+} else {
+  cat("Error: Unable to determine average ratings for early and later seasons.\n")
+}
+```
+
+```{r}
+# Define the success score as a new metric using mutate
+TITLE_RATINGS <- TITLE_RATINGS %>%
+  mutate(successScore = (0.7 * averageRating) + (0.3 * log(numVotes)))
+
+# Question 1: Choose the top 5-10 movies based on the success metric
+top_successful_movies <- TITLE_RATINGS %>%
+  inner_join(TITLE_BASICS, by = "tconst") %>%
+  filter(titleType == "movie") %>%
+  arrange(desc(successScore)) %>%
+  select(primaryTitle, averageRating, numVotes, successScore, startYear) %>%
+  head(10)
+
+# Display the top successful movies using gt
+top_successful_movies %>%
+  gt() %>%
+  tab_header(
+    title = "Top 10 Successful Movies (Based on Success Score)"
+  )
+
+```
+
+```{r}
+# Question 2: Choose 3-5 movies with large numbers of votes but low success score
+poorly_rated_movies <- TITLE_RATINGS %>%
+  filter(successScore < 6, numVotes > 100000) %>%  # Threshold for low success
+  inner_join(TITLE_BASICS, by = "tconst") %>%
+  filter(titleType == "movie") %>%
+  select(primaryTitle, averageRating, numVotes, successScore, startYear) %>%
+  arrange(successScore) %>%
+  head(5)
+
+# Display the poorly rated movies using gt
+poorly_rated_movies %>%
+  gt() %>%
+  tab_header(
+    title = "Low Scoring Movies (Low Success Score, High Votes)"
+  )
+
+```
+
+```{r}
+# Question 3: Christopher Nolan's projects and their success scores
+# Step 1: Find Christopher Nolan's nconst from NAME_BASICS
+nolan_nconst <- NAME_BASICS %>%
+  filter(primaryName == "Christopher Nolan") %>%
+  select(nconst)
+
+# Step 2: Find all projects directed by Christopher Nolan from TITLE_CREW
+nolan_projects <- TITLE_CREW %>%
+  filter(grepl(nolan_nconst$nconst, directors)) %>%
+  select(tconst)
+
+# Step 3: Join Nolan's projects with TITLE_RATINGS and TITLE_BASICS to apply success metric
+nolan_ratings <- nolan_projects %>%
+  inner_join(TITLE_RATINGS, by = "tconst") %>%
+  inner_join(TITLE_BASICS, by = "tconst") %>%
+  filter(titleType == "movie") %>%
+  arrange(desc(successScore))
+
+# Display top high-scoring Nolan projects using gt
+nolan_ratings %>%
+  select(primaryTitle, averageRating, numVotes, successScore) %>%
+  slice(1:10) %>%
+  gt() %>%
+  tab_header(
+    title = "Top Christopher Nolan Movies (Based on Success Score)"
+  )
+```
+
+```{r}
+# Step 1: Set a minimum threshold for average rating and number of votes to filter out low-quality entries
+filtered_movies <- TITLE_RATINGS %>%
+  filter(averageRating >= 8.0, numVotes >= 100000)  # Adjust minimum criteria as needed
+
+# Step 2: Calculate the 75th percentile for success score based on the filtered movies
+success_threshold <- quantile(filtered_movies$successScore, 0.75, na.rm = TRUE)
+
+# Step 3: Filter movies above the new success threshold
+successful_movies_threshold <- filtered_movies %>%
+  filter(successScore > success_threshold) %>%
+  inner_join(TITLE_BASICS, by = "tconst") %>%
+  filter(titleType == "movie") %>%
+  select(primaryTitle, averageRating, numVotes, successScore)
+
+# Step 4: Display the successful movies above the new threshold using gt
+successful_movies_threshold %>%
+  head(10) %>%
+  gt() %>%
+  tab_header(
+    title = paste("Movies Above Success Threshold (>", success_threshold, ")")
+  )
+
+```
+
+In preparation for my next project, I’ll examine and analyze the genre trends in success over the decade and also the most successful genres since 2010.
+
+```{r}
+#Task4.1What was the genre with the most “successes” in each decade?
+# Add a 'decade' column to TITLE_BASICS
+TITLE_BASICS <- TITLE_BASICS %>%
+  mutate(decade = floor(startYear / 10) * 10)
+
+# Filter for movies above success threshold (>7.30)
+successful_movies <- TITLE_RATINGS %>%
+  filter(successScore > success_threshold) %>%
+  inner_join(TITLE_BASICS, by = "tconst") %>%
+  filter(titleType == "movie")
+
+# Group by decade and genre, count successful movies
+success_by_genre_decade <- successful_movies %>%
+  separate_rows(genres, sep = ",") %>% # Split multiple genres
+  group_by(decade, genres) %>%
+  summarize(success_count = n(), .groups = 'drop') %>%
+  arrange(desc(success_count))
+
+# Visualizing most successful genres per decade
+library(ggplot2)
+
+ggplot(success_by_genre_decade, aes(x = decade, y = success_count, fill = genres)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Top Genres with Most Successes Per Decade", x = "Decade", y = "Success Count") +
+  theme_minimal()
+
+
+
+```
+## Genre with the Most “Successes” by Decade
+The Top Genres with Most Successes Per Decade bar graph indicates that:\
+
+1. Drama and Adventure consistently lead in producing successful films throughout the decades.
+Notably, Drama shows a significant surge in success during the late 1990s and early 2000s.
+2. Consistency of Success Across Genres
+
+## Drama emerges as the most consistent genre in generating successes over the years.
+Conversely, genres like Western and War, which were more prevalent in earlier decades, have experienced a decline in successful productions, suggesting a shift in audience preferences.
+```{r}
+#Task4.2
+
+# Filter for movies since 2010
+recent_successes <- successful_movies %>%
+  filter(startYear >= 2010) %>%
+  separate_rows(genres, sep = ",") %>%
+  group_by(genres) %>%
+  summarize(success_count = n(), .groups = 'drop') %>%
+  arrange(desc(success_count))
+
+# Plotting recent successful genres
+ggplot(recent_successes, aes(x = reorder(genres, -success_count), y = success_count)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Most Successful Genres Since 2010", x = "Genres", y = "Success Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+## Most Successful Genres Since 2010
+From the Most Successful Genres Since 2010 bar graph:\
+
+1. Drama leads with the highest number of successes, followed closely by Adventure and Action.
+2. To assess the success rate, it is essential to compare the number of successes against the total productions in these genres during this period. A high number of productions coupled with a lower success count may indicate a less favorable success rate.
+
+## Popular Genres in Recent Years
+The analysis reveals that:\
+
+1. Drama has gained popularity in recent years, evidenced by its high success count since 2010.
+2. Additionally, both Adventure and Action genres have seen a notable increase in successful films, suggesting a trend towards more engaging, action-oriented storytelling.
+\
+Based on the findings from the analysis, Drama is recommended as a promising genre for future film projects due to its consistent success across decades. However, exploring Adventure or Action genres may also be beneficial, given their significant audience appeal and success in recent years.
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
 
 ```
