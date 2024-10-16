@@ -1,10 +1,10 @@
 ---
-title: "Report 2"
+title: "Insights for Successful Hollywood Film Development and Proposal"
 ---
+The Hollywood movie industry is constantly seeking fresh and innovative ideas for films that captivate audiences and achieve commercial success. Traditionally, this has involved acquiring rights to life stories, securing production options for promising novels, or adapting established intellectual property (IP) into films. However, in recent years, this process has been criticized for its over-reliance on sequels and predictable storylines. To combat this trend and inspire new content, this report aims to leverage data-driven insights to identify key factors that contribute to the success of films. By analyzing past successes, failures, and the contributions of top filmmakers and actors, we hope to generate creative and informed ideas for future films.
 
-
-```{r}
-
+```{r, eval=FALSE, folding=TRUE}
+suppressWarnings({
   if(!require("stringr")) install.packages("stringr")
 library(stringr)
 
@@ -19,10 +19,13 @@ library(ggplot2)
 
  if(!require("tidyverse")) install.packages("tidyverse")
 library (tidyverse)
+  
+  if(!require("DT")) install.packages("DT")
+library(DT)
 
 get_imdb_file <- function(fname, path){
     fname_ext <- file.path(path, paste0(fname, "_small.csv"))
-    as.data.frame(readr::read_csv(fname_ext, lazy=FALSE))
+    as.data.frame(readr::read_csv(fname_ext, lazy=FALSE, show_col_types = FALSE))
 }
 
 # Example usage: specify the path where your CSV files are stored
@@ -66,23 +69,82 @@ TITLE_PRINCIPALS <- TITLE_PRINCIPALS |>
 
 rm(TITLE_EPISODES_1)
 rm(TITLE_EPISODES_2)
+
+})
 ```
 
-```{r}
+```{r, eval=FALSE, folding=TRUE}
+
 
 #Task#1
-NAME_BASICS <- NAME_BASICS |>
+# Suppress warnings and clean data
+suppressWarnings({
+  NAME_BASICS <- NAME_BASICS |>
     mutate(birthYear = as.numeric(str_replace_all(birthYear, "[^0-9]", "")),
            deathYear = as.numeric(str_replace_all(deathYear, "[^0-9]", "")))
-TITLE_BASICS <- TITLE_BASICS |>
-  mutate(isAdult = as.logical(as.numeric(isAdult)),
-         startYear = as.numeric(startYear),
-         endYear = as.numeric(endYear),
-         runtimeMinutes = as.numeric(str_replace_all(runtimeMinutes, "[^0-9]", "")))
 
-TITLE_EPISODES <- TITLE_EPISODES |>
-  mutate(seasonNumber = as.numeric(seasonNumber),
-         episodeNumber = as.numeric(episodeNumber))
+  TITLE_BASICS <- TITLE_BASICS |>
+    mutate(isAdult = as.logical(as.numeric(isAdult)),
+           startYear = as.numeric(startYear),
+           endYear = as.numeric(endYear),
+           runtimeMinutes = as.numeric(str_replace_all(runtimeMinutes, "[^0-9]", "")))
+
+  TITLE_EPISODES <- TITLE_EPISODES |>
+    mutate(seasonNumber = as.numeric(seasonNumber),
+           episodeNumber = as.numeric(episodeNumber))
+
+  # Function to display a sample of 1000 rows from each table
+  display_sample <- function(data, table_name) {
+    sample_data <- data[sample(nrow(data), min(1000, nrow(data))), ]  # Sample 1000 rows or fewer if the dataset is smaller
+    datatable(sample_data, options = list(pageLength = 10))  
+  }
+})
+
+
+
+```
+
+## Name Basics
+```{r}
+# Sample and display NAME_BASICS
+NAME_BASICS_sample <- display_sample(NAME_BASICS, "NAME_BASICS")
+NAME_BASICS_sample  
+```
+
+## Title Basics
+```{r}
+# Sample and display TITLE_BASICS
+TITLE_BASICS_sample <- display_sample(TITLE_BASICS, "TITLE_BASICS")
+TITLE_BASICS_sample 
+```
+
+## Title Episodes
+```{r}
+# Sample and display TITLE_EPISODES
+TITLE_EPISODES_sample <- display_sample(TITLE_EPISODES, "TITLE_EPISODES")
+TITLE_EPISODES_sample 
+```
+
+## Title Ratings
+```{r}
+# Sample and display TITLE_RATINGS
+TITLE_RATINGS_sample <- display_sample(TITLE_RATINGS, "TITLE_RATINGS")
+TITLE_RATINGS_sample  
+```
+
+## Title Crew
+```{r}
+# Sample and display TITLE_CREW
+TITLE_CREW_sample <- display_sample(TITLE_CREW, "TITLE_CREW")
+TITLE_CREW_sample 
+```
+
+## Title Principals
+```{r}
+# Sample and display TITLE_PRINCIPALS
+TITLE_PRINCIPALS_sample <- display_sample(TITLE_PRINCIPALS, "TITLE_PRINCIPALS")
+TITLE_PRINCIPALS_sample 
+
 
 ```
 
@@ -282,6 +344,7 @@ poorly_rated_movies %>%
 ```
 
 ```{r}
+
 # Question 3: Christopher Nolan's projects and their success scores
 # Step 1: Find Christopher Nolan's nconst from NAME_BASICS
 nolan_nconst <- NAME_BASICS %>%
@@ -289,10 +352,12 @@ nolan_nconst <- NAME_BASICS %>%
   select(nconst)
 
 # Step 2: Find all projects directed by Christopher Nolan from TITLE_CREW
+
+suppressWarnings({
 nolan_projects <- TITLE_CREW %>%
   filter(grepl(nolan_nconst$nconst, directors)) %>%
   select(tconst)
-
+})
 # Step 3: Join Nolan's projects with TITLE_RATINGS and TITLE_BASICS to apply success metric
 nolan_ratings <- nolan_projects %>%
   inner_join(TITLE_RATINGS, by = "tconst") %>%
@@ -407,10 +472,78 @@ The analysis reveals that:\
 2. Additionally, both Adventure and Action genres have seen a notable increase in successful films, suggesting a trend towards more engaging, action-oriented storytelling.
 \
 Based on the findings from the analysis, Drama is recommended as a promising genre for future film projects due to its consistent success across decades. However, exploring Adventure or Action genres may also be beneficial, given their significant audience appeal and success in recent years.
+
+## Pitch for Drama Movie 
+
+For the upcoming drama film, we are bringing together a powerhouse team with a proven track record of success. With **Aaron Paul** and **Bob Odenkirk** as lead actors and **Christopher Nolan** directing, we are confident that this combination of talent will result in a critically acclaimed and commercially successful film.
+
+**Aaron Paul** is an actor renowned for his dramatic range, having earned widespread acclaim for his performance in *Breaking Bad*. With **16 successful projects** to his credit, Paul's ability to portray deeply emotional and complex characters makes him a perfect fit for a dramatic role in this project. His experience in television and film ensures he can carry a film to success with both critics and audiences.
+
+**Bob Odenkirk**, also with **16 successful projects**, is a dynamic actor known for his versatility. While he initially gained fame in comedy, his breakout role in *Better Call Saul* revealed his dramatic chops. Odenkirk’s transition to serious roles has resonated with audiences, and pairing him with Paul again promises to rekindle the chemistry they shared, ensuring compelling on-screen performances.
+
+**Christopher Nolan**, with **5 successful projects** as a director, is a visionary storyteller who excels in delivering high-concept dramas with deep emotional core. Known for films like *Inception*, *Dunkirk*, and *Interstellar*, Nolan’s unique approach to narrative structure and character development makes him an ideal director for this drama project. His reputation for creating visually stunning and intellectually stimulating films is sure to attract both critical attention and box-office success.
+
 ```{r}
 
-```
+# Define the target genre
+target_genre <- "Drama"
 
+# Step 1: Filter films from the target genre with success scores above the threshold
+successful_movies <- TITLE_BASICS %>%
+  inner_join(TITLE_RATINGS, by = "tconst") %>%
+  filter(grepl(target_genre, genres) & successScore > success_threshold) %>%
+  select(tconst, primaryTitle)
+
+# Step 2: Identify directors who have worked on the successful movies
+successful_directors <- TITLE_PRINCIPALS %>%
+  filter(tconst %in% successful_movies$tconst & category == "director") %>%
+  select(tconst, nconst) %>%
+  inner_join(NAME_BASICS, by = "nconst") %>%
+  group_by(primaryName) %>%
+  summarise(success_count = n(), .groups = 'drop') %>%
+  arrange(desc(success_count)) %>%
+  top_n(1)
+
+
+# Step 3: Identify actors from the successful movies
+successful_actors <- TITLE_PRINCIPALS %>%
+  filter(tconst %in% successful_movies$tconst & category == "actor") %>%
+  select(tconst, nconst) %>%
+  inner_join(NAME_BASICS, by = "nconst") %>%
+  group_by(primaryName) %>%
+  summarise(success_count = n(), .groups = 'drop') %>%
+  arrange(desc(success_count)) %>%
+  top_n(2)
+
+# Step 4: Prepare the final table of successful personnel with primary names
+key_personnel <- bind_rows(
+  successful_actors %>% rename(personnel = primaryName, success_count = success_count),
+  successful_directors %>% rename(personnel = primaryName, success_count = success_count)
+)
+
+
+# Create a table of successful personnel
+key_personnel_table <- key_personnel %>%
+  gt() %>%
+  tab_header(
+    title = "Key Personnel in Target Genre"
+  ) %>%
+  cols_label(
+    personnel = "Personnel",
+    success_count = "Number of Successful Projects"
+  )
+
+# Print the table
+print(key_personnel_table)
+
+# Visualize the success of the chosen personnel
+ggplot(key_personnel, aes(x = reorder(personnel, success_count), y = success_count, fill = personnel)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Success Count of Key Personnel", x = "Personnel", y = "Success Count") +
+  theme_minimal()
+```
+This combination of actors and director, each with a wealth of experience and accolades in the drama genre, positions this project for a strong reception. The collaboration of these talented individuals, with their history of success, will no doubt create a compelling, memorable drama that resonates with viewers.
 ```{r}
 
 ```
