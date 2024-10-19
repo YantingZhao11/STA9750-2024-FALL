@@ -92,7 +92,7 @@ Lastly, I created a function to display a sample of 1,000 rows for the following
 
 ```
 
-- `NAME_BASICS`
+## NAME_BASICS
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -101,7 +101,7 @@ NAME_BASICS_sample <- display_sample(NAME_BASICS, "NAME_BASICS")
 NAME_BASICS_sample  
 ```
 
-- `TITLE_BASICS`
+## TITLE_BASICS
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -109,7 +109,7 @@ TITLE_BASICS_sample <- display_sample(TITLE_BASICS, "TITLE_BASICS")
 TITLE_BASICS_sample 
 ```
 
-- `TITLE_EPISODES`
+## TITLE_EPISODES
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -117,7 +117,7 @@ TITLE_EPISODES_sample <- display_sample(TITLE_EPISODES, "TITLE_EPISODES")
 TITLE_EPISODES_sample 
 ```
 
-- `TITLE_RATINGS`
+## TITLE_RATINGS
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -125,7 +125,7 @@ TITLE_RATINGS_sample <- display_sample(TITLE_RATINGS, "TITLE_RATINGS")
 TITLE_RATINGS_sample  
 ```
 
-- `TITLE_CREWS`
+## TITLE_CREWS
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -133,7 +133,7 @@ TITLE_CREW_sample <- display_sample(TITLE_CREW, "TITLE_CREW")
 TITLE_CREW_sample 
 ```
 
-- `TITLE_PRINCIPALS`
+## TITLE_PRINCIPALS`
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -216,7 +216,7 @@ perfect_episode <- TITLE_RATINGS |>
 perfect_episode |>
   gt() |>
   tab_header(
-    title = "TV Episode with a Perfect 10/10 Rating and 200K Votes"
+    title = "TV Episode with a Perfect 10/10 Rating and 200K+ Votes"
   ) |>
   cols_label(
     primaryTitle = "Episode Title",
@@ -436,7 +436,7 @@ Lastly, we established a threshold for projects to be considered a ‘success,�
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
-#| 
+
 
 filtered_movies <- TITLE_RATINGS %>%
   filter(averageRating >= 8.0, numVotes >= 100000)  # Adjust minimum criteria as needed
@@ -458,6 +458,8 @@ successful_movies_threshold %>%
   )
 
 ```
+
+## Examining Success by Genre and Decade
 
 In preparation for my next project, I’ll examine and analyze the genre trends in success over the decade and also the most successful genres since 2010.
 
@@ -545,7 +547,7 @@ For the upcoming drama film, we are bringing together a powerhouse team with a p
 
 **Christopher Nolan**, with **5 successful projects** as a director, is a visionary storyteller who excels in delivering high-concept dramas with deep emotional core. Known for films like *Inception*, *Dunkirk*, and *Interstellar*, Nolan’s unique approach to narrative structure and character development makes him an ideal director for this drama project. His reputation for creating visually stunning and intellectually stimulating films is sure to attract both critical attention and box-office success.
 
-````{r echo=TRUE, message=FALSE, warning=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
 
@@ -558,7 +560,7 @@ successful_movies <- TITLE_BASICS %>%
   filter(grepl(target_genre, genres) & successScore > success_threshold) %>%
   select(tconst, primaryTitle)
 
-# identify directors
+#identify directors
 successful_directors <- TITLE_PRINCIPALS %>%
   filter(tconst %in% successful_movies$tconst & category == "director") %>%
   select(tconst, nconst) %>%
@@ -569,7 +571,7 @@ successful_directors <- TITLE_PRINCIPALS %>%
   top_n(1)
 
 
-# identify actors
+#identify actors
 successful_actors <- TITLE_PRINCIPALS %>%
   filter(tconst %in% successful_movies$tconst & category == "actor") %>%
   select(tconst, nconst) %>%
@@ -579,43 +581,43 @@ successful_actors <- TITLE_PRINCIPALS %>%
   arrange(desc(success_count)) %>%
   top_n(2)
 
-# prepare table
-key_personnel <- bind_rows(
-  successful_actors %>% rename(personnel = primaryName, success_count = success_count),
-  successful_directors %>% rename(personnel = primaryName, success_count = success_count)
-)
-
-
-#table of successful personnel
-key_personnel_table <- key_personnel %>%
+director_table <- successful_directors %>%
   gt() %>%
   tab_header(
-    title = "Key Personnel in Target Genre"
+    title = "Top Successful Director in Drama"
   ) %>%
   cols_label(
-    personnel = "Personnel",
-    success_count = "Number of Successful Projects"
+    primaryName = "Director Name",
+    success_count = "Successful Movies Count"
   )
 
-print(key_personnel_table)
+# Create GT table for successful actors
+actor_table <- successful_actors %>%
+  gt() %>%
+  tab_header(
+    title = "Top Successful Actors in Drama"
+  ) %>%
+  cols_label(
+    primaryName = "Actor Name",
+    success_count = "Successful Movies Count"
+  )
 
-
-ggplot(key_personnel, aes(x = reorder(personnel, success_count), y = success_count, fill = personnel)) +
-  geom_bar(stat = "identity") +
-  coord_flip() +
-  labs(title = "Success Count of Key Personnel", x = "Personnel", y = "Success Count") +
-  theme_minimal()
+# Display the tables
+director_table
+actor_table
 ```
+
 This combination of actors and director, each with a wealth of experience and accolades in the drama genre, positions this project for a strong reception. The collaboration of these talented individuals, with their history of success, will no doubt create a compelling, memorable drama that resonates with viewers.
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
 
-# join tables
+#join tables
 filtered_movies_with_basics <- filtered_movies %>%
   inner_join(TITLE_BASICS, by = "tconst")
 
-# filters
+#filters
 high_rating_threshold <- 8.0
 min_votes_threshold <- 50000
 classic_movie_year <- 25  # We want movies that haven't been remade in the past 25 years
@@ -627,30 +629,30 @@ classic_movies <- filtered_movies_with_basics %>%
          startYear < (2024 - classic_movie_year),
          titleType == "movie")  
 
-# Check if any remakes have been made in the last 25 years
+#Check if any remakes have been made in the last 25 years
 recent_movies <- TITLE_BASICS %>%
   filter(startYear >= (2024 - classic_movie_year))  # Movies made in the last 25 years
 
-# Exclude any classic movies that have been remade in the last 25 years
+#Exclude any classic movies that have been remade in the last 25 years
 remade_movies <- recent_movies %>%
   select(tconst) %>%
   distinct()
 
-# Modify anti_join to use tconst correctly
+#Modify anti_join to use tconst correctly
 classic_movies_no_remakes <- classic_movies %>%
   anti_join(remade_movies, by = "tconst")  # Exclude movies that have been remade
 
-# find key personnel (actors, directors, writers) in classic movies
+#find key personnel (actors, directors, writers) in classic movies
 classic_movie_personnel <- TITLE_PRINCIPALS %>%
   filter(tconst %in% classic_movies_no_remakes$tconst) %>%
   select(tconst, nconst, category) %>%
   inner_join(NAME_BASICS, by = "nconst")
 
-# check if key personnel are still alive
+#check if key personnel are still alive
 living_personnel <- classic_movie_personnel %>%
   filter(is.na(deathYear))  
 
-# display classic movies and their living personnel for potential remake
+#display classic movies and their living personnel for potential remake
 classic_movies_selected <- classic_movies_no_remakes %>%
   inner_join(living_personnel, by = "tconst")
 
@@ -682,6 +684,7 @@ classic_movies_selected %>%
     decimals = 0
   )
 ```
+
 # Elevator Pitch: "The Shawshank Redemption" Remake
 
 Our next project is a high-stakes remake of **"The Shawshank Redemption" (1994)**, one of the most beloved drama films in history, with an IMDb rating of **9.3** and over **2.9 million votes**. With no remakes in the last 25 years, this classic is ripe for a revival, and we have assembled a dream team to deliver it to a new generation.
