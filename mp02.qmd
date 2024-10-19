@@ -3,8 +3,10 @@ title: "Insights for Successful Hollywood Film Development and Proposal"
 ---
 The Hollywood movie industry is constantly seeking fresh and innovative ideas for films that captivate audiences and achieve commercial success. Traditionally, this has involved acquiring rights to life stories, securing production options for promising novels, or adapting established intellectual property (IP) into films. However, in recent years, this process has been criticized for its over-reliance on sequels and predictable storylines. To combat this trend and inspire new content, this report aims to leverage data-driven insights to identify key factors that contribute to the success of films. By analyzing past successes, failures, and the contributions of top filmmakers and actors, we hope to generate creative and informed ideas for future films.
 
-```{r, eval=FALSE, folding=TRUE}
-suppressWarnings({
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
   if(!require("stringr")) install.packages("stringr")
 library(stringr)
 
@@ -28,7 +30,6 @@ get_imdb_file <- function(fname, path){
     as.data.frame(readr::read_csv(fname_ext, lazy=FALSE, show_col_types = FALSE))
 }
 
-# Example usage: specify the path where your CSV files are stored
 path <- "C:\\Users\\w3038\\Downloads\\STA 9750"
 
 NAME_BASICS      <- get_imdb_file("name_basics", path)
@@ -52,36 +53,25 @@ TITLE_CREW <- TITLE_CREW |>
     semi_join(TITLE_RATINGS, 
               join_by(tconst == tconst))
 
-TITLE_EPISODES_1 <- TITLE_EPISODES |>
-    semi_join(TITLE_RATINGS, 
-              join_by(tconst == tconst))
-TITLE_EPISODES_2 <- TITLE_EPISODES |>
-    semi_join(TITLE_RATINGS, 
-              join_by(parentTconst == tconst))
-
-TITLE_EPISODES <- bind_rows(TITLE_EPISODES_1,
-                            TITLE_EPISODES_2) |>
-    distinct()
 
 TITLE_PRINCIPALS <- TITLE_PRINCIPALS |>
     semi_join(TITLE_RATINGS, join_by(tconst == tconst))
 
 
-rm(TITLE_EPISODES_1)
-rm(TITLE_EPISODES_2)
-
-})
 ```
 
-```{r, eval=FALSE, folding=TRUE}
+For preprocessing the data, I corrected the column types in the IMDb dataset using `mutate` with functions like `as.numeric` and `as.logical`. In the `NAME_BASICS` table, you converted birth and death years to numeric formats. In the `TITLE_BASICS` table, you transformed columns such as `isAdult` to logical and `runtimeMinutes` to numeric. Similarly, you adjusted `seasonNumber` and `episodeNumber` in the `TITLE_EPISODES` table.
 
+Lastly, I created a function to display a sample of 1,000 rows for the following tables:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 
 #Task#1
-# Suppress warnings and clean data
-suppressWarnings({
+
   NAME_BASICS <- NAME_BASICS |>
-    mutate(birthYear = as.numeric(str_replace_all(birthYear, "[^0-9]", "")),
-           deathYear = as.numeric(str_replace_all(deathYear, "[^0-9]", "")))
+    mutate(birthYear = as.numeric(birthYear),
+           deathYear = as.numeric(deathYear))
 
   TITLE_BASICS <- TITLE_BASICS |>
     mutate(isAdult = as.logical(as.numeric(isAdult)),
@@ -98,59 +88,67 @@ suppressWarnings({
     sample_data <- data[sample(nrow(data), min(1000, nrow(data))), ]  # Sample 1000 rows or fewer if the dataset is smaller
     datatable(sample_data, options = list(pageLength = 10))  
   }
-})
-
 
 
 ```
 
-## Name Basics
-```{r}
-# Sample and display NAME_BASICS
+- `NAME_BASICS`
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 NAME_BASICS_sample <- display_sample(NAME_BASICS, "NAME_BASICS")
 NAME_BASICS_sample  
 ```
 
-## Title Basics
-```{r}
-# Sample and display TITLE_BASICS
+- `TITLE_BASICS`
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 TITLE_BASICS_sample <- display_sample(TITLE_BASICS, "TITLE_BASICS")
 TITLE_BASICS_sample 
 ```
 
-## Title Episodes
-```{r}
-# Sample and display TITLE_EPISODES
+- `TITLE_EPISODES`
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 TITLE_EPISODES_sample <- display_sample(TITLE_EPISODES, "TITLE_EPISODES")
 TITLE_EPISODES_sample 
 ```
 
-## Title Ratings
-```{r}
-# Sample and display TITLE_RATINGS
+- `TITLE_RATINGS`
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 TITLE_RATINGS_sample <- display_sample(TITLE_RATINGS, "TITLE_RATINGS")
 TITLE_RATINGS_sample  
 ```
 
-## Title Crew
-```{r}
-# Sample and display TITLE_CREW
+- `TITLE_CREWS`
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 TITLE_CREW_sample <- display_sample(TITLE_CREW, "TITLE_CREW")
 TITLE_CREW_sample 
 ```
 
-## Title Principals
-```{r}
-# Sample and display TITLE_PRINCIPALS
+- `TITLE_PRINCIPALS`
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 TITLE_PRINCIPALS_sample <- display_sample(TITLE_PRINCIPALS, "TITLE_PRINCIPALS")
 TITLE_PRINCIPALS_sample 
 
 
 ```
+## Initial Exploration
 
-```{r}
-
-
+### 1. Media Count
+Upon an initial look at the data, the total count of movies,TV series and TV episodes is as follows:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 #Task2.1 How many movies are in our data set? How many TV series? How many TV episodes?
 
 num_movies <- TITLE_BASICS |>
@@ -165,144 +163,202 @@ num_tv_episodes <- TITLE_BASICS |>
   filter(titleType == "tvEpisode") |>
   count()
 
-cat("Movie total:", num_movies$n, "\n")
-cat("TV Series total:", num_tv_series$n, "\n")
-cat("TV Episodes total:", num_tv_episodes$n, "\n")
+result_table <- tibble(
+  Category = c("Movies", "TV Series", "TV Episodes"),
+  Count = c(num_movies$n, num_tv_series$n, num_tv_episodes$n)
+)
+
+result_table %>%
+  gt() %>%
+  tab_header(title = "Media Count") %>%
+  fmt_number(
+    columns = vars(Count),
+    decimals = 0
+  )
 
 ```
+### 2. Oldest Living Person
+In terms of notable individuals, the oldest living person in our dataset is:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 
-```{r}
 #Task2.2 Who is the oldest living person in our data set?
+current_year = 2024
 oldest_living_person <- NAME_BASICS |>
   filter(is.na(deathYear)) |>
+  filter(birthYear >= (current_year - 124)) |>
   arrange(birthYear) |>
+  select(- nconst,
+         - knownForTitles) |>
   slice(1)
 
-# Print the details of the oldest living person
-cat("The oldest living person in the dataset is:", 
-    oldest_living_person$primaryName, 
-    "born in", oldest_living_person$birthYear, "\n")
-```
+oldest_living_person |>
+  gt() |>
+  tab_header(title = "Oldest Living Person")
 
-```{r}
+
+```
+### 3. TV Episode with a Perfect 10/10 Rating and 200K+ Votes
+Moreover, when examining TV episodes, we find that the one with a perfect **10/10 rating** and **227,589 IMDb ratings** is
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 #Task2.3There is one TV Episode in this data set with a perfect 10/10 rating and 200,000 IMDb ratings. What is it? What series does it belong to?
 
 perfect_episode <- TITLE_RATINGS |>
-  filter(averageRating == 10, numVotes == 200000) |>
+  filter(averageRating == 10, numVotes > 200000) |>
   left_join(TITLE_BASICS, by = "tconst") |>
-  select(primaryTitle, titleType, genres)
+  filter(titleType == "tvEpisode") |>
+  select(primaryTitle, titleType, genres, numVotes) |>
+  arrange(desc(numVotes))  
 
-# Step 2: Print the results in a table format
-perfect_episode |> 
-  gt() 
-
+perfect_episode |>
+  gt() |>
+  tab_header(
+    title = "TV Episode with a Perfect 10/10 Rating and 200K Votes"
+  ) |>
+  cols_label(
+    primaryTitle = "Episode Title",
+    titleType = "Title Type",
+    genres = "Genres",
+    numVotes = "Number of Votes"
+  )
 
 ```
-
-```{r}
+### 4. Top Four Projects of Mark Hamill
+Furthermore, the actor **Mark Hamill** is renowned for his work in the following projects:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 #Task2.4What four projects is the actor Mark Hammill most known for?
 
-# Find Mark Hamill's nconst
+
 mark_hamill <- NAME_BASICS |>
   filter(primaryName == "Mark Hamill")
 
-# Check if Mark Hamill was found
 if(nrow(mark_hamill) > 0) {
-  mark_hamill_nconst <- mark_hamill$nconst
-  
-  # Get the projects Mark Hamill is known for
-  known_projects <- TITLE_PRINCIPALS |>
+  mark_hamill_nconst <- mark_hamill$nconst}
+
+known_projects <- TITLE_PRINCIPALS |>
     filter(nconst == mark_hamill_nconst) |>
     inner_join(TITLE_BASICS, by = "tconst") |>
+    distinct(tconst, .keep_all = TRUE) |>  
     select(primaryTitle, titleType) |>
-    arrange(desc(titleType)) |>  # Sort by titleType
-    slice(1:4)  # Get the top 4 projects
+    arrange(desc(titleType)) |> 
+    slice(1:4)  
   
-  # Print the projects
-  cat("Mark Hamill is most known for the following projects:\n")
-  print(known_projects)
-} else {
-  cat("Mark Hamill not found in the dataset.\n")
-  
-}
-```
 
-```{r}
+  known_projects |>
+    gt() |>
+    tab_header(
+      title = "Top Four Projects of Mark Hamill"
+    ) |>
+    cols_label(
+      primaryTitle = "Project Title",
+      titleType = "Type of Project"
+    ) |>
+    tab_options(
+      table.width = pct(100)  # Set table width to 100%
+    )
+
+```
+### 5. TV Series with More Than 12 Episodes and Highest Average Rating
+Additionally, when considering series with extensive episode counts, the one with the highest average rating is:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 #Task#2.5 What TV series, with more than 12 episodes, has the highest average rating?
 
-# Step 1: Count the number of episodes for each series
+
 episode_counts <- TITLE_EPISODES |>
   group_by(parentTconst) |>
   summarise(episode_count = n(), .groups = 'drop')
 
-# Step 2: Join episode counts with Title Ratings
-# We need to join with TITLE_BASICS to get the title name and ensure we're working with TV series
+
 average_ratings <- episode_counts |>
   inner_join(TITLE_RATINGS, by = c("parentTconst" = "tconst")) |>
   inner_join(TITLE_BASICS, by = c("parentTconst" = "tconst")) |>
   filter(titleType == "tvSeries") |>
   select(seriesTitle = primaryTitle, episode_count, averageRating)
 
-# Step 3: Filter for series with more than 12 episodes
+
 filtered_series <- average_ratings |>
   filter(episode_count > 12)
 
-# Step 4: Find the series with the highest average rating
+
 top_series <- filtered_series |>
   arrange(desc(averageRating)) |>
   slice(1)
 
-# Print the result
-if (nrow(top_series) > 0) {
-  cat("The TV series with more than 12 episodes and the highest average rating is:\n")
-  print(top_series)
-} else {
-  cat("No TV series found with more than 12 episodes.\n")
-  
-}
+top_series |>
+    gt() |>
+    tab_header(
+      title = "TV Series with More Than 12 Episodes and Highest Average Rating"
+    ) |>
+    cols_label(
+      seriesTitle = "Series Title",
+      episode_count = "Number of Episodes",
+      averageRating = "Average Rating"
+    ) |>
+    tab_options(
+      table.width = pct(100)  
+    )
 ```
-
-```{r}
+### 6. Average Ratings for Early and Later Seasons of Happy Days
+Lastly, regarding classic television, *Happy Days* (1974-1984) brings us to an intriguing discussion about its ratings. The average ratings for the seasons are as follows:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 #Task2.6 Is it true that episodes from later seasons of Happy Days have lower average ratings than the early seasons?
-
-# Step 1: Get tconst for Happy Days
 happy_days_tconst <- TITLE_BASICS |>
   filter(primaryTitle == "Happy Days") |>
   select(tconst)
 
-# Step 2: Filter episodes for Happy Days and get their ratings
 happy_days_episodes <- TITLE_EPISODES |>
   filter(parentTconst %in% happy_days_tconst$tconst) |>
   inner_join(TITLE_RATINGS, by = "tconst") |>
   mutate(seasonNumber = as.integer(seasonNumber))
 
-# Step 3: Classify seasons into early and later
-# Let's assume seasons 1-5 are early, and seasons 6-11 are later for this example
+
 happy_days_episodes <- happy_days_episodes |>
   mutate(season_group = ifelse(seasonNumber <= 5, "Early", "Later"))
 
-# Step 4: Calculate average ratings for early and later seasons
+
 average_ratings <- happy_days_episodes |>
   group_by(season_group) |>
   summarise(average_rating = mean(averageRating, na.rm = TRUE), .groups = 'drop')
 
-# Step 5: Print the results
-print(average_ratings)
 
-# Step 6: Check if later seasons have lower average ratings
-if (nrow(average_ratings) == 2) {
-  if (average_ratings$average_rating[average_ratings$season_group == "Later"] < 
-      average_ratings$average_rating[average_ratings$season_group == "Early"]) {
-    cat("True: Later seasons of Happy Days have lower average ratings than early seasons.\n")
-  } else {
-    cat("False: Later seasons of Happy Days do not have lower average ratings than early seasons.\n")
-  }
-} else {
-  cat("Error: Unable to determine average ratings for early and later seasons.\n")
-}
+average_ratings |>
+  gt() |>
+  tab_header(
+    title = "Average Ratings for Early and Later Seasons of Happy Days"
+  ) |>
+  cols_label(
+    season_group = "Season Group",
+    average_rating = "Average Rating"
+  ) |>
+  tab_options(
+    table.width = pct(100)  
+  )
+
 ```
+Is it true that episodes from later seasons of *Happy Days* have lower average ratings than the early seasons? The data clearly indicates that **later seasons** do, indeed, have lower average ratings than the **early seasons**.
 
-```{r}
+## Analysis of Movie Success Metrics
+
+**success score** is defined as a composite metric that incorporates both the average rating and the number of votes a movie receives. Specifically, it is calculated using the formula:
+
+**Success Score = (0.7 * Average Rating) + (0.3 * log(Number of Votes))**
+
+This weighting gives greater importance to the average rating while still considering the volume of votes, which helps to account for the credibility of the rating. This approach allows us to evaluate movies more comprehensively, ensuring that both quality and popularity are reflected in our scoring system.
+
+### 1. Top 10 Successful Movies (Based on Success Score)  
+The following movies emerged as the top successful films based on our success score metric:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 # Define the success score as a new metric using mutate
 TITLE_RATINGS <- TITLE_RATINGS %>%
   mutate(successScore = (0.7 * averageRating) + (0.3 * log(numVotes)))
@@ -315,7 +371,6 @@ top_successful_movies <- TITLE_RATINGS %>%
   select(primaryTitle, averageRating, numVotes, successScore, startYear) %>%
   head(10)
 
-# Display the top successful movies using gt
 top_successful_movies %>%
   gt() %>%
   tab_header(
@@ -323,8 +378,11 @@ top_successful_movies %>%
   )
 
 ```
-
-```{r}
+### 2. Low Scoring Movies (Low Success Score, High Votes)  
+In contrast, we identified several movies that received a large number of IMDb votes yet scored poorly on our success metric:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 # Question 2: Choose 3-5 movies with large numbers of votes but low success score
 poorly_rated_movies <- TITLE_RATINGS %>%
   filter(successScore < 6, numVotes > 100000) %>%  # Threshold for low success
@@ -334,7 +392,6 @@ poorly_rated_movies <- TITLE_RATINGS %>%
   arrange(successScore) %>%
   head(5)
 
-# Display the poorly rated movies using gt
 poorly_rated_movies %>%
   gt() %>%
   tab_header(
@@ -342,30 +399,30 @@ poorly_rated_movies %>%
   )
 
 ```
-
-```{r}
+### 3. Top Christopher Nolan Movies (Based on Success Score)  
+When examining the works of Christopher Nolan, we found that he has several projects that score highly on our success metric:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 
 # Question 3: Christopher Nolan's projects and their success scores
-# Step 1: Find Christopher Nolan's nconst from NAME_BASICS
+
 nolan_nconst <- NAME_BASICS %>%
   filter(primaryName == "Christopher Nolan") %>%
   select(nconst)
 
-# Step 2: Find all projects directed by Christopher Nolan from TITLE_CREW
 
-suppressWarnings({
 nolan_projects <- TITLE_CREW %>%
   filter(grepl(nolan_nconst$nconst, directors)) %>%
   select(tconst)
-})
-# Step 3: Join Nolan's projects with TITLE_RATINGS and TITLE_BASICS to apply success metric
+
 nolan_ratings <- nolan_projects %>%
   inner_join(TITLE_RATINGS, by = "tconst") %>%
   inner_join(TITLE_BASICS, by = "tconst") %>%
   filter(titleType == "movie") %>%
   arrange(desc(successScore))
 
-# Display top high-scoring Nolan projects using gt
+
 nolan_ratings %>%
   select(primaryTitle, averageRating, numVotes, successScore) %>%
   slice(1:10) %>%
@@ -374,23 +431,25 @@ nolan_ratings %>%
     title = "Top Christopher Nolan Movies (Based on Success Score)"
   )
 ```
+### 4. Movies Above Success Threshold  
+Lastly, we established a threshold for projects to be considered a ‘success,’ identifying those movies that exceed a success score of **9.89179010376421**:
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| 
 
-```{r}
-# Step 1: Set a minimum threshold for average rating and number of votes to filter out low-quality entries
 filtered_movies <- TITLE_RATINGS %>%
   filter(averageRating >= 8.0, numVotes >= 100000)  # Adjust minimum criteria as needed
 
-# Step 2: Calculate the 75th percentile for success score based on the filtered movies
 success_threshold <- quantile(filtered_movies$successScore, 0.75, na.rm = TRUE)
 
-# Step 3: Filter movies above the new success threshold
+#Filter movies above the new success threshold
 successful_movies_threshold <- filtered_movies %>%
   filter(successScore > success_threshold) %>%
   inner_join(TITLE_BASICS, by = "tconst") %>%
   filter(titleType == "movie") %>%
   select(primaryTitle, averageRating, numVotes, successScore)
 
-# Step 4: Display the successful movies above the new threshold using gt
 successful_movies_threshold %>%
   head(10) %>%
   gt() %>%
@@ -402,7 +461,9 @@ successful_movies_threshold %>%
 
 In preparation for my next project, I’ll examine and analyze the genre trends in success over the decade and also the most successful genres since 2010.
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 #Task4.1What was the genre with the most “successes” in each decade?
 # Add a 'decade' column to TITLE_BASICS
 TITLE_BASICS <- TITLE_BASICS %>%
@@ -414,14 +475,14 @@ successful_movies <- TITLE_RATINGS %>%
   inner_join(TITLE_BASICS, by = "tconst") %>%
   filter(titleType == "movie")
 
-# Group by decade and genre, count successful movies
+# Group
 success_by_genre_decade <- successful_movies %>%
   separate_rows(genres, sep = ",") %>% # Split multiple genres
   group_by(decade, genres) %>%
   summarize(success_count = n(), .groups = 'drop') %>%
   arrange(desc(success_count))
 
-# Visualizing most successful genres per decade
+
 library(ggplot2)
 
 ggplot(success_by_genre_decade, aes(x = decade, y = success_count, fill = genres)) +
@@ -441,8 +502,9 @@ Notably, Drama shows a significant surge in success during the late 1990s and ea
 
 ## Drama emerges as the most consistent genre in generating successes over the years.
 Conversely, genres like Western and War, which were more prevalent in earlier decades, have experienced a decline in successful productions, suggesting a shift in audience preferences.
-```{r}
-#Task4.2
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 
 # Filter for movies since 2010
 recent_successes <- successful_movies %>%
@@ -452,7 +514,7 @@ recent_successes <- successful_movies %>%
   summarize(success_count = n(), .groups = 'drop') %>%
   arrange(desc(success_count))
 
-# Plotting recent successful genres
+
 ggplot(recent_successes, aes(x = reorder(genres, -success_count), y = success_count)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   labs(title = "Most Successful Genres Since 2010", x = "Genres", y = "Success Count") +
@@ -483,18 +545,20 @@ For the upcoming drama film, we are bringing together a powerhouse team with a p
 
 **Christopher Nolan**, with **5 successful projects** as a director, is a visionary storyteller who excels in delivering high-concept dramas with deep emotional core. Known for films like *Inception*, *Dunkirk*, and *Interstellar*, Nolan’s unique approach to narrative structure and character development makes him an ideal director for this drama project. His reputation for creating visually stunning and intellectually stimulating films is sure to attract both critical attention and box-office success.
 
-```{r}
+````{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 
-# Define the target genre
+
 target_genre <- "Drama"
 
-# Step 1: Filter films from the target genre with success scores above the threshold
+#filter by success threshold
 successful_movies <- TITLE_BASICS %>%
   inner_join(TITLE_RATINGS, by = "tconst") %>%
   filter(grepl(target_genre, genres) & successScore > success_threshold) %>%
   select(tconst, primaryTitle)
 
-# Step 2: Identify directors who have worked on the successful movies
+# identify directors
 successful_directors <- TITLE_PRINCIPALS %>%
   filter(tconst %in% successful_movies$tconst & category == "director") %>%
   select(tconst, nconst) %>%
@@ -505,7 +569,7 @@ successful_directors <- TITLE_PRINCIPALS %>%
   top_n(1)
 
 
-# Step 3: Identify actors from the successful movies
+# identify actors
 successful_actors <- TITLE_PRINCIPALS %>%
   filter(tconst %in% successful_movies$tconst & category == "actor") %>%
   select(tconst, nconst) %>%
@@ -515,14 +579,14 @@ successful_actors <- TITLE_PRINCIPALS %>%
   arrange(desc(success_count)) %>%
   top_n(2)
 
-# Step 4: Prepare the final table of successful personnel with primary names
+# prepare table
 key_personnel <- bind_rows(
   successful_actors %>% rename(personnel = primaryName, success_count = success_count),
   successful_directors %>% rename(personnel = primaryName, success_count = success_count)
 )
 
 
-# Create a table of successful personnel
+#table of successful personnel
 key_personnel_table <- key_personnel %>%
   gt() %>%
   tab_header(
@@ -533,10 +597,9 @@ key_personnel_table <- key_personnel %>%
     success_count = "Number of Successful Projects"
   )
 
-# Print the table
 print(key_personnel_table)
 
-# Visualize the success of the chosen personnel
+
 ggplot(key_personnel, aes(x = reorder(personnel, success_count), y = success_count, fill = personnel)) +
   geom_bar(stat = "identity") +
   coord_flip() +
@@ -544,22 +607,87 @@ ggplot(key_personnel, aes(x = reorder(personnel, success_count), y = success_cou
   theme_minimal()
 ```
 This combination of actors and director, each with a wealth of experience and accolades in the drama genre, positions this project for a strong reception. The collaboration of these talented individuals, with their history of success, will no doubt create a compelling, memorable drama that resonates with viewers.
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 
+# join tables
+filtered_movies_with_basics <- filtered_movies %>%
+  inner_join(TITLE_BASICS, by = "tconst")
+
+# filters
+high_rating_threshold <- 8.0
+min_votes_threshold <- 50000
+classic_movie_year <- 25  # We want movies that haven't been remade in the past 25 years
+
+classic_movies <- filtered_movies_with_basics %>%
+  filter(averageRating >= high_rating_threshold,
+         numVotes >= min_votes_threshold,
+         successScore >= success_threshold,  
+         startYear < (2024 - classic_movie_year),
+         titleType == "movie")  
+
+# Check if any remakes have been made in the last 25 years
+recent_movies <- TITLE_BASICS %>%
+  filter(startYear >= (2024 - classic_movie_year))  # Movies made in the last 25 years
+
+# Exclude any classic movies that have been remade in the last 25 years
+remade_movies <- recent_movies %>%
+  select(tconst) %>%
+  distinct()
+
+# Modify anti_join to use tconst correctly
+classic_movies_no_remakes <- classic_movies %>%
+  anti_join(remade_movies, by = "tconst")  # Exclude movies that have been remade
+
+# find key personnel (actors, directors, writers) in classic movies
+classic_movie_personnel <- TITLE_PRINCIPALS %>%
+  filter(tconst %in% classic_movies_no_remakes$tconst) %>%
+  select(tconst, nconst, category) %>%
+  inner_join(NAME_BASICS, by = "nconst")
+
+# check if key personnel are still alive
+living_personnel <- classic_movie_personnel %>%
+  filter(is.na(deathYear))  
+
+# display classic movies and their living personnel for potential remake
+classic_movies_selected <- classic_movies_no_remakes %>%
+  inner_join(living_personnel, by = "tconst")
+
+classic_movies_selected %>%
+  select(primaryTitle, startYear, averageRating, numVotes, successScore, primaryName, birthYear, deathYear, category) %>%
+  arrange(desc(averageRating), desc(successScore), desc(numVotes)) %>%
+  head(1) %>%
+  gt() %>%
+  tab_header(
+    title = "Top Classic Movie for Remake"
+  ) %>%
+  cols_label(
+    primaryTitle = "Title",
+    startYear = "Year",
+    averageRating = "IMDb Rating",
+    numVotes = "Votes",
+    successScore = "Success Score",
+    primaryName = "Personnel Name",
+    birthYear = "Born",
+    deathYear = "Died",
+    category = "Role"
+  ) %>%
+  fmt_number(
+    columns = vars(averageRating, successScore),
+    decimals = 2
+  ) %>%
+  fmt_number(
+    columns = vars(numVotes),
+    decimals = 0
+  )
 ```
+# Elevator Pitch: "The Shawshank Redemption" Remake
 
-```{r}
+Our next project is a high-stakes remake of **"The Shawshank Redemption" (1994)**, one of the most beloved drama films in history, with an IMDb rating of **9.3** and over **2.9 million votes**. With no remakes in the last 25 years, this classic is ripe for a revival, and we have assembled a dream team to deliver it to a new generation.
 
-```
+Starring **Aaron Paul** and **Bob Odenkirk**, two actors with **16 successful projects** each, their on-screen chemistry from *Breaking Bad* and *Better Call Saul* will bring a new dynamic to the characters of Andy and Red. **Aaron Paul’s** raw emotional depth and **Bob Odenkirk’s** nuanced transition from comedy to drama make them a perfect fit for the lead roles.
 
-```{r}
+Helming the project is **Christopher Nolan**, a director known for creating visually stunning, emotionally rich narratives. With **5 successful projects**, Nolan’s reputation for blending intricate storytelling with character-driven plots will breathe fresh life into the powerful themes of hope, resilience, and friendship at the heart of this story. Nolan's signature style and deep emotional resonance are sure to captivate both new audiences and long-time fans.
 
-```
-
-```{r}
-
-```
-
-```{r}
-
-```
+This film will combine nostalgia with a modern sensibility, promising a fresh yet faithful take on the original story. With the potential involvement of **Tim Robbins** in a cameo, we also bring a nod to the classic while attracting new viewers. This remake is poised to dominate the box office and receive critical acclaim.
