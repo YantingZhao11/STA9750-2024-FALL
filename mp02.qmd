@@ -3,6 +3,8 @@ title: "Insights for Successful Hollywood Film Development and Proposal"
 ---
 The Hollywood movie industry is constantly seeking fresh and innovative ideas for films that captivate audiences and achieve commercial success. Traditionally, this has involved acquiring rights to life stories, securing production options for promising novels, or adapting established intellectual property (IP) into films. However, in recent years, this process has been criticized for its over-reliance on sequels and predictable storylines. To combat this trend and inspire new content, this report aims to leverage data-driven insights to identify key factors that contribute to the success of films. By analyzing past successes, failures, and the contributions of top filmmakers and actors, we hope to generate creative and informed ideas for future films.
 
+*The data used for this project is a condensed, smaller size to ensure efficient processing.
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -431,7 +433,7 @@ nolan_ratings %>%
     title = "Top Christopher Nolan Movies (Based on Success Score)"
   )
 ```
-### 4. Movies Above Success Threshold  
+### 4 - 5. Movies Above Success Threshold  
 Lastly, we established a threshold for projects to be considered a ‘success,’ identifying those movies that exceed a success score of **9.89179010376421**:
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
