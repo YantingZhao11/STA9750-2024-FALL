@@ -307,7 +307,7 @@ top_series |>
       table.width = pct(100)  
     )
 ```
-### 6. Average Ratings for Early and Later Seasons of Happy Days
+### 6. Average Ratings of Early and Later Seasons of Happy Days
 Lastly, regarding classic television, *Happy Days* (1974-1984) brings us to an intriguing discussion about its ratings. The average ratings for the seasons are as follows:
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -332,18 +332,16 @@ average_ratings <- happy_days_episodes |>
   summarise(average_rating = mean(averageRating, na.rm = TRUE), .groups = 'drop')
 
 
-average_ratings |>
-  gt() |>
-  tab_header(
-    title = "Average Ratings for Early and Later Seasons of Happy Days"
-  ) |>
-  cols_label(
-    season_group = "Season Group",
-    average_rating = "Average Rating"
-  ) |>
-  tab_options(
-    table.width = pct(100)  
-  )
+ggplot(average_ratings, aes(x = season_group, y = average_rating, fill = season_group)) +
+  geom_bar(stat = "identity", width = 0.6, show.legend = FALSE) +
+  geom_text(aes(label = sprintf("%.2f", average_rating)), vjust = -0.5, size = 4) +  
+  scale_fill_manual(values = c("Early" = "lightblue", "Later" = "salmon")) + 
+  labs(title = "Average Ratings for Early and Later Seasons of Happy Days", 
+       x = "Season Group", 
+       y = "Average Rating") +
+  ylim(0, 10) +  
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
 
 ```
 Is it true that episodes from later seasons of *Happy Days* have lower average ratings than the early seasons? The data clearly indicates that **later seasons** do, indeed, have lower average ratings than the **early seasons**.
