@@ -135,7 +135,7 @@ TITLE_CREW_sample <- display_sample(TITLE_CREW, "TITLE_CREW")
 TITLE_CREW_sample 
 ```
 
-## TITLE_PRINCIPALS`
+## TITLE_PRINCIPALS
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -380,7 +380,7 @@ top_successful_movies %>%
   )
 
 ```
-### 2. Low Scoring Movies (Low Success Score, High Votes)  
+### 2. Low Scoring Movies (Low Success Score)  
 In contrast, we identified several movies that received a large number of IMDb votes yet scored poorly on our success metric:
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -394,11 +394,15 @@ poorly_rated_movies <- TITLE_RATINGS %>%
   arrange(successScore) %>%
   head(5)
 
-poorly_rated_movies %>%
-  gt() %>%
-  tab_header(
-    title = "Low Scoring Movies (Low Success Score, High Votes)"
-  )
+ggplot(poorly_rated_movies, aes(x = reorder(primaryTitle, successScore), y = successScore)) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  geom_text(aes(label = sprintf("%.2f", successScore)), hjust = -0.1, size = 3.5) +  # Display two decimal places
+  coord_flip() +  # Flip the axes for better readability
+  labs(title = "Low Scoring Movies with High Votes", 
+       x = "Movie Title", 
+       y = "Success Score") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
 
 ```
 ### 3. Top Christopher Nolan Movies (Based on Success Score)  
@@ -434,7 +438,7 @@ nolan_ratings %>%
   )
 ```
 ### 4 - 5. Movies Above Success Threshold  
-Lastly, we established a threshold for projects to be considered a ‘success,’ identifying those movies that exceed a success score of **9.89179010376421**:
+Lastly, we established a threshold for projects to be considered a ‘success,’ identifying those movies that exceed a success score of **9.89**:
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -687,7 +691,7 @@ classic_movies_selected %>%
   )
 ```
 
-# Elevator Pitch: "The Shawshank Redemption" Remake
+## Elevator Pitch: "The Shawshank Redemption" Remake
 
 Our next project is a high-stakes remake of **"The Shawshank Redemption" (1994)**, one of the most beloved drama films in history, with an IMDb rating of **9.3** and over **2.9 million votes**. With no remakes in the last 25 years, this classic is ripe for a revival, and we have assembled a dream team to deliver it to a new generation.
 
