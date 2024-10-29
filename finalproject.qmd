@@ -7,6 +7,15 @@ editor: visual
 #| code-fold: true
 #| code-summary: "Show the code"
 
+if(!require("tidytext")) install.packages("tidytext")
+library(tidytext)
+
+if(!require("RColorBrewer")) install.packages("RColorBrewer")
+library(RColorBrewer)
+
+if(!require("lubridate")) install.packages("lubridate")
+library(lubridate)
+
   if(!require("stringr")) install.packages("stringr")
 library(stringr)
 
@@ -29,99 +38,171 @@ mtaincident_file <- function(filepath) {
   as.data.frame(readr::read_csv(filepath, lazy = FALSE, show_col_types = FALSE))
 }
 
-# Define the full path to the file
+
 path <- "C:\\Users\\w3038\\Downloads\\STA 9750\\Final Project\\MTA_Subway_Major_Incidents__Beginning_2020_20241026.csv"
 
-# Load the data using the updated function
+
 mtaincident <- mtaincident_file(path)
 
 # Clean the data by removing empty rows in 'line' column
 mtaincident <- mtaincident %>%
   filter(line != "")
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 
 # Calculate total complaints by subway line
 line_incident <- mtaincident %>%
   group_by(line) %>%
   summarise(total_incident = sum(count)) %>%
-  arrange(desc(total_incident))
+  arrange(total_incident)
 
-# Plot for all subway lines with complaints in descending order
-incident_line_graph <- ggplot(line_incident, aes(x = reorder(line, -total_incident), y = total_incident)) +
+incident_line_graph <- ggplot(line_incident, aes(x = reorder(line, total_incident), y = total_incident)) +
   geom_bar(stat = "identity", fill = "darkred") +
+  geom_text(aes(label = total_incident), hjust = -0.2, color = "black", size = 3.5) +  # Add labels
   labs(title = "Subway Lines by Top Incidents",
        x = "Subway Line",
        y = "Total Incidents") +
   theme_minimal() +
-  coord_flip() # Flip for readability
+  coord_flip() +  # Flip for readability
+  theme(plot.title = element_text(hjust = 0.5))
 
-
-# Display the plots
+# Display the plot
 incident_line_graph
+```
 
-# Create gt table for the top 5 lines with the most incidents
-top_5_incidents <- line_incident %>%
-  head(5) %>%
-  gt() %>%
-  tab_header(
-    title = "Top 5 Subway Lines with Most Incidents"
-  ) %>%
-  cols_label(
-    line = "Subway Line",
-    total_incident = "Total Incidents"
-  ) %>%
-  fmt_number(
-    columns = vars(total_incident),
-    decimals = 0
-  )
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 
-# Create gt table for the bottom 5 lines with the least incidents
-least_5_incidents <- line_incident %>%
-  tail(5) %>%
-  gt() %>%
-  tab_header(
-    title = "Top 5 Subway Lines with Least Incidents"
-  ) %>%
-  cols_label(
-    line = "Subway Line",
-    total_incident = "Total Incidents"
-  ) %>%
-  fmt_number(
-    columns = vars(total_incident),
-    decimals = 0
-  )
 
-# Display the gt tables
-top_5_incidents
-least_5_incidents
-
-# Calculate total incidents by category and get top 5 reasons
-top_reasons <- mtaincident %>%
-  group_by(category) %>%
+filtered_line_incident <- mtaincident %>%
+  filter(line != "Systemwide") %>%
+  group_by(line) %>%
   summarise(total_incident = sum(count)) %>%
-  arrange(desc(total_incident)) %>%
-  head(5) %>%
+  arrange(desc(total_incident))
+
+# Identify the top 3 and least 3 lines based on total incident counts
+top_3_lines <- head(filtered_line_incident, 3)$line
+least_3_lines <- tail(filtered_line_incident, 3)$line
+
+# Filter the original dataset to get incidents for the selected lines
+top_least_lines_data <- mtaincident %>%
+  filter(line %in% c(top_3_lines, least_3_lines))
+
+# Calculate the top 3 incident reasons for each line
+top_least_incident_reasons <- top_least_lines_data %>%
+  group_by(line, category) %>%
+  summarise(total_incidents = sum(count)) %>%
+  arrange(line, desc(total_incidents)) %>%
+  group_by(line) %>%
+  slice_head(n = 3)  # Get the top 3 incident reasons for each line
+
+# Create a single horizontal bar chart for all lines
+combined_incidents_graph <- ggplot(top_least_incident_reasons, aes(x = total_incidents, y = reorder(category, total_incidents), fill = line)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Position bars side by side
+  labs(title = "Top 3 Incident Reasons for Top and Least Incident Subway Lines",
+       x = "Total Incidents",
+       y = "Incident Category") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_brewer(palette = "Set2")  # Use a distinct color palette for lines
+
+# Display the plot
+print(combined_incidents_graph)
+
+
+
+
+
+
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| 
+# First, convert the 'month' column to a Date format if not already done
+mtaincident$month <- as.Date(mtaincident$month, format = "%m/%d/%Y")
+
+# Aggregate the data to get total complaints by month and category
+monthly_category_complaints <- mtaincident %>%
+  group_by(month, category) %>%
+  summarise(total_complaints = sum(count)) %>%
+  ungroup()
+
+# Plot the stacked area chart
+stacked_area_chart <- ggplot(monthly_category_complaints, aes(x = month, y = total_complaints, fill = category)) +
+  geom_area(alpha = 0.8, color = "black", size = 0.2) +
+  labs(title = "Monthly Complaints by Category Over Time",
+       x = "Month",
+       y = "Total Complaints",
+       fill = "Complaint Category") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set3") +  # Choose a color palette for clarity
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Display the plot
+stacked_area_chart
+
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| 
+# Create borough mapping based on your updated list
+borough_data <- data.frame(
+  line = c("1", "1", "2", "2", "3", "3", "4", "4", "4", "5", 
+           "5", "6", "6", "7", "7", "A", "A", "B", "B", "B", 
+           "C", "C", "D", "D", "D", "E", "E", "F", "F", "F", 
+           "G", "G", "J", "J", "Z", "Z", "L", "L", "N", "N", 
+           "N", "Q", "Q", "R", "R", "R", "S Rock", "S Fkln", "S 42nd"),
+  borough = c("Manhattan", "Bronx", "Brooklyn", "Manhattan", 
+              "Brooklyn", "Manhattan", "Manhattan", "Brooklyn", 
+              "Bronx", "Brooklyn", "Manhattan", "Manhattan", 
+              "Bronx", "Manhattan", "Queens", "Manhattan", 
+              "Brooklyn", "Brooklyn", "Bronx", "Manhattan", 
+              "Manhattan", "Brooklyn", "Brooklyn", "Manhattan", 
+              "Bronx", "Queens", "Manhattan", "Manhattan","Queens", "Brooklyn", 
+              "Queens", "Brooklyn", "Manhattan", "Queens", 
+              "Manhattan", "Queens", "Manhattan", "Brooklyn", 
+              "Queens", "Manhattan", "Brooklyn", "Manhattan", 
+              "Brooklyn", "Queens", "Manhattan", "Brooklyn", 
+              "Manhattan", "Brooklyn", "Manhattan")
+)
+
+# Define top and least incident lines
+top_lines <- c("N", "6", "2")
+least_lines <- c("S Rock", "S Fkln", "S 42nd")
+
+# Combine the top and least lines into one vector
+all_lines <- c(top_lines, least_lines)
+
+
+
+# Filter the borough data to get relevant boroughs for the lines of interest
+relevant_boroughs <- borough_data %>%
+  filter(line %in% all_lines)
+
+# Count occurrences of each borough across the relevant lines
+borough_counts <- relevant_boroughs %>%
+  group_by(borough) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Create a gt table for borough counts
+borough_counts_table <- borough_counts %>%
   gt() %>%
-  tab_header(
-    title = "Top 5 Reasons for MTA Incidents"
-  ) %>%
-  cols_label(
-    category = "Incident Category",
-    total_incident = "Total Incidents"
-  ) %>%
-  fmt_number(
-    columns = vars(total_incident),
-    decimals = 0
-  )
+  tab_header(title = "Frequency of Boroughs for Selected Subway Lines") %>%
+  cols_label(borough = "Borough", count = "Incident Count") %>%
+  fmt_number(columns = vars(count), decimals = 0) %>%
+  tab_options(table.width = pct(100))
 
 # Display the gt table
-top_reasons
-
-# Load necessary libraries
-if(!require("lubridate")) install.packages("lubridate")
-library(lubridate)
-
-
-
-
+borough_counts_table
 
 ```
