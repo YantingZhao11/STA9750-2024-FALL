@@ -7,6 +7,8 @@ editor: visual
 #| code-fold: true
 #| code-summary: "Show the code"
 
+
+#Run and clean the datas
 if(!require("tidytext")) install.packages("tidytext")
 library(tidytext)
 
@@ -46,31 +48,7 @@ mtaincident <- mtaincident_file(path)
 
 # Clean the data by removing empty rows in 'line' column
 mtaincident <- mtaincident %>%
-  filter(line != "")
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-#| code-fold: true
-#| code-summary: "Show the code"
-
-# Calculate total complaints by subway line
-line_incident <- mtaincident %>%
-  group_by(line) %>%
-  summarise(total_incident = sum(count)) %>%
-  arrange(total_incident)
-
-incident_line_graph <- ggplot(line_incident, aes(x = reorder(line, total_incident), y = total_incident)) +
-  geom_bar(stat = "identity", fill = "darkred") +
-  geom_text(aes(label = total_incident), hjust = -0.2, color = "black", size = 3.5) +  # Add labels
-  labs(title = "Subway Lines by Top Incidents",
-       x = "Subway Line",
-       y = "Total Incidents") +
-  theme_minimal() +
-  coord_flip() +  # Flip for readability
-  theme(plot.title = element_text(hjust = 0.5))
-
-# Display the plot
-incident_line_graph
+  filter(line != "", line != "Systemwide")
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -78,53 +56,7 @@ incident_line_graph
 #| code-summary: "Show the code"
 
 
-filtered_line_incident <- mtaincident %>%
-  filter(line != "Systemwide") %>%
-  group_by(line) %>%
-  summarise(total_incident = sum(count)) %>%
-  arrange(desc(total_incident))
-
-# Identify the top 3 and least 3 lines based on total incident counts
-top_3_lines <- head(filtered_line_incident, 3)$line
-least_3_lines <- tail(filtered_line_incident, 3)$line
-
-# Filter the original dataset to get incidents for the selected lines
-top_least_lines_data <- mtaincident %>%
-  filter(line %in% c(top_3_lines, least_3_lines))
-
-# Calculate the top 3 incident reasons for each line
-top_least_incident_reasons <- top_least_lines_data %>%
-  group_by(line, category) %>%
-  summarise(total_incidents = sum(count)) %>%
-  arrange(line, desc(total_incidents)) %>%
-  group_by(line) %>%
-  slice_head(n = 3)  # Get the top 3 incident reasons for each line
-
-# Create a single horizontal bar chart for all lines
-combined_incidents_graph <- ggplot(top_least_incident_reasons, aes(x = total_incidents, y = reorder(category, total_incidents), fill = line)) +
-  geom_bar(stat = "identity", position = "dodge") +  # Position bars side by side
-  labs(title = "Top 3 Incident Reasons for Top and Least Incident Subway Lines",
-       x = "Total Incidents",
-       y = "Incident Category") +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  scale_fill_brewer(palette = "Set2")  # Use a distinct color palette for lines
-
-# Display the plot
-print(combined_incidents_graph)
-
-
-
-
-
-
-
-```
-
-```{r echo=TRUE, message=FALSE, warning=FALSE}
-#| code-fold: true
-#| code-summary: "Show the code"
-#| 
+#Monthly Complaints by Category Over Time
 # First, convert the 'month' column to a Date format if not already done
 mtaincident$month <- as.Date(mtaincident$month, format = "%m/%d/%Y")
 
@@ -153,6 +85,140 @@ stacked_area_chart
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
+
+mtaincident$month <- as.Date(mtaincident$month)
+
+# Create pre-COVID and post-COVID datasets
+pre_covid_data <- mtaincident %>%
+  filter(month >= as.Date("2020-01-01") & month < as.Date("2022-01-01"))
+
+post_covid_data <- mtaincident %>%
+  filter(month >= as.Date("2022-01-01") & month < as.Date("2025-01-01"))
+
+# Calculate total incidents for pre-COVID
+line_incident_pre <- pre_covid_data %>%
+  group_by(line) %>%
+  summarise(total_incident = sum(count, na.rm = TRUE)) %>%
+  arrange(desc(total_incident))
+
+# Calculate total incidents for post-COVID
+line_incident_post <- post_covid_data %>%
+  group_by(line) %>%
+  summarise(total_incident = sum(count, na.rm = TRUE)) %>%
+  arrange(desc(total_incident))
+
+# Create bar plot for pre-COVID incidents
+incident_line_graph_pre <- ggplot(line_incident_pre, aes(x = reorder(line, total_incident), y = total_incident)) +
+  geom_bar(stat = "identity", fill = "darkred") +
+  geom_text(aes(label = total_incident), hjust = -0.2, color = "black", size = 3.5) +
+  labs(title = "Pre-COVID Subway Lines by Total Incidents (2020-2021)",
+       x = "Subway Line",
+       y = "Total Incidents") +
+  theme_minimal() +
+  coord_flip() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Create bar plot for post-COVID incidents
+incident_line_graph_post <- ggplot(line_incident_post, aes(x = reorder(line, total_incident), y = total_incident)) +
+  geom_bar(stat = "identity", fill = "darkgreen") +
+  geom_text(aes(label = total_incident), hjust = -0.2, color = "black", size = 3.5) +
+  labs(title = "Post-COVID Subway Lines by Total Incidents (2022-2024)",
+       x = "Subway Line",
+       y = "Total Incidents") +
+  theme_minimal() +
+  coord_flip() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Display the plots
+print(incident_line_graph_pre)
+print(incident_line_graph_post)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Create a new column for year to facilitate filtering
+mtaincident$year <- year(mtaincident$month)
+
+# Filter for pre-COVID (2020-2021) and calculate total incidents per line
+pre_covid_data <- mtaincident %>%
+  filter(month >= as.Date("2020-01-01") & month < as.Date("2022-01-01"))
+
+pre_covid_line_totals <- pre_covid_data %>%
+  group_by(line) %>%
+  summarise(total_incident = sum(count)) %>%
+  arrange(desc(total_incident))
+
+# Identify the top 5 lines for pre-COVID
+top_5_pre_covid_lines <- head(pre_covid_line_totals, 5)$line
+
+# Calculate the top 3 incident reasons for each of the top 5 pre-COVID lines
+pre_covid_incident_reasons <- pre_covid_data %>%
+  filter(line %in% top_5_pre_covid_lines) %>%
+  group_by(line, category) %>%
+  summarise(total_incidents = sum(count)) %>%
+  arrange(line, desc(total_incidents)) %>%
+  group_by(line) %>%
+  slice_head(n = 3)  # Get the top 3 incident reasons for each line
+
+# Plot the pre-COVID data
+pre_covid_graph <- ggplot(pre_covid_incident_reasons, aes(x = total_incidents, y = reorder(category, total_incidents), fill = line)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ line) +
+  labs(title = "Top 3 Incident Reasons for Top 5 Subway Lines (Pre-COVID 2020-2021)",
+       x = "Total Incidents",
+       y = "Incident Category") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_brewer(palette = "Set3")
+
+# Display the pre-COVID plot
+print(pre_covid_graph)
+
+# Filter for post-COVID (2022-2024) and calculate total incidents per line
+post_covid_data <- mtaincident %>%
+  filter(month >= as.Date("2022-01-01") & month < as.Date("2025-01-01"))
+
+post_covid_line_totals <- post_covid_data %>%
+  group_by(line) %>%
+  summarise(total_incident = sum(count)) %>%
+  arrange(desc(total_incident))
+
+# Identify the top 5 lines for post-COVID
+top_5_post_covid_lines <- head(post_covid_line_totals, 5)$line
+
+# Calculate the top 3 incident reasons for each of the top 5 post-COVID lines
+post_covid_incident_reasons <- post_covid_data %>%
+  filter(line %in% top_5_post_covid_lines) %>%
+  group_by(line, category) %>%
+  summarise(total_incidents = sum(count)) %>%
+  arrange(line, desc(total_incidents)) %>%
+  group_by(line) %>%
+  slice_head(n = 3)  # Get the top 3 incident reasons for each line
+
+# Plot the post-COVID data
+post_covid_graph <- ggplot(post_covid_incident_reasons, aes(x = total_incidents, y = reorder(category, total_incidents), fill = line)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ line) +
+  labs(title = "Top 3 Incident Reasons for Top 5 Subway Lines (Post-COVID 2022-2024)",
+       x = "Total Incidents",
+       y = "Incident Category") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_brewer(palette = "Set3")
+
+# Display the post-COVID plot
+print(post_covid_graph)
+
+
+
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 #| 
 # Create borough mapping based on your updated list
 borough_data <- data.frame(
@@ -175,34 +241,47 @@ borough_data <- data.frame(
               "Manhattan", "Brooklyn", "Manhattan")
 )
 
-# Define top and least incident lines
-top_lines <- c("N", "6", "2")
-least_lines <- c("S Rock", "S Fkln", "S 42nd")
+# Define line groups for pre-COVID and post-COVID
+pre_covid_lines <- c("6", "7", "E", "F", "N")
+post_covid_lines <- c("2", "6", "E", "F", "N")
 
-# Combine the top and least lines into one vector
-all_lines <- c(top_lines, least_lines)
+# Filter the borough data for pre-COVID lines
+pre_covid_boroughs <- borough_data %>%
+  filter(line %in% pre_covid_lines)
 
+# Filter the borough data for post-COVID lines
+post_covid_boroughs <- borough_data %>%
+  filter(line %in% post_covid_lines)
 
-
-# Filter the borough data to get relevant boroughs for the lines of interest
-relevant_boroughs <- borough_data %>%
-  filter(line %in% all_lines)
-
-# Count occurrences of each borough across the relevant lines
-borough_counts <- relevant_boroughs %>%
+# Count occurrences of each borough across the pre-COVID lines
+pre_covid_borough_counts <- pre_covid_boroughs %>%
   group_by(borough) %>%
   summarise(count = n()) %>%
   arrange(desc(count))
 
-# Create a gt table for borough counts
-borough_counts_table <- borough_counts %>%
+# Count occurrences of each borough across the post-COVID lines
+post_covid_borough_counts <- post_covid_boroughs %>%
+  group_by(borough) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Create a gt table for pre-COVID borough counts
+pre_covid_table <- pre_covid_borough_counts %>%
   gt() %>%
-  tab_header(title = "Frequency of Boroughs for Selected Subway Lines") %>%
+  tab_header(title = "Frequency of Boroughs for Pre-COVID Subway Lines") %>%
   cols_label(borough = "Borough", count = "Incident Count") %>%
   fmt_number(columns = vars(count), decimals = 0) %>%
   tab_options(table.width = pct(100))
 
-# Display the gt table
-borough_counts_table
+# Create a gt table for post-COVID borough counts
+post_covid_table <- post_covid_borough_counts %>%
+  gt() %>%
+  tab_header(title = "Frequency of Boroughs for Post-COVID Subway Lines") %>%
+  cols_label(borough = "Borough", count = "Incident Count") %>%
+  fmt_number(columns = vars(count), decimals = 0) %>%
+  tab_options(table.width = pct(100))
 
+# Display the gt tables
+pre_covid_table
+post_covid_table
 ```
