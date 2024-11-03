@@ -8,9 +8,13 @@ editor: visual
 #| code-summary: "Show the code"
 #| 
 # Load necessary packages
+if(!require("sf")) install.packages("sf")
+library(sf)
 library(httr)
 library(tidyverse)
-
+library(dplyr)
+library(ggplot2)
+library(gt)
 
 #data_1_Task_1
 
@@ -52,7 +56,7 @@ base_url <- "https://cdmaps.polisci.ucla.edu/shp/"
 download_shapefiles(93, 112, base_url)
 
 
-#data_3_Task_1
+#data_1_Task_2
 
 # Create directory for shapefiles if it doesn't exist
 dir.create("data/census_shapefiles", showWarnings = FALSE, recursive = TRUE)
@@ -63,7 +67,7 @@ shapefile_urls <- c(
   "https://www2.census.gov/geo/tiger/TIGER2015/CD/tl_2015_us_cd114.zip",
   "https://www2.census.gov/geo/tiger/TIGER2016/CD/tl_2016_us_cd115.zip",
   "https://www2.census.gov/geo/tiger/TIGER2017/CD/tl_2017_us_cd115.zip",
-  "https://www2.census.gov/geo/tiger/TIGER2018PLtest/CD/2020/tl_2018_44_cd116.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2018/CD/tl_2018_us_cd116.zip",
   "https://www2.census.gov/geo/tiger/TIGER2019/CD/tl_2019_us_cd116.zip",
   "https://www2.census.gov/geo/tiger/TIGER2020/CD/tl_2020_us_cd116.zip",
   "https://www2.census.gov/geo/tiger/TIGER2021/CD/tl_2021_us_cd116.zip",
@@ -88,5 +92,324 @@ download_shapefiles_census <- function(urls, dest_dir) {
 
 # Call the download function
 download_shapefiles_census(shapefile_urls, "data/census_shapefiles")
+
+```
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+#3.1 Which states have gained and lost the most seats in the US House of Representatives between 1976 and 2022?
+
+# Filter data for relevant years (1976 and 2022)
+house_seats <- house_data %>%
+  filter(year %in% c(1976, 2022)) %>%
+  distinct(year, state, district) %>%
+  group_by(year, state) %>%
+  summarise(seat_count = n(), .groups = "drop")
+
+# Calculate seat changes
+seat_changes <- house_seats %>%
+  pivot_wider(names_from = year, values_from = seat_count, names_prefix = "year_") %>%
+  mutate(seat_change = year_2022 - year_1976) %>%
+  arrange(desc(seat_change))
+
+# Separate states with the highest seat changes
+top_gained <- seat_changes %>% top_n(5, seat_change)
+top_lost <- seat_changes %>% top_n(-5, seat_change)
+
+# Plot for top gained seats
+gained_plot <- ggplot(top_gained, aes(x = reorder(state, seat_change), y = seat_change, fill = seat_change)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Top 5 States with Most Gained Seats (1976-2022)",
+       x = "State",
+       y = "Number of Seats Gained") +
+  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  theme_minimal()
+
+# Plot for top lost seats
+lost_plot <- ggplot(top_lost, aes(x = reorder(state, seat_change), y = seat_change, fill = -seat_change)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Top 5 States with Most Lost Seats (1976-2022)",
+       x = "State",
+       y = "Number of Seats Lost") +
+  scale_fill_gradient(low = "lightcoral", high = "darkred") +
+  theme_minimal()
+
+# Display plots
+list(gained_plot, lost_plot)
+
+```
+```{r}
+
+#Task3.2
+# Filter for New York State and U.S. House elections
+ny_house_data <- house_data %>%
+  filter(state == "NEW YORK", office == "US HOUSE")
+
+# Filter for candidates from major parties only (Democrat or Republican)
+# and keep records for candidates with votes across different lines
+fusion_analysis <- ny_house_data %>%
+  mutate(is_major_party = party %in% c("DEMOCRAT", "REPUBLICAN")) %>%
+  group_by(year, district, candidate) %>%
+  summarise(
+    total_votes_all_lines = sum(candidatevotes),
+    major_party_votes = sum(candidatevotes[is_major_party]),
+    .groups = "drop"
+  )
+
+# Determine the election winner by both fusion and non-fusion scenarios
+# Winner with fusion system (total across all lines)
+winners_fusion <- fusion_analysis %>%
+  group_by(year, district) %>%
+  filter(total_votes_all_lines == max(total_votes_all_lines)) %>%
+  select(year, district, candidate, total_votes_all_lines) %>%
+  rename(fusion_winner = candidate, fusion_votes = total_votes_all_lines)
+
+# Winner without fusion system (major party line votes only)
+winners_nonfusion <- fusion_analysis %>%
+  group_by(year, district) %>%
+  filter(major_party_votes == max(major_party_votes)) %>%
+  select(year, district, candidate, major_party_votes) %>%
+  rename(nonfusion_winner = candidate, nonfusion_votes = major_party_votes)
+
+# Compare outcomes
+election_outcomes <- winners_fusion %>%
+  inner_join(winners_nonfusion, by = c("year", "district")) %>%
+  filter(fusion_winner != nonfusion_winner)
+
+election_outcomes_table <- election_outcomes %>%
+  gt() %>%
+  tab_header(
+    title = "Elections Affected by Fusion Voting System",
+    subtitle = "Comparison of Winners with and without Fusion Voting"
+  ) %>%
+  cols_label(
+    year = "Year",
+    district = "District",
+    fusion_winner = "Winner with Fusion Voting",
+    fusion_votes = "Votes (Fusion)",
+    nonfusion_winner = "Winner without Fusion Voting",
+    nonfusion_votes = "Votes (Non-Fusion)"
+  ) %>%
+  fmt_number(
+    columns = c(fusion_votes, nonfusion_votes),
+    decimals = 0
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "lightblue"),
+      cell_text(weight = "bold")
+    ),
+    locations = list(
+      cells_title(groups = c("title", "subtitle")),  # Apply styles to title and subtitle
+      cells_column_labels(columns = c(fusion_winner, nonfusion_winner))  # Styles for specific column labels
+    )
+  ) %>%
+  tab_options(
+    table.font.size = 14,
+    heading.align = "center"
+  )
+
+# Display the table
+print(election_outcomes_table)
+```
+
+```{r}
+# Filter and aggregate presidential votes
+presidential_votes <- president_data %>%
+  filter(office == "US PRESIDENT", year >= 1976, year <= 2012) %>%
+  group_by(year) %>%
+  summarise(total_president_votes = sum(candidatevotes), .groups = "drop")
+
+# Filter and aggregate congressional votes
+congressional_votes <- house_data %>%
+  filter(office == "US HOUSE", year >= 1976, year <= 2012) %>%
+  group_by(year) %>%
+  summarise(total_congress_votes = sum(candidatevotes), .groups = "drop")
+
+# Combine the datasets
+vote_comparison <- presidential_votes %>%
+  left_join(congressional_votes, by = "year")
+
+# Calculate vote percentage difference
+vote_comparison <- vote_comparison %>%
+  mutate(vote_percentage_difference = 
+           (total_president_votes - total_congress_votes) / total_congress_votes)
+
+# Create a gt table
+vote_table <- vote_comparison %>%
+  gt() %>%
+  tab_header(
+    title = "Total Votes for Presidential and Congressional Candidates (1976 - 2012)"
+  ) %>%
+  cols_label(
+    year = "Year",
+    total_president_votes = "Total Presidential Votes",
+    total_congress_votes = "Total Congressional Votes",
+    vote_percentage_difference = "Vote Percentage Difference (%)"
+  ) %>%
+  fmt_number(
+    columns = c(total_president_votes, total_congress_votes), 
+    decimals = 0
+  ) %>%
+  fmt_percent(
+    columns = vote_percentage_difference,
+    decimals = 1
+  )
+
+# Plotting the vote percentage difference over the years
+ggplot(vote_comparison, aes(x = year, y = vote_percentage_difference)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "blue", size = 2) +
+  labs(title = "Percentage Difference Between Presidential and Congressional Votes (1976 - 2012)",
+       x = "Year",
+       y = "Vote Percentage Difference (%)") +
+  theme_minimal()
+
+# Display the gt table
+vote_table
+```
+
+```{r}
+# Aggregate votes by party for presidential and congressional candidates
+party_votes <- president_data %>%
+  filter(office == "US PRESIDENT", year >= 1976, year <= 2012) %>%
+  group_by(year, party_simplified) %>%
+  summarise(president_votes = sum(candidatevotes), .groups = "drop") %>%
+  rename(party = party_simplified)
+
+congressional_party_votes <- house_data %>%
+  filter(office == "US HOUSE", year >= 1976, year <= 2012) %>%
+  group_by(year, party) %>%
+  summarise(congress_votes = sum(candidatevotes), .groups = "drop")
+
+# Combine the datasets
+party_vote_comparison <- party_votes %>%
+  left_join(congressional_party_votes, by = c("year", "party"))
+
+# Reshape data to long format
+party_vote_long <- party_vote_comparison %>%
+  pivot_longer(cols = c(president_votes, congress_votes), 
+               names_to = "vote_type", 
+               values_to = "votes")
+
+# Plotting stacked area graph by party
+ggplot(party_vote_long, aes(x = year, y = votes, fill = party)) +
+  geom_area(position = "stack") +
+  facet_wrap(~ vote_type) +
+  labs(title = "Votes for Presidential vs. Congressional Candidates by Party (1976 - 2012)",
+       x = "Year",
+       y = "Number of Votes",
+       fill = "Party") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set1") +
+  theme(legend.position = "top")
+
+```
+
+```{r}
+# Aggregate votes by state for presidential and congressional candidates
+state_vote_comparison <- president_data %>%
+  filter(office == "US PRESIDENT", year >= 1976, year <= 2012) %>%
+  group_by(state, year) %>%
+  summarise(presidential_votes = sum(candidatevotes), .groups = "drop")
+
+congressional_state_votes <- house_data %>%
+  filter(office == "US HOUSE", year >= 1976, year <= 2012) %>%
+  group_by(state, year) %>%
+  summarise(congressional_votes = sum(candidatevotes), .groups = "drop")
+
+# Combine the datasets
+state_votes_combined <- state_vote_comparison %>%
+  left_join(congressional_state_votes, by = c("state", "year"))
+
+# Reshape data to long format for ggplot
+state_votes_long <- state_votes_combined %>%
+  pivot_longer(cols = c(presidential_votes, congressional_votes), 
+               names_to = "vote_type", 
+               values_to = "votes")
+
+# Plotting grouped bar chart for votes by state
+ggplot(state_votes_long, aes(x = reorder(state, -votes), y = votes, fill = vote_type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Total Votes by State: Presidential vs. Congressional (1976 - 2012)",
+       x = "State",
+       y = "Total Votes",
+       fill = "Vote Type") +
+  theme_minimal() +
+  coord_flip() + # Flip coordinates for better visibility
+  scale_fill_manual(values = c("presidential_votes" = "blue", "congressional_votes" = "orange"))
+
+
+```
+
+```{r}
+#Are any presidents particularly more or less popular than their co-partisans?
+
+
+```
+Reading Data 1
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ 
+
+# Function to read UCLA shapefiles into R
+
+read_ucla_shapefiles <- function(directory) {
+
+  shapefiles <- list.files(directory, pattern = "\\.zip$", full.names = TRUE)
+
+  results <- list()
+
+  
+
+  for (zip_file in shapefiles) {
+
+    unzip_dir <- tempdir()
+
+    unzip(zip_file, exdir = unzip_dir)
+
+    
+
+    shp_files <- list.files(unzip_dir, pattern = "\\.shp$", full.names = TRUE, recursive = TRUE)
+
+    
+
+    for (shp_file in shp_files) {
+
+      tryCatch({
+
+        sf_object <- sf::st_read(shp_file)
+
+        results[[basename(shp_file)]] <- sf_object
+
+      }, error = function(e) {
+
+        message(paste("Error reading file:", shp_file, ":", e$message))
+
+      })
+
+    }
+
+  }
+
+  
+
+  return(results)
+
+}
+
+ # Define the shapefile directory
+ucla_dir <- "data/shapefiles"
+
+# Read the downloaded UCLA shapefiles into R
+
+ucla_shapefiles <- read_ucla_shapefiles(ucla_dir)
 
 ```
