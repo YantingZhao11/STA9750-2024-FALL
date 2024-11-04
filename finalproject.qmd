@@ -48,7 +48,15 @@ mtaincident <- mtaincident_file(path)
 
 # Clean the data by removing empty rows in 'line' column
 mtaincident <- mtaincident %>%
-  filter(line != "", line != "Systemwide")
+  filter(line != "", line != "Systemwide") %>%
+  mutate(division = case_when(
+    division == "A DIVISION" ~ "Number Line",
+    division == "B DIVISION" ~ "Letter Line",
+    TRUE ~ division  # Retain other values
+  ))
+
+# Optional: Check the first few rows of the cleaned dataset
+head(mtaincident)
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -86,130 +94,124 @@ stacked_area_chart
 #| code-fold: true
 #| code-summary: "Show the code"
 
-mtaincident$month <- as.Date(mtaincident$month)
+# Load and clean MTA incident data
+mtaincident$month <- as.Date(mtaincident$month)  # Ensure month column is in Date format
 
-# Create pre-COVID and post-COVID datasets
-pre_covid_data <- mtaincident %>%
+# Filter data for COVID (2020-2021) and post-COVID (2022-2024) periods
+covid_data <- mtaincident %>%
   filter(month >= as.Date("2020-01-01") & month < as.Date("2022-01-01"))
 
 post_covid_data <- mtaincident %>%
   filter(month >= as.Date("2022-01-01") & month < as.Date("2025-01-01"))
 
-# Calculate total incidents for pre-COVID
-line_incident_pre <- pre_covid_data %>%
-  group_by(line) %>%
+# Calculate total incidents by line and division for COVID period
+line_incident_covid <- covid_data %>%
+  group_by(line, division) %>%
   summarise(total_incident = sum(count, na.rm = TRUE)) %>%
   arrange(desc(total_incident))
 
-# Calculate total incidents for post-COVID
+# Calculate total incidents by line and division for post-COVID period
 line_incident_post <- post_covid_data %>%
-  group_by(line) %>%
+  group_by(line, division) %>%
   summarise(total_incident = sum(count, na.rm = TRUE)) %>%
   arrange(desc(total_incident))
 
-# Create bar plot for pre-COVID incidents
-incident_line_graph_pre <- ggplot(line_incident_pre, aes(x = reorder(line, total_incident), y = total_incident)) +
-  geom_bar(stat = "identity", fill = "darkred") +
-  geom_text(aes(label = total_incident), hjust = -0.2, color = "black", size = 3.5) +
-  labs(title = "Pre-COVID Subway Lines by Total Incidents (2020-2021)",
-       x = "Subway Line",
-       y = "Total Incidents") +
-  theme_minimal() +
-  coord_flip() +
-  theme(plot.title = element_text(hjust = 0.5))
+# Combine COVID and post-COVID datasets for mirrored plotting
+line_incidents_combined <- bind_rows(
+  line_incident_covid %>% mutate(period = "COVID (2020-2021)"),
+  line_incident_post %>% mutate(period = "Post-COVID (2022-2024)")
+)
 
-# Create bar plot for post-COVID incidents
-incident_line_graph_post <- ggplot(line_incident_post, aes(x = reorder(line, total_incident), y = total_incident)) +
-  geom_bar(stat = "identity", fill = "darkgreen") +
-  geom_text(aes(label = total_incident), hjust = -0.2, color = "black", size = 3.5) +
-  labs(title = "Post-COVID Subway Lines by Total Incidents (2022-2024)",
+# Separate data by division
+number_line_data <- line_incidents_combined %>%
+  filter(division == "Number Line")
+
+letter_line_data <- line_incidents_combined %>%
+  filter(division == "Letter Line")
+
+# Create mirrored chart for Number Line
+number_line_graph <- ggplot(number_line_data, aes(x = reorder(line, total_incident), y = ifelse(period == "COVID (2020-2021)", -total_incident, total_incident), fill = period)) +
+  geom_bar(stat = "identity", position = "identity") +
+  geom_text(aes(label = abs(total_incident)), 
+            position = position_stack(vjust = 0.5), 
+            color = "black", 
+            size = 3.5) +  # Display total incidents as text
+  scale_y_continuous(labels = abs) +  # Show absolute values on y-axis
+  labs(title = "Total Incidents by Number Line (COVID vs. Post-COVID)",
        x = "Subway Line",
        y = "Total Incidents") +
   theme_minimal() +
   coord_flip() +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(values = c("lightblue", "lightgreen"))
+
+# Create mirrored chart for Letter Line
+letter_line_graph <- ggplot(letter_line_data, aes(x = reorder(line, total_incident), y = ifelse(period == "COVID (2020-2021)", -total_incident, total_incident), fill = period)) +
+  geom_bar(stat = "identity", position = "identity") +
+  geom_text(aes(label = abs(total_incident)), 
+            position = position_stack(vjust = 0.5), 
+            color = "black", 
+            size = 3.5) +  # Display total incidents as text
+  scale_y_continuous(labels = abs) +  # Show absolute values on y-axis
+  labs(title = "Total Incidents by Letter Line (COVID vs. Post-COVID)",
+       x = "Subway Line",
+       y = "Total Incidents") +
+  theme_minimal() +
+  coord_flip() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(values = c("lightblue", "lightgreen"))
 
 # Display the plots
-print(incident_line_graph_pre)
-print(incident_line_graph_post)
+print(number_line_graph)
+print(letter_line_graph)
+
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
 
-# Create a new column for year to facilitate filtering
-mtaincident$year <- year(mtaincident$month)
+library(scales)
 
-# Filter for pre-COVID (2020-2021) and calculate total incidents per line
-pre_covid_data <- mtaincident %>%
-  filter(month >= as.Date("2020-01-01") & month < as.Date("2022-01-01"))
+# Calculate total incidents for each category during the COVID period (2020-2021)
+covid_incident_reasons <- mtaincident %>%
+  filter(month >= as.Date("2020-01-01") & month < as.Date("2022-01-01")) %>%
+  group_by(category) %>%
+  summarise(total_incidents = sum(count, na.rm = TRUE)) %>%
+  mutate(percentage = total_incidents / sum(total_incidents) * 100)
 
-pre_covid_line_totals <- pre_covid_data %>%
-  group_by(line) %>%
-  summarise(total_incident = sum(count)) %>%
-  arrange(desc(total_incident))
+# Plot pie chart for COVID period
+covid_pie <- ggplot(covid_incident_reasons, aes(x = "", y = total_incidents, fill = category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), color = "white") +
+  labs(title = "Incident Reasons During COVID Period (2020-2021)", fill = "Incident Category") +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5))
 
-# Identify the top 5 lines for pre-COVID
-top_5_pre_covid_lines <- head(pre_covid_line_totals, 5)$line
+# Display COVID pie chart
+print(covid_pie)
 
-# Calculate the top 3 incident reasons for each of the top 5 pre-COVID lines
-pre_covid_incident_reasons <- pre_covid_data %>%
-  filter(line %in% top_5_pre_covid_lines) %>%
-  group_by(line, category) %>%
-  summarise(total_incidents = sum(count)) %>%
-  arrange(line, desc(total_incidents)) %>%
-  group_by(line) %>%
-  slice_head(n = 3)  # Get the top 3 incident reasons for each line
+# Calculate total incidents for each category during the post-COVID period (2022-2024)
+post_covid_incident_reasons <- mtaincident %>%
+  filter(month >= as.Date("2022-01-01") & month < as.Date("2025-01-01")) %>%
+  group_by(category) %>%
+  summarise(total_incidents = sum(count, na.rm = TRUE)) %>%
+  mutate(percentage = total_incidents / sum(total_incidents) * 100)
 
-# Plot the pre-COVID data
-pre_covid_graph <- ggplot(pre_covid_incident_reasons, aes(x = total_incidents, y = reorder(category, total_incidents), fill = line)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  facet_wrap(~ line) +
-  labs(title = "Top 3 Incident Reasons for Top 5 Subway Lines (Pre-COVID 2020-2021)",
-       x = "Total Incidents",
-       y = "Incident Category") +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  scale_fill_brewer(palette = "Set3")
+# Plot pie chart for post-COVID period
+post_covid_pie <- ggplot(post_covid_incident_reasons, aes(x = "", y = total_incidents, fill = category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), color = "white") +
+  labs(title = "Incident Reasons Post-COVID Period (2022-2024)", fill = "Incident Category") +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5))
 
-# Display the pre-COVID plot
-print(pre_covid_graph)
-
-# Filter for post-COVID (2022-2024) and calculate total incidents per line
-post_covid_data <- mtaincident %>%
-  filter(month >= as.Date("2022-01-01") & month < as.Date("2025-01-01"))
-
-post_covid_line_totals <- post_covid_data %>%
-  group_by(line) %>%
-  summarise(total_incident = sum(count)) %>%
-  arrange(desc(total_incident))
-
-# Identify the top 5 lines for post-COVID
-top_5_post_covid_lines <- head(post_covid_line_totals, 5)$line
-
-# Calculate the top 3 incident reasons for each of the top 5 post-COVID lines
-post_covid_incident_reasons <- post_covid_data %>%
-  filter(line %in% top_5_post_covid_lines) %>%
-  group_by(line, category) %>%
-  summarise(total_incidents = sum(count)) %>%
-  arrange(line, desc(total_incidents)) %>%
-  group_by(line) %>%
-  slice_head(n = 3)  # Get the top 3 incident reasons for each line
-
-# Plot the post-COVID data
-post_covid_graph <- ggplot(post_covid_incident_reasons, aes(x = total_incidents, y = reorder(category, total_incidents), fill = line)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  facet_wrap(~ line) +
-  labs(title = "Top 3 Incident Reasons for Top 5 Subway Lines (Post-COVID 2022-2024)",
-       x = "Total Incidents",
-       y = "Incident Category") +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  scale_fill_brewer(palette = "Set3")
-
-# Display the post-COVID plot
-print(post_covid_graph)
+# Display post-COVID pie chart
+print(post_covid_pie)
 
 
 
