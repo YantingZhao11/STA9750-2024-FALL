@@ -3,6 +3,7 @@ title: "mp03"
 editor: visual
 ---
 
+#Task 1 & 2
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -95,7 +96,7 @@ download_shapefiles_census(shapefile_urls, "data/census_shapefiles")
 
 ```
 
-
+#Task 3
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -351,6 +352,8 @@ ggplot(state_votes_long, aes(x = reorder(state, -votes), y = votes, fill = vote_
 
 
 ```
+#Task 4
+
 Reading Data 1
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -411,5 +414,105 @@ ucla_dir <- "data/shapefiles"
 # Read the downloaded UCLA shapefiles into R
 
 ucla_shapefiles <- read_ucla_shapefiles(ucla_dir)
+
+```
+Reading data II
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+# Function to read specific Census shapefiles into R
+
+# Function to read specific Census shapefiles into R
+read_census_shapefiles <- function(directory, filenames) {
+  shapefiles <- list.files(directory, pattern = "\\.zip$", full.names = TRUE)
+  results <- list()
+  
+  for (zip_file in shapefiles) {
+    unzip_dir <- tempdir()
+    unzip(zip_file, exdir = unzip_dir)
+    
+    shp_files <- list.files(unzip_dir, pattern = "\\.shp$", full.names = TRUE, recursive = TRUE)
+    
+    for (shp_file in shp_files) {
+      # Check if the shapefile matches the desired filenames
+      if (basename(shp_file) %in% filenames) {
+        tryCatch({
+          sf_object <- sf::st_read(shp_file)
+          results[[basename(shp_file)]] <- sf_object
+        }, error = function(e) {
+          message(paste("Error reading file:", shp_file, ":", e$message))
+        })
+      }
+    }
+  }
+  
+  return(results)
+}
+
+# List of specific filenames to read
+desired_filenames <- c(
+  "tl_2014_us_cd114.shp",
+  "tl_2015_us_cd114.shp",
+  "tl_2016_us_cd115.shp",
+  "tl_2017_us_cd115.shp",
+  "tl_2018_us_cd116.shp",
+  "tl_2019_us_cd116.shp",
+  "tl_2020_us_cd116.shp",
+  "tl_2021_us_cd116.shp",
+  "tl_2022_us_cd116.shp"
+)
+
+# Define the Census shapefile directory
+census_dir <- "data/census_shapefiles"
+
+# Read the downloaded Census shapefiles into R
+census_shapefiles <- read_census_shapefiles(census_dir, desired_filenames)
+
+```
+
+#Task 5
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+# Load necessary libraries
+library(dplyr)
+library(sf)
+library(ggplot2)
+
+# Assuming ucla_shapefiles has already been read and includes district_106
+district_106 <- ucla_shapefiles[["districts106.shp"]]
+
+# Check and set CRS if necessary
+if (is.na(st_crs(district_106))) {
+  st_crs(district_106) <- 4269  # Set to NAD83 if it's not set
+}
+
+# Filter for the 2000 presidential election
+election_2000 <- president_data %>%
+  filter(year == 2000, office == "US PRESIDENT") %>%
+  group_by(state, state_po) %>%
+  summarize(winning_party = party_simplified[which.max(candidatevotes)], .groups = 'drop')
+
+# Ensure geometry column from shapefile is merged
+election_2000 <- left_join(election_2000, district_106, by = c("state_po" = "STATENAME"))
+
+# Select the necessary columns including DISTRICT and geometry
+election_2000 <- election_2000 %>%
+  select(state, state_po, winning_party, DISTRICT, geometry)
+
+# Plot the map with specified CRS and limits method
+ggplot(election_2000) +
+  geom_sf(aes(geometry = geometry, fill = winning_party), color = "black") +
+  scale_fill_manual(values = c("DEMOCRAT" = "blue", "REPUBLICAN" = "red")) +
+  labs(title = "2000 U.S. Presidential Election Results by State",
+       fill = "Winning Party") +
+  coord_sf(lims_method = "geometry_bbox") +  # Specify limits method
+  theme_minimal()
+
+
+print(dim(election_2000))  # Check dimensions
+print(head(election_2000))  # View first few rows
 
 ```
