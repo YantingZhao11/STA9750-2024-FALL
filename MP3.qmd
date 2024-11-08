@@ -1,0 +1,92 @@
+---
+title: "mp03"
+editor: visual
+---
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+#| 
+# Load necessary packages
+library(httr)
+library(tidyverse)
+
+
+#data_1_Task_1
+
+# Define file paths
+president_data_path <- "C:\\Users\\w3038\\Downloads\\STA 9750\\1976-2020-president.csv"
+house_data_path <- "C:\\Users\\w3038\\Downloads\\STA 9750\\1976-2022-house.csv"
+
+# Load the datasets
+president_data <- read.csv(president_data_path)
+house_data <- read.csv(house_data_path)
+
+# Preview the data
+head(president_data)
+head(house_data)
+
+#data_2_Task_1
+
+# Create directory for shapefiles with recursive creation
+dir.create("data/shapefiles", showWarnings = FALSE, recursive = TRUE)
+
+# Function to download shapefiles systematically
+download_shapefiles <- function(start, end, base_url) {
+  for (session in start:end) {
+    file_name <- paste0("districts", sprintf("%03d", session), ".zip")
+    url <- paste0(base_url, file_name)
+    destfile <- file.path("data/shapefiles", file_name)
+    
+    if (!file.exists(destfile)) {
+      GET(url, write_disk(destfile, overwrite = TRUE))
+      message(paste("Downloaded:", file_name))
+    } else {
+      message(paste("File already exists:", file_name))
+    }
+  }
+}
+
+# Define the base URL and download the files
+base_url <- "https://cdmaps.polisci.ucla.edu/shp/"
+download_shapefiles(93, 112, base_url)
+
+
+#data_3_Task_1
+
+# Create directory for shapefiles if it doesn't exist
+dir.create("data/census_shapefiles", showWarnings = FALSE, recursive = TRUE)
+
+# List of download URLs and file names for the shapefiles
+shapefile_urls <- c(
+  "https://www2.census.gov/geo/tiger/TIGER2014/CD/tl_2014_us_cd114.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2015/CD/tl_2015_us_cd114.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2016/CD/tl_2016_us_cd115.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2017/CD/tl_2017_us_cd115.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2018PLtest/CD/2020/tl_2018_44_cd116.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2019/CD/tl_2019_us_cd116.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2020/CD/tl_2020_us_cd116.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2021/CD/tl_2021_us_cd116.zip",
+  "https://www2.census.gov/geo/tiger/TIGER2022/CD/tl_2022_us_cd116.zip"
+)
+
+# Function to download shapefiles systematically
+download_shapefiles_census <- function(urls, dest_dir) {
+  for (url in urls) {
+    file_name <- basename(url)
+    destfile <- file.path(dest_dir, file_name)
+    
+    # Download file only if it doesn't already exist
+    if (!file.exists(destfile)) {
+      GET(url, write_disk(destfile, overwrite = TRUE))
+      message(paste("Downloaded:", file_name))
+    } else {
+      message(paste("File already exists:", file_name))
+    }
+  }
+}
+
+# Call the download function
+download_shapefiles_census(shapefile_urls, "data/census_shapefiles")
+
+```

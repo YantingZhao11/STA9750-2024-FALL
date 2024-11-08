@@ -55,8 +55,6 @@ mtaincident <- mtaincident %>%
     TRUE ~ division  # Retain other values
   ))
 
-# Optional: Check the first few rows of the cleaned dataset
-head(mtaincident)
 ```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
@@ -216,7 +214,123 @@ print(post_covid_pie)
 
 
 ```
+```{r}
 
+# Define reasons for incidents
+incident_reasons <- c("Other", "Persons on Track/Police/Medical", "Signals", 
+                      "Stations and Structure", "Subway Car", "Track")
+
+# Create separate datasets for COVID (2020-2021) and post-COVID (2022-2024)
+covid_data <- mtaincident %>%
+  filter(month >= as.Date("2020-01-01") & month < as.Date("2022-01-01")) %>%
+  filter(category %in% incident_reasons)
+
+post_covid_data <- mtaincident %>%
+  filter(month >= as.Date("2022-01-01") & month < as.Date("2025-01-01")) %>%
+  filter(category %in% incident_reasons)
+
+# Get top 5 lines per incident reason during COVID
+top5_lines_covid <- covid_data %>%
+  group_by(category, line) %>%
+  summarise(total_incidents = sum(count, na.rm = TRUE), .groups = "drop") %>%
+  arrange(category, desc(total_incidents)) %>%
+  group_by(category) %>%
+  slice_max(total_incidents, n = 5) %>%
+  ungroup()
+
+# Get top 5 lines per incident reason post-COVID
+top5_lines_post_covid <- post_covid_data %>%
+  group_by(category, line) %>%
+  summarise(total_incidents = sum(count, na.rm = TRUE), .groups = "drop") %>%
+  arrange(category, desc(total_incidents)) %>%
+  group_by(category) %>%
+  slice_max(total_incidents, n = 5) %>%
+  ungroup()
+
+# Plot COVID data
+covid_bar_graph <- ggplot(top5_lines_covid, aes(x = reorder(line, total_incidents), y = total_incidents, fill = line)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ category, scales = "free_y") +
+  labs(title = "Top 5 Subway Lines by Incident Reason (COVID Period 2020-2021)",
+       x = "Subway Line",
+       y = "Total Incidents") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_flip()
+
+# Plot Post-COVID data
+post_covid_bar_graph <- ggplot(top5_lines_post_covid, aes(x = reorder(line, total_incidents), y = total_incidents, fill = line)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ category, scales = "free_y") +
+  labs(title = "Top 5 Subway Lines by Incident Reason (Post-COVID Period 2022-2024)",
+       x = "Subway Line",
+       y = "Total Incidents") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_flip()
+
+# Display graphs
+print(covid_bar_graph)
+print(post_covid_bar_graph)
+
+# Combine data for table
+summary_table_data <- top5_lines_covid %>%
+  rename(COVID_Total_Incidents = total_incidents) %>%
+  left_join(top5_lines_post_covid %>% rename(Post_COVID_Total_Incidents = total_incidents), 
+            by = c("category", "line")) %>%
+  arrange(category, desc(COVID_Total_Incidents))
+
+# Create a gt table for summary
+summary_gt_table <- summary_table_data %>%
+  gt() %>%
+  tab_header(
+    title = "Top Subway Lines by Incident Reason During COVID and Post-COVID"
+  ) %>%
+  cols_label(
+    category = "Incident Reason",
+    line = "Subway Line",
+    COVID_Total_Incidents = "COVID Total Incidents",
+    Post_COVID_Total_Incidents = "Post-COVID Total Incidents"
+  ) %>%
+  fmt_number(
+    columns = c(COVID_Total_Incidents, Post_COVID_Total_Incidents),
+    decimals = 0
+  ) %>%
+  tab_options(
+    table.width = px(800)
+  )
+
+# Display gt table
+summary_gt_table
+
+```
+```{r}
+# Combine datasets and add a period column for COVID and post-COVID
+covid_data_summary <- top5_lines_covid %>%
+  mutate(period = "COVID")
+
+post_covid_data_summary <- top5_lines_post_covid %>%
+  mutate(period = "Post-COVID")
+
+combined_data <- bind_rows(covid_data_summary, post_covid_data_summary)
+
+
+# Grouped Bar Chart with Facets for Each Incident Reason
+grouped_bar_chart <- ggplot(combined_data, aes(x = reorder(line, -total_incidents), y = total_incidents, fill = period)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ category, scales = "free_y") +
+  labs(title = "Top 5 Subway Lines by Incident Reason (COVID vs Post-COVID)",
+       x = "Subway Line",
+       y = "Total Incidents",
+       fill = "Period") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_flip()
+
+# Display the grouped bar chart
+print(grouped_bar_chart)
+
+```
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
