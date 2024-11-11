@@ -148,30 +148,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>#Task 1 &amp; 2</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">"sf"</span>)) <span class="fu">install.packages</span>(<span class="st">"sf"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#data_1_Task_1</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">"usmap"</span>)) <span class="fu">install.packages</span>(<span class="st">"usmap"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usmap)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Define file paths</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>president_data_path <span class="ot">&lt;-</span> <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">w3038</span><span class="sc">\\</span><span class="st">Downloads</span><span class="sc">\\</span><span class="st">STA 9750</span><span class="sc">\\</span><span class="st">1976-2020-president.csv"</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>house_data_path <span class="ot">&lt;-</span> <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">w3038</span><span class="sc">\\</span><span class="st">Downloads</span><span class="sc">\\</span><span class="st">STA 9750</span><span class="sc">\\</span><span class="st">1976-2022-house.csv"</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the datasets</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>president_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(president_data_path)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>house_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(house_data_path)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the data</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(president_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#data_1_Task_1</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Define file paths</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>president_data_path <span class="ot">&lt;-</span> <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">w3038</span><span class="sc">\\</span><span class="st">Downloads</span><span class="sc">\\</span><span class="st">STA 9750</span><span class="sc">\\</span><span class="st">1976-2020-president.csv"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>house_data_path <span class="ot">&lt;-</span> <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">w3038</span><span class="sc">\\</span><span class="st">Downloads</span><span class="sc">\\</span><span class="st">STA 9750</span><span class="sc">\\</span><span class="st">1976-2022-house.csv"</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the datasets</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>president_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(president_data_path)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>house_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(house_data_path)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the data</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(president_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>  year   state state_po state_fips state_cen state_ic       office
@@ -289,6 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="fu">download_shapefiles_census</span>(shapefile_urls, <span class="st">"data/census_shapefiles"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<p>#Task 3</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
@@ -429,23 +433,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the table</span></span>
 <span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(election_outcomes_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;div id="phppbwneva" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;"&gt;
-  &lt;style&gt;#phppbwneva table {
+<pre><code>&lt;div id="qftjkanaef" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;"&gt;
+  &lt;style&gt;#qftjkanaef table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#phppbwneva thead, #phppbwneva tbody, #phppbwneva tfoot, #phppbwneva tr, #phppbwneva td, #phppbwneva th {
+#qftjkanaef thead, #qftjkanaef tbody, #qftjkanaef tfoot, #qftjkanaef tr, #qftjkanaef td, #qftjkanaef th {
   border-style: none;
 }
 
-#phppbwneva p {
+#qftjkanaef p {
   margin: 0;
   padding: 0;
 }
 
-#phppbwneva .gt_table {
+#qftjkanaef .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -471,12 +475,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#phppbwneva .gt_caption {
+#qftjkanaef .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#phppbwneva .gt_title {
+#qftjkanaef .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -488,7 +492,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#phppbwneva .gt_subtitle {
+#qftjkanaef .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -500,7 +504,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#phppbwneva .gt_heading {
+#qftjkanaef .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -512,13 +516,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#phppbwneva .gt_bottom_border {
+#qftjkanaef .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#phppbwneva .gt_col_headings {
+#qftjkanaef .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -533,7 +537,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#phppbwneva .gt_col_heading {
+#qftjkanaef .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -553,7 +557,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#phppbwneva .gt_column_spanner_outer {
+#qftjkanaef .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -565,15 +569,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#phppbwneva .gt_column_spanner_outer:first-child {
+#qftjkanaef .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#phppbwneva .gt_column_spanner_outer:last-child {
+#qftjkanaef .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#phppbwneva .gt_column_spanner {
+#qftjkanaef .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -585,11 +589,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#phppbwneva .gt_spanner_row {
+#qftjkanaef .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#phppbwneva .gt_group_heading {
+#qftjkanaef .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -615,7 +619,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#phppbwneva .gt_empty_group_heading {
+#qftjkanaef .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -630,15 +634,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#phppbwneva .gt_from_md &gt; :first-child {
+#qftjkanaef .gt_from_md &gt; :first-child {
   margin-top: 0;
 }
 
-#phppbwneva .gt_from_md &gt; :last-child {
+#qftjkanaef .gt_from_md &gt; :last-child {
   margin-bottom: 0;
 }
 
-#phppbwneva .gt_row {
+#qftjkanaef .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -657,7 +661,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#phppbwneva .gt_stub {
+#qftjkanaef .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -670,7 +674,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#phppbwneva .gt_stub_row_group {
+#qftjkanaef .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -684,15 +688,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#phppbwneva .gt_row_group_first td {
+#qftjkanaef .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#phppbwneva .gt_row_group_first th {
+#qftjkanaef .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#phppbwneva .gt_summary_row {
+#qftjkanaef .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -702,16 +706,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#phppbwneva .gt_first_summary_row {
+#qftjkanaef .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#phppbwneva .gt_first_summary_row.thick {
+#qftjkanaef .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#phppbwneva .gt_last_summary_row {
+#qftjkanaef .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -721,7 +725,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#phppbwneva .gt_grand_summary_row {
+#qftjkanaef .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -731,7 +735,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#phppbwneva .gt_first_grand_summary_row {
+#qftjkanaef .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -741,7 +745,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#phppbwneva .gt_last_grand_summary_row_top {
+#qftjkanaef .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -751,11 +755,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#phppbwneva .gt_striped {
+#qftjkanaef .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#phppbwneva .gt_table_body {
+#qftjkanaef .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -764,7 +768,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#phppbwneva .gt_footnotes {
+#qftjkanaef .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -778,7 +782,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#phppbwneva .gt_footnote {
+#qftjkanaef .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -787,7 +791,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#phppbwneva .gt_sourcenotes {
+#qftjkanaef .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -801,7 +805,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#phppbwneva .gt_sourcenote {
+#qftjkanaef .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -809,72 +813,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#phppbwneva .gt_left {
+#qftjkanaef .gt_left {
   text-align: left;
 }
 
-#phppbwneva .gt_center {
+#qftjkanaef .gt_center {
   text-align: center;
 }
 
-#phppbwneva .gt_right {
+#qftjkanaef .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#phppbwneva .gt_font_normal {
+#qftjkanaef .gt_font_normal {
   font-weight: normal;
 }
 
-#phppbwneva .gt_font_bold {
+#qftjkanaef .gt_font_bold {
   font-weight: bold;
 }
 
-#phppbwneva .gt_font_italic {
+#qftjkanaef .gt_font_italic {
   font-style: italic;
 }
 
-#phppbwneva .gt_super {
+#qftjkanaef .gt_super {
   font-size: 65%;
 }
 
-#phppbwneva .gt_footnote_marks {
+#qftjkanaef .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#phppbwneva .gt_asterisk {
+#qftjkanaef .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#phppbwneva .gt_indent_1 {
+#qftjkanaef .gt_indent_1 {
   text-indent: 5px;
 }
 
-#phppbwneva .gt_indent_2 {
+#qftjkanaef .gt_indent_2 {
   text-indent: 10px;
 }
 
-#phppbwneva .gt_indent_3 {
+#qftjkanaef .gt_indent_3 {
   text-indent: 15px;
 }
 
-#phppbwneva .gt_indent_4 {
+#qftjkanaef .gt_indent_4 {
   text-indent: 20px;
 }
 
-#phppbwneva .gt_indent_5 {
+#qftjkanaef .gt_indent_5 {
   text-indent: 25px;
 }
 
-#phppbwneva .katex-display {
+#qftjkanaef .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#phppbwneva div.Reactable &gt; div.rt-table &gt; div.rt-thead &gt; div.rt-tr.rt-tr-group-header &gt; div.rt-th-group:after {
+#qftjkanaef div.Reactable &gt; div.rt-table &gt; div.rt-thead &gt; div.rt-tr.rt-tr-group-header &gt; div.rt-th-group:after {
   height: 0px !important;
 }
 &lt;/style&gt;
@@ -1120,23 +1124,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the gt table</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>vote_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="pzxlpkoesu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pzxlpkoesu table {
+<div id="ircpyzjymr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ircpyzjymr table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pzxlpkoesu thead, #pzxlpkoesu tbody, #pzxlpkoesu tfoot, #pzxlpkoesu tr, #pzxlpkoesu td, #pzxlpkoesu th {
+#ircpyzjymr thead, #ircpyzjymr tbody, #ircpyzjymr tfoot, #ircpyzjymr tr, #ircpyzjymr td, #ircpyzjymr th {
   border-style: none;
 }
 
-#pzxlpkoesu p {
+#ircpyzjymr p {
   margin: 0;
   padding: 0;
 }
 
-#pzxlpkoesu .gt_table {
+#ircpyzjymr .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1162,12 +1166,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_caption {
+#ircpyzjymr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pzxlpkoesu .gt_title {
+#ircpyzjymr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1179,7 +1183,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#pzxlpkoesu .gt_subtitle {
+#ircpyzjymr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1191,7 +1195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#pzxlpkoesu .gt_heading {
+#ircpyzjymr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1203,13 +1207,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_bottom_border {
+#ircpyzjymr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_col_headings {
+#ircpyzjymr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1224,7 +1228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_col_heading {
+#ircpyzjymr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1244,7 +1248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#pzxlpkoesu .gt_column_spanner_outer {
+#ircpyzjymr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1256,15 +1260,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#pzxlpkoesu .gt_column_spanner_outer:first-child {
+#ircpyzjymr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pzxlpkoesu .gt_column_spanner_outer:last-child {
+#ircpyzjymr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pzxlpkoesu .gt_column_spanner {
+#ircpyzjymr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1276,11 +1280,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#pzxlpkoesu .gt_spanner_row {
+#ircpyzjymr .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pzxlpkoesu .gt_group_heading {
+#ircpyzjymr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1306,7 +1310,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#pzxlpkoesu .gt_empty_group_heading {
+#ircpyzjymr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1321,15 +1325,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#pzxlpkoesu .gt_from_md > :first-child {
+#ircpyzjymr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pzxlpkoesu .gt_from_md > :last-child {
+#ircpyzjymr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pzxlpkoesu .gt_row {
+#ircpyzjymr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1348,7 +1352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#pzxlpkoesu .gt_stub {
+#ircpyzjymr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1361,7 +1365,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pzxlpkoesu .gt_stub_row_group {
+#ircpyzjymr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1375,15 +1379,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#pzxlpkoesu .gt_row_group_first td {
+#ircpyzjymr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pzxlpkoesu .gt_row_group_first th {
+#ircpyzjymr .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pzxlpkoesu .gt_summary_row {
+#ircpyzjymr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1393,16 +1397,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pzxlpkoesu .gt_first_summary_row {
+#ircpyzjymr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_first_summary_row.thick {
+#ircpyzjymr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pzxlpkoesu .gt_last_summary_row {
+#ircpyzjymr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1412,7 +1416,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_grand_summary_row {
+#ircpyzjymr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1422,7 +1426,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pzxlpkoesu .gt_first_grand_summary_row {
+#ircpyzjymr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1432,7 +1436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_last_grand_summary_row_top {
+#ircpyzjymr .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1442,11 +1446,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_striped {
+#ircpyzjymr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pzxlpkoesu .gt_table_body {
+#ircpyzjymr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1455,7 +1459,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_footnotes {
+#ircpyzjymr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1469,7 +1473,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_footnote {
+#ircpyzjymr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1478,7 +1482,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pzxlpkoesu .gt_sourcenotes {
+#ircpyzjymr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1492,7 +1496,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pzxlpkoesu .gt_sourcenote {
+#ircpyzjymr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1500,72 +1504,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pzxlpkoesu .gt_left {
+#ircpyzjymr .gt_left {
   text-align: left;
 }
 
-#pzxlpkoesu .gt_center {
+#ircpyzjymr .gt_center {
   text-align: center;
 }
 
-#pzxlpkoesu .gt_right {
+#ircpyzjymr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pzxlpkoesu .gt_font_normal {
+#ircpyzjymr .gt_font_normal {
   font-weight: normal;
 }
 
-#pzxlpkoesu .gt_font_bold {
+#ircpyzjymr .gt_font_bold {
   font-weight: bold;
 }
 
-#pzxlpkoesu .gt_font_italic {
+#ircpyzjymr .gt_font_italic {
   font-style: italic;
 }
 
-#pzxlpkoesu .gt_super {
+#ircpyzjymr .gt_super {
   font-size: 65%;
 }
 
-#pzxlpkoesu .gt_footnote_marks {
+#ircpyzjymr .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pzxlpkoesu .gt_asterisk {
+#ircpyzjymr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pzxlpkoesu .gt_indent_1 {
+#ircpyzjymr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pzxlpkoesu .gt_indent_2 {
+#ircpyzjymr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pzxlpkoesu .gt_indent_3 {
+#ircpyzjymr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pzxlpkoesu .gt_indent_4 {
+#ircpyzjymr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pzxlpkoesu .gt_indent_5 {
+#ircpyzjymr .gt_indent_5 {
   text-indent: 25px;
 }
 
-#pzxlpkoesu .katex-display {
+#ircpyzjymr .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#pzxlpkoesu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ircpyzjymr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1742,6 +1746,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Are any presidents particularly more or less popular than their co-partisans?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>#Task 4</p>
 <p>Reading Data 1</p>
 <div class="cell">
 <details class="code-fold">
@@ -1801,7 +1806,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1809,7 +1814,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1817,7 +1822,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1825,7 +1830,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1833,7 +1838,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1841,7 +1846,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1849,7 +1854,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1857,7 +1862,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1865,7 +1870,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1873,7 +1878,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1881,7 +1886,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1889,7 +1894,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1897,7 +1902,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1905,7 +1910,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1913,7 +1918,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1921,7 +1926,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1929,7 +1934,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1937,7 +1942,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1945,7 +1950,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1953,7 +1958,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1961,7 +1966,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1969,7 +1974,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1977,7 +1982,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1985,7 +1990,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -1993,7 +1998,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2001,7 +2006,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2009,7 +2014,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2017,7 +2022,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2025,7 +2030,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2033,7 +2038,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2041,7 +2046,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2049,7 +2054,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2057,7 +2062,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2065,7 +2070,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2073,7 +2078,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2081,7 +2086,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2089,7 +2094,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2097,7 +2102,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2105,7 +2110,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2113,7 +2118,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2121,7 +2126,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2129,7 +2134,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2137,7 +2142,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2145,7 +2150,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2153,7 +2158,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2161,7 +2166,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2169,7 +2174,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2177,7 +2182,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2185,7 +2190,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2193,7 +2198,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2201,7 +2206,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2209,7 +2214,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2217,7 +2222,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2225,7 +2230,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2233,7 +2238,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2241,7 +2246,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2249,7 +2254,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2257,7 +2262,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2265,7 +2270,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2273,7 +2278,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2281,7 +2286,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2289,7 +2294,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2297,7 +2302,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2305,7 +2310,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2313,7 +2318,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2321,7 +2326,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2329,7 +2334,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2337,7 +2342,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2345,7 +2350,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2353,7 +2358,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2361,7 +2366,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2369,7 +2374,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2377,7 +2382,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2385,7 +2390,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2393,7 +2398,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2401,7 +2406,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2409,7 +2414,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2417,7 +2422,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2425,7 +2430,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2433,7 +2438,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2441,7 +2446,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2449,7 +2454,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2457,7 +2462,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2465,7 +2470,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2473,7 +2478,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2481,7 +2486,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2489,7 +2494,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2497,7 +2502,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2505,7 +2510,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2513,7 +2518,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2521,7 +2526,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts105' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts105.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts105.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2529,7 +2534,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2537,7 +2542,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2545,7 +2550,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2553,7 +2558,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2561,7 +2566,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2569,7 +2574,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2577,7 +2582,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2585,7 +2590,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2593,7 +2598,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2601,7 +2606,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2609,7 +2614,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2617,7 +2622,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2625,7 +2630,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts105' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts105.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts105.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2633,7 +2638,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts106' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts106.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts106.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2641,7 +2646,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2649,7 +2654,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2657,7 +2662,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2665,7 +2670,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2673,7 +2678,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2681,7 +2686,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2689,7 +2694,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2697,7 +2702,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2705,7 +2710,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2713,7 +2718,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2721,7 +2726,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2729,7 +2734,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2737,7 +2742,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts105' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts105.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts105.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2745,7 +2750,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts106' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts106.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts106.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2753,7 +2758,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts107' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts107.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts107.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2761,7 +2766,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2769,7 +2774,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2777,7 +2782,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2785,7 +2790,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2793,7 +2798,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2801,7 +2806,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2809,7 +2814,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2817,7 +2822,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2825,7 +2830,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2833,7 +2838,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2841,7 +2846,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2849,7 +2854,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2857,7 +2862,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts105' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts105.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts105.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2865,7 +2870,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts106' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts106.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts106.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2873,7 +2878,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts107' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts107.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts107.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2881,7 +2886,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts108' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts108.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts108.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2889,7 +2894,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2897,7 +2902,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2905,7 +2910,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2913,7 +2918,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2921,7 +2926,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2929,7 +2934,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2937,7 +2942,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2945,7 +2950,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2953,7 +2958,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2961,7 +2966,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -2969,7 +2974,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2977,7 +2982,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2985,7 +2990,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts105' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts105.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts105.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -2993,7 +2998,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts106' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts106.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts106.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3001,7 +3006,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts107' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts107.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts107.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3009,7 +3014,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts108' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts108.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts108.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3017,7 +3022,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts109' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts109.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts109.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3025,7 +3030,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3033,7 +3038,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3041,7 +3046,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3049,7 +3054,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3057,7 +3062,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3065,7 +3070,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3073,7 +3078,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3081,7 +3086,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3089,7 +3094,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3097,7 +3102,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3105,7 +3110,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3113,7 +3118,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3121,7 +3126,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts105' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts105.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts105.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3129,7 +3134,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts106' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts106.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts106.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3137,7 +3142,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts107' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts107.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts107.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3145,7 +3150,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts108' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts108.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts108.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3153,7 +3158,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts109' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts109.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts109.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3161,7 +3166,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts110' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts110.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts110.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3169,7 +3174,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3177,7 +3182,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3185,7 +3190,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3193,7 +3198,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3201,7 +3206,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3209,7 +3214,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3217,7 +3222,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3225,7 +3230,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3233,7 +3238,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3241,7 +3246,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3249,7 +3254,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3257,7 +3262,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3265,7 +3270,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts105' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts105.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts105.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3273,7 +3278,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts106' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts106.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts106.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3281,7 +3286,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts107' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts107.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts107.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3289,7 +3294,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts108' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts108.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts108.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3297,7 +3302,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts109' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts109.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts109.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3305,7 +3310,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts110' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts110.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts110.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3313,7 +3318,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts111' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts111.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts111.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3321,7 +3326,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts093' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts093.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts093.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3329,7 +3334,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts094' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts094.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts094.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3337,7 +3342,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts095' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts095.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts095.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3345,7 +3350,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts096' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts096.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts096.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3353,7 +3358,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts097' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts097.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts097.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 435 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3361,7 +3366,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts098' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts098.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts098.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3369,7 +3374,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3381 ymin: 18.91071 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts099' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts099.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts099.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3377,7 +3382,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  NAD83
 Reading layer `districts100' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts100.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts100.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3385,7 +3390,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts101' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts101.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts101.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3393,7 +3398,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts102' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts102.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts102.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields
 Geometry type: MULTIPOLYGON
@@ -3401,7 +3406,7 @@ Dimension:     XY
 Bounding box:  xmin: -178.3395 ymin: 18.91383 xmax: 177.7388 ymax: 71.3857
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts103' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts103.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts103.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3409,7 +3414,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  NAD83
 Reading layer `districts104' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts104.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts104.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3417,7 +3422,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts105' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts105.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts105.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3425,7 +3430,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts106' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts106.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts106.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3433,7 +3438,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts107' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts107.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts107.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3441,7 +3446,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts108' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts108.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts108.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3449,7 +3454,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts109' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts109.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts109.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3457,7 +3462,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts110' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts110.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts110.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3465,7 +3470,7 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts111' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts111.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts111.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
@@ -3473,13 +3478,553 @@ Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)
 Reading layer `districts112' from data source 
-  `C:\Users\w3038\AppData\Local\Temp\Rtmp80l4Wf\districtShapes\districts112.shp' 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\districtShapes\districts112.shp' 
   using driver `ESRI Shapefile'
 Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
 Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -179.1473 ymin: 18.9177 xmax: 179.7785 ymax: 71.35256
 Geodetic CRS:  GRS 1980(IUGG, 1980)</code></pre>
+</div>
+</div>
+<p>Reading data II</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to read specific Census shapefiles into R</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to read specific Census shapefiles into R</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>read_census_shapefiles <span class="ot">&lt;-</span> <span class="cf">function</span>(directory, filenames) {</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  shapefiles <span class="ot">&lt;-</span> <span class="fu">list.files</span>(directory, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.zip$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (zip_file <span class="cf">in</span> shapefiles) {</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    unzip_dir <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unzip</span>(zip_file, <span class="at">exdir =</span> unzip_dir)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    shp_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(unzip_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.shp$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (shp_file <span class="cf">in</span> shp_files) {</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Check if the shapefile matches the desired filenames</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">basename</span>(shp_file) <span class="sc">%in%</span> filenames) {</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tryCatch</span>({</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>          sf_object <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(shp_file)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>          results[[<span class="fu">basename</span>(shp_file)]] <span class="ot">&lt;-</span> sf_object</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>        }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>          <span class="fu">message</span>(<span class="fu">paste</span>(<span class="st">"Error reading file:"</span>, shp_file, <span class="st">":"</span>, e<span class="sc">$</span>message))</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(results)</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="co"># List of specific filenames to read</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>desired_filenames <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2014_us_cd114.shp"</span>,</span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2015_us_cd114.shp"</span>,</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2016_us_cd115.shp"</span>,</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2017_us_cd115.shp"</span>,</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2018_us_cd116.shp"</span>,</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2019_us_cd116.shp"</span>,</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2020_us_cd116.shp"</span>,</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2021_us_cd116.shp"</span>,</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>  <span class="st">"tl_2022_us_cd116.shp"</span></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the Census shapefile directory</span></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>census_dir <span class="ot">&lt;-</span> <span class="st">"data/census_shapefiles"</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the downloaded Census shapefiles into R</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>census_shapefiles <span class="ot">&lt;-</span> <span class="fu">read_census_shapefiles</span>(census_dir, desired_filenames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2016_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2016_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2016_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2016_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2017_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2017_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2016_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2016_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2017_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2017_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2016_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2016_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2017_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2017_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2018_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2018_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2016_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2016_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2017_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2017_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2018_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2018_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2019_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2019_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2016_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2016_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2017_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2017_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2018_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2018_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2019_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2019_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2020_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2020_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2016_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2016_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2017_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2017_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2018_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2018_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2019_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2019_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2020_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2020_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2021_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2021_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2014_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2014_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2015_us_cd114' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2015_us_cd114.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2016_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2016_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.44106
+Geodetic CRS:  NAD83
+Reading layer `tl_2017_us_cd115' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2017_us_cd115.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2018_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2018_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2019_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2019_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2020_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2020_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2021_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2021_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83
+Reading layer `tl_2022_us_cd116' from data source 
+  `C:\Users\w3038\AppData\Local\Temp\RtmpWKJZxP\tl_2022_us_cd116.shp' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 444 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -179.2311 ymin: -14.60181 xmax: 179.8597 ymax: 71.43979
+Geodetic CRS:  NAD83</code></pre>
+</div>
+</div>
+<p>#Task 5</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load required libraries</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usmap)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create electoral college votes column</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>CD_106 <span class="ot">&lt;-</span> ucla_shapefiles[[<span class="st">"districts106.shp"</span>]] <span class="sc">%&gt;%</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STATENAME =</span> <span class="fu">tolower</span>(STATENAME)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>geometry) <span class="sc">%&gt;%</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(STATENAME) <span class="sc">%&gt;%</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">EC =</span> <span class="fu">n</span>() <span class="sc">+</span> <span class="dv">2</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Show winning party for each state for the year 2000</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>vote_results_2000 <span class="ot">&lt;-</span> president_data <span class="sc">%&gt;%</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">tolower</span>(state)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">winning_party =</span> party_simplified[<span class="fu">which.max</span>(candidatevotes)],</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_votes =</span> <span class="fu">max</span>(totalvotes)</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Special case adjustments for Minnesota &amp; Vermont</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>vote_results_2000 <span class="ot">&lt;-</span> vote_results_2000 <span class="sc">%&gt;%</span></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">winning_party =</span> <span class="fu">ifelse</span>(state <span class="sc">==</span> <span class="st">"minnesota"</span> <span class="sc">&amp;</span> winning_party <span class="sc">==</span> <span class="st">"DEMOCRATIC-FARMER-LABOR"</span>, <span class="st">"DEMOCRAT"</span>, winning_party),</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">winning_party =</span> <span class="fu">ifelse</span>(state <span class="sc">==</span> <span class="st">"vermont"</span>, <span class="st">"DEMOCRAT"</span>, winning_party)</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine EC with winning party</span></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>EC_2000 <span class="ot">&lt;-</span> CD_106 <span class="sc">%&gt;%</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(vote_results_2000, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"STATENAME"</span> <span class="ot">=</span> <span class="st">"state"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">winning_party =</span> <span class="fu">if_else</span>(STATENAME <span class="sc">==</span> <span class="st">"district of columbia"</span> <span class="sc">&amp;</span> <span class="fu">is.na</span>(winning_party), <span class="st">"DEMOCRAT"</span>, winning_party)</span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(STATENAME, winning_party, EC)</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns to match `usmap` requirements</span></span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>EC_2000 <span class="ot">&lt;-</span> EC_2000 <span class="sc">%&gt;%</span></span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">state =</span> STATENAME)</span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Add state abbreviations to the EC_2000 data</span></span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>state_abbreviations <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="fu">tolower</span>(<span class="fu">c</span>(<span class="st">"alabama"</span>, <span class="st">"alaska"</span>, <span class="st">"arizona"</span>, <span class="st">"arkansas"</span>, <span class="st">"california"</span>, <span class="st">"colorado"</span>, <span class="st">"connecticut"</span>, <span class="st">"delaware"</span>, <span class="st">"florida"</span>, <span class="st">"georgia"</span>, <span class="st">"hawaii"</span>, <span class="st">"idaho"</span>, <span class="st">"illinois"</span>, <span class="st">"indiana"</span>, <span class="st">"iowa"</span>, <span class="st">"kansas"</span>, <span class="st">"kentucky"</span>, <span class="st">"louisiana"</span>, <span class="st">"maine"</span>, <span class="st">"maryland"</span>, <span class="st">"massachusetts"</span>, <span class="st">"michigan"</span>, <span class="st">"minnesota"</span>, <span class="st">"mississippi"</span>, <span class="st">"missouri"</span>, <span class="st">"montana"</span>, <span class="st">"nebraska"</span>, <span class="st">"nevada"</span>, <span class="st">"new hampshire"</span>, <span class="st">"new jersey"</span>, <span class="st">"new mexico"</span>, <span class="st">"new york"</span>, <span class="st">"north carolina"</span>, <span class="st">"north dakota"</span>, <span class="st">"ohio"</span>, <span class="st">"oklahoma"</span>, <span class="st">"oregon"</span>, <span class="st">"pennsylvania"</span>, <span class="st">"rhode island"</span>, <span class="st">"south carolina"</span>, <span class="st">"south dakota"</span>, <span class="st">"tennessee"</span>, <span class="st">"texas"</span>, <span class="st">"utah"</span>, <span class="st">"vermont"</span>, <span class="st">"virginia"</span>, <span class="st">"washington"</span>, <span class="st">"west virginia"</span>, <span class="st">"wisconsin"</span>, <span class="st">"wyoming"</span>, <span class="st">"district of columbia"</span>)),</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">abbreviation =</span> <span class="fu">c</span>(<span class="st">"AL"</span>, <span class="st">"AK"</span>, <span class="st">"AZ"</span>, <span class="st">"AR"</span>, <span class="st">"CA"</span>, <span class="st">"CO"</span>, <span class="st">"CT"</span>, <span class="st">"DE"</span>, <span class="st">"FL"</span>, <span class="st">"GA"</span>, <span class="st">"HI"</span>, <span class="st">"ID"</span>, <span class="st">"IL"</span>, <span class="st">"IN"</span>, <span class="st">"IA"</span>, <span class="st">"KS"</span>, <span class="st">"KY"</span>, <span class="st">"LA"</span>, <span class="st">"ME"</span>, <span class="st">"MD"</span>, <span class="st">"MA"</span>, <span class="st">"MI"</span>, <span class="st">"MN"</span>, <span class="st">"MS"</span>, <span class="st">"MO"</span>, <span class="st">"MT"</span>, <span class="st">"NE"</span>, <span class="st">"NV"</span>, <span class="st">"NH"</span>, <span class="st">"NJ"</span>, <span class="st">"NM"</span>, <span class="st">"NY"</span>, <span class="st">"NC"</span>, <span class="st">"ND"</span>, <span class="st">"OH"</span>, <span class="st">"OK"</span>, <span class="st">"OR"</span>, <span class="st">"PA"</span>, <span class="st">"RI"</span>, <span class="st">"SC"</span>, <span class="st">"SD"</span>, <span class="st">"TN"</span>, <span class="st">"TX"</span>, <span class="st">"UT"</span>, <span class="st">"VT"</span>, <span class="st">"VA"</span>, <span class="st">"WA"</span>, <span class="st">"WV"</span>, <span class="st">"WI"</span>, <span class="st">"WY"</span>, <span class="st">"DC"</span>)</span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the state abbreviations with EC_2000 data</span></span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>EC_2000 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(EC_2000, state_abbreviations, <span class="at">by =</span> <span class="st">"state"</span>)</span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjusted coordinates for northeastern states and DC</span></span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>label_coords <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="fu">c</span>(<span class="st">"new york"</span>, <span class="st">"new jersey"</span>, <span class="st">"connecticut"</span>, <span class="st">"rhode island"</span>, <span class="st">"massachusetts"</span>, <span class="st">"vermont"</span>, <span class="st">"new hampshire"</span>, <span class="st">"maine"</span>, <span class="st">"district of columbia"</span>),</span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0</span>, <span class="sc">-</span><span class="fl">74.5</span>, <span class="sc">-</span><span class="fl">73.5</span>, <span class="sc">-</span><span class="fl">71.5</span>, <span class="sc">-</span><span class="fl">71.5</span>, <span class="sc">-</span><span class="fl">72.7</span>, <span class="sc">-</span><span class="fl">71.5</span>, <span class="sc">-</span><span class="fl">69.0</span>, <span class="sc">-</span><span class="fl">77.0</span>),</span>
+<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="fl">42.5</span>, <span class="fl">40.0</span>, <span class="fl">41.5</span>, <span class="fl">41.0</span>, <span class="fl">42.2</span>, <span class="fl">43.5</span>, <span class="fl">43.8</span>, <span class="fl">45.5</span>, <span class="fl">38.9</span>)</span>
+<span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge label coordinates with electoral data for northeastern states</span></span>
+<span id="cb23-61"><a href="#cb23-61" aria-hidden="true" tabindex="-1"></a>map_data <span class="ot">&lt;-</span> <span class="fu">left_join</span>(EC_2000, label_coords, <span class="at">by =</span> <span class="st">"state"</span>)</span>
+<span id="cb23-62"><a href="#cb23-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-63"><a href="#cb23-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate base map using `usmap`</span></span>
+<span id="cb23-64"><a href="#cb23-64" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> <span class="fu">plot_usmap</span>(<span class="at">data =</span> EC_2000, <span class="at">values =</span> <span class="st">"winning_party"</span>, <span class="at">regions =</span> <span class="st">"states"</span>) <span class="sc">+</span></span>
+<span id="cb23-65"><a href="#cb23-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"DEMOCRAT"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"REPUBLICAN"</span> <span class="ot">=</span> <span class="st">"red"</span>),</span>
+<span id="cb23-66"><a href="#cb23-66" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"DEMOCRAT"</span> <span class="ot">=</span> <span class="st">"Gore"</span>, <span class="st">"REPUBLICAN"</span> <span class="ot">=</span> <span class="st">"Bush"</span>),</span>
+<span id="cb23-67"><a href="#cb23-67" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="st">"Winning Party"</span>) <span class="sc">+</span></span>
+<span id="cb23-68"><a href="#cb23-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"2000 Presidential Election Results by State"</span>,</span>
+<span id="cb23-69"><a href="#cb23-69" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Bush vs. Gore"</span>) <span class="sc">+</span></span>
+<span id="cb23-70"><a href="#cb23-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb23-71"><a href="#cb23-71" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-72"><a href="#cb23-72" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add electoral votes and labels to the map</span></span>
+<span id="cb23-73"><a href="#cb23-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> map_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">label =</span> EC),</span>
+<span id="cb23-74"><a href="#cb23-74" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>) <span class="sc">+</span></span>
+<span id="cb23-75"><a href="#cb23-75" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add state abbreviations for clarity</span></span>
+<span id="cb23-76"><a href="#cb23-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> map_data, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y <span class="sc">+</span> <span class="dv">1</span>, <span class="at">label =</span> abbreviation),</span>
+<span id="cb23-77"><a href="#cb23-77" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">2.5</span>)</span>
+<span id="cb23-78"><a href="#cb23-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-79"><a href="#cb23-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the final map</span></span>
+<span id="cb23-80"><a href="#cb23-80" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plot_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mp03_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 
