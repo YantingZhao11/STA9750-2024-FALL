@@ -11,6 +11,10 @@ editor: visual
 # Load necessary packages
 if(!require("sf")) install.packages("sf")
 library(sf)
+if(!require("tigris")) install.packages("tigris")
+library(tigris)
+if(!require("gganimate")) install.packages("gganimate")
+library(gganimate)
 if(!require("usmap")) install.packages("usmap")
 library(usmap)
 library(httr)
@@ -152,6 +156,10 @@ list(gained_plot, lost_plot)
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
+#| 
+library(gt)
+library(dplyr)
+
 # Filter for New York State and U.S. House elections
 ny_house_data <- house_data %>%
   filter(state == "NEW YORK", office == "US HOUSE")
@@ -187,6 +195,7 @@ election_outcomes <- winners_fusion %>%
   inner_join(winners_nonfusion, by = c("year", "district")) %>%
   filter(fusion_winner != nonfusion_winner)
 
+# Create the gt table with updated styles
 election_outcomes_table <- election_outcomes %>%
   gt() %>%
   tab_header(
@@ -205,23 +214,14 @@ election_outcomes_table <- election_outcomes %>%
     columns = c(fusion_votes, nonfusion_votes),
     decimals = 0
   ) %>%
-  tab_style(
-    style = list(
-      cell_fill(color = "lightblue"),
-      cell_text(weight = "bold")
-    ),
-    locations = list(
-      cells_title(groups = c("title", "subtitle")),  # Apply styles to title and subtitle
-      cells_column_labels(columns = c(fusion_winner, nonfusion_winner))  # Styles for specific column labels
-    )
-  ) %>%
   tab_options(
-    table.font.size = 14,
+    table.font.size = px(14),
     heading.align = "center"
   )
 
 # Display the table
 print(election_outcomes_table)
+
 ```
 
 
@@ -543,13 +543,9 @@ us_states <- usmap::us_map(regions = "states")  # Correct way to get state geome
 EC_2000 <- EC_2000 %>%
   rename(abbr = Abbreviation)
 
-# Remove x and y columns from map_data (if they exist)
-map_data_cleaned <- map_data %>%
-  select(-x, -y)
-
 # Ensure map_data_cleaned is a data frame before joining
-map_data_with_geom <- map_data_cleaned %>%
-  left_join(us_states, by = c("abbreviation" = "abbr")) %>%
+map_data_with_geom <- EC_2000 %>%
+  left_join(us_states, by = c("abbr" = "abbr")) %>%
   select(everything(), geom)
 
 # Rename 'geom' to 'geometry' for consistency
@@ -573,6 +569,94 @@ ggplot(map_data_with_geom_sf) +
 
 ```
 
+#Task 6
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+library(usmap)
+library(tools)
+library(sf)
+library(tigris)
+library(dplyr)
+library(ggplot2)
+library(gganimate)
+
+# Modify the function to return data for all years
+generate_choropleth_data_for_year <- function(year, district_number, president_data, ucla_shapefiles) {
+  
+  # Load the specific district shapefile
+  district_shapefile <- ucla_shapefiles[[paste0("districts", district_number, ".shp")]]
+  
+  # Create Electoral College votes column based on the district shapefile
+  district_EC <- district_shapefile %>%
+    mutate(STATENAME = toupper(STATENAME)) %>%
+    select(-geometry) %>%
+    as.data.frame() %>%
+    group_by(STATENAME) %>%
+    summarize(EC = n() + 2)  # 2 for senators per state
+
+  # Filter the election data for the given year
+  president_year <- president_data %>%
+    filter(year == year) %>%
+    group_by(state) %>%
+    mutate(
+      winning_party = party_simplified[which.max(candidatevotes)]  # Determine the winning party
+    ) %>%
+    slice_max(candidatevotes, n = 1) %>%  # Only keep the row with the highest total votes
+    ungroup()  # Ungroup after summarizing
+  
+  # Join the election data with the district data (EC votes and winning party)
+  president_EC <- district_EC %>%
+    left_join(president_year, by = c("STATENAME" = "state")) %>%
+    select(state = STATENAME, EC, winning_party, state_fips)
+  
+  # Load U.S. state shapefiles for mapping
+  us_state_shapefiles <- usmap::us_map(regions = "states") %>%
+    mutate(fips = as.integer(fips))
+  
+  # Merge district data with state shapefiles by FIPS code
+  merged_data <- president_EC %>%
+    left_join(us_state_shapefiles, by = c("state_fips" = "fips"))
+  
+  # Add the year column to merge data
+  merged_data$year <- year
+  
+  # Return the merged data for all years (instead of a plot)
+  return(merged_data)
+}
+
+# Generate data for all election years
+all_years_data <- bind_rows(
+  generate_choropleth_data_for_year(1976, "094", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(1980, "096", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(1984, "098", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(1988, "100", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(1992, "102", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(1996, "104", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(2000, "106", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(2004, "108", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(2008, "110", president_data, ucla_shapefiles),
+  generate_choropleth_data_for_year(2012, "112", president_data, ucla_shapefiles)
+)
+
+# facet graph, work on getting in one column
+ggplot(data = all_years_data) +
+  geom_sf(aes(fill = winning_party, geometry = geom), color = "white", size = 2.0) +  # Color by winning party
+  scale_fill_manual(values = c("REPUBLICAN" = "red", "DEMOCRAT" = "blue"), 
+                    labels = c("REPUBLICAN" = "Republican", "DEMOCRAT" = "Democratic"), 
+                    name = "Winning Party") +  # Red for Republican, Blue for Democrat
+  geom_sf_text(aes(label = EC, geometry = geom), color = "black", size = 3, fontface = "bold") +  # Add EC vote labels
+  theme_minimal() +
+  labs(title = "2000 Presidential Election: Winning Party by State") +  # Removed subtitle
+  theme(legend.position = "bottom", 
+        plot.title = element_text(hjust = 0.5, size = 16)) +
+  facet_wrap(~ year) 
+```
+
+
 #Task 7 - State-Wide Winner-Take-All
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -582,9 +666,9 @@ library(dplyr)
 library(gt)
 library(ggplot2)
 
-# Filter data for the years 1988, 2000, and 2012, and calculate the highest vote winner for each state
+# Filter data for all presidential election years from 1976 to 2020
 state_winner <- president_data %>%
-  filter(office == "US PRESIDENT", year %in% c(1988, 2000, 2012)) %>%  # Select specified years
+  filter(office == "US PRESIDENT", year %in% seq(1976, 2020, by = 4)) %>%  # Include all presidential election years
   group_by(year, state) %>%
   filter(candidatevotes == max(candidatevotes, na.rm = TRUE)) %>%
   summarise(
@@ -599,7 +683,7 @@ gt_table <- state_winner %>%
   arrange(year, state) %>%  # Arrange by year and state for readability
   gt() %>%
   tab_header(
-    title = "US Presidential Election Winners by State (1988, 2000, 2012)",
+    title = "US Presidential Election Winners by State (1976 - 2020)",
     subtitle = "Candidate with the Highest Votes for Each State and Their Party"
   ) %>%
   cols_label(
@@ -610,12 +694,16 @@ gt_table <- state_winner %>%
     highest_votes = "Highest Votes"
   ) %>%
   fmt_number(
-    columns = vars(highest_votes),
+    columns = c(highest_votes),
     decimals = 0
+  ) %>%
+  tab_options(
+    table.font.size = px(14),
+    heading.align = "center"
   ) %>%
   tab_style(
     style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
+    locations = cells_column_labels(columns = c(year, state, winner, party, highest_votes))
   )
 
 # Display the gt table
@@ -630,7 +718,7 @@ party_count_per_year <- state_winner %>%
 ggplot(party_count_per_year, aes(x = factor(year), y = n, fill = party)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(
-    title = "Party Count per Year in US Presidential Elections (1988, 2000, 2012)",
+    title = "Party Count per Year in US Presidential Elections (1976 - 2020)",
     x = "Year",
     y = "Number of States",
     fill = "Party"
@@ -639,17 +727,23 @@ ggplot(party_count_per_year, aes(x = factor(year), y = n, fill = party)) +
   theme_minimal() +
   theme(legend.position = "top")
 
+
 ```
 
 #Task 7 - District-Wide Winner-Take-All + State-Wide “At Large” Votes
 
-```{r}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
 library(dplyr)
 library(gt)
+library(ggplot2)
 
-# Filter for presidential data in the years 1988, 2000, and 2012
+# Filter for presidential data in all election years from 1976 to 2020
 filtered_data <- president_data %>%
-  filter(office == "US PRESIDENT", year %in% c(1988, 2000, 2012))
+  filter(office == "US PRESIDENT", year %in% seq(1976, 2020, by = 4))
 
 # Step 1: Determine the highest candidate votes for each party by state and year
 highest_votes_per_party <- filtered_data %>%
@@ -668,7 +762,7 @@ gt_table <- state_winners_atlarge %>%
   arrange(year, state) %>%  # Arrange by year and state for readability
   gt() %>%
   tab_header(
-    title = "Winning Party by State in 1988, 2000, and 2012",
+    title = "Winning Party by State in US Presidential Elections (1976 - 2020)",
     subtitle = "Party with Highest Total Candidate Votes per State and Year"
   ) %>%
   cols_label(
@@ -678,12 +772,12 @@ gt_table <- state_winners_atlarge %>%
     total_votes = "Total Votes"
   ) %>%
   fmt_number(
-    columns = vars(total_votes),
+    columns = c(total_votes),
     decimals = 0
   ) %>%
   tab_style(
     style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
+    locations = cells_column_labels(columns = c(year, state, party_simplified, total_votes))
   )
 
 # Display the gt table
@@ -698,7 +792,7 @@ party_count_per_year <- state_winners_atlarge %>%
 ggplot(party_count_per_year, aes(x = factor(year), y = n, fill = party_simplified)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(
-    title = "Party Count per Year in US Presidential Elections (1988, 2000, 2012)",
+    title = "Party Count per Year in US Presidential Elections (1976 - 2020)",
     x = "Year",
     y = "Number of States",
     fill = "Party"
@@ -706,79 +800,198 @@ ggplot(party_count_per_year, aes(x = factor(year), y = n, fill = party_simplifie
   scale_fill_manual(values = c("DEMOCRAT" = "blue", "REPUBLICAN" = "red", "OTHER" = "grey")) +
   theme_minimal() +
   theme(legend.position = "top")
+
 ```
 
 # EC1988+2012
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+library(dplyr)
+library(stringr)
+
+# Define a function to generate EC data for a specific election year
+generate_ec_table <- function(year, district_file, president_data, ucla_shapefiles, state_abbreviations) {
+  
+  # Load the shapefile for the corresponding congressional districts
+  congressional_districts <- ucla_shapefiles[[paste0("districts", district_file, ".shp")]] %>%
+    mutate(STATENAME = tolower(STATENAME)) %>%
+    select(-geometry) %>%
+    as.data.frame() %>%
+    group_by(STATENAME) %>%
+    summarize(EC = n() + 2)  # EC based on the number of districts + 2 senators per state
+  
+  # Filter and summarize presidential data for the given year
+  vote_results <- president_data %>%
+    filter(year == year) %>%
+    mutate(state = tolower(state)) %>%
+    group_by(state) %>%
+    summarize(
+      winning_party = party_simplified[which.max(candidatevotes)],
+      total_votes = max(totalvotes)
+    ) %>%
+    ungroup()
+  
+  # Combine EC with winning party information
+  ec_table <- congressional_districts %>%
+    left_join(vote_results, by = c("STATENAME" = "state")) %>%
+    mutate(
+      winning_party = if_else(STATENAME == "district of columbia" & is.na(winning_party), "DEMOCRAT", winning_party)
+    ) %>%
+    select(STATENAME, winning_party, EC)
+  
+  # Rename columns to match `usmap` requirements and merge state abbreviations
+  ec_table <- ec_table %>%
+    rename(state = STATENAME) %>%
+    left_join(state_abbreviations, by = "state") %>%
+    rename(Abbreviation = abbreviation)  # Rename 'abbreviation' to 'Abbreviation'
+  
+  return(ec_table)
+}
+
+# List of years and corresponding district shapefile codes
+years_and_districts <- list(
+  c(1976, "094"), c(1980, "096"), c(1984, "098"), 
+  c(1988, "100"), c(1992, "102"), c(1996, "104"), 
+   c(2000, "106"), c(2004, "108"), c(2008, "110"), 
+  c(2012, "112")
+)
+
+# Loop through each year and generate the EC tables
+ec_tables <- lapply(years_and_districts, function(info) {
+  year <- info[1]
+  district_file <- info[2]
+  generate_ec_table(as.numeric(year), district_file, president_data, ucla_shapefiles, state_abbreviations)
+})
+
+# Assign each generated EC table to a named list element for easy reference
+names(ec_tables) <- paste0("EC_", sapply(years_and_districts, `[[`, 1))
+
+
+```
+
+
+
+#Task 7 - State-Wide Proportional
 ```{r}
-# Create electoral college votes column
-CD_100 <- ucla_shapefiles[["districts100.shp"]] %>%
-  mutate(STATENAME = tolower(STATENAME)) %>%
-  select(-geometry) %>%
-  as.data.frame() %>%
-  group_by(STATENAME) %>%
-  summarize(EC = n() + 2)
+library(dplyr)
+library(ggplot2)
 
-# Show winning party for each state for the year 2000
-vote_results_1988 <- president_data %>%
-  filter(year == 1988) %>%
-  mutate(state = tolower(state)) %>%
-  group_by(state) %>%
-  summarize(
-    winning_party = party_simplified[which.max(candidatevotes)],
-    total_votes = max(totalvotes)
+# Step 1: Combine all electoral college data into a single dataframe from 1976 to 2012
+ec_data <- bind_rows(
+  lapply(names(ec_tables), function(name) {
+    year <- as.numeric(sub("EC_", "", name))
+    mutate(ec_tables[[name]], year = year)
+  })
+)
+
+# Step 2: Filter for presidential data in all required years (1976 to 2012)
+filtered_data <- president_data %>%
+  filter(office == "US PRESIDENT", year %in% seq(1976, 2012, 4))  # Only presidential election years
+
+# Step 3: Find the winning candidate for Democrat and Republican parties in each state and year
+party_winners <- filtered_data %>%
+  filter(party_simplified %in% c("DEMOCRAT", "REPUBLICAN")) %>%
+  group_by(year, state, party_simplified) %>%
+  summarise(
+    candidate = candidate[which.max(candidatevotes)],  # Get candidate with highest votes per party
+    candidate_votes = max(candidatevotes, na.rm = TRUE),
+    total_state_votes = max(totalvotes, na.rm = TRUE),
+    .groups = "drop"
   ) %>%
-  ungroup()
+  mutate(vote_percentage = candidate_votes / total_state_votes)  # Calculate percentage of votes
 
-# Combine EC with winning party
-EC_1988 <- CD_100 %>%
-  left_join(vote_results_1988, by = c("STATENAME" = "state")) %>%
+# Ensure consistent formatting of state names
+party_winners <- party_winners %>%
+  mutate(state = str_to_title(state))
+
+ec_data <- ec_data %>%
+  mutate(state = str_to_title(state))
+
+# Step 4: Join with EC data and calculate allocated EC votes
+proportional_ec_votes <- party_winners %>%
+  left_join(ec_data, by = c("year", "state")) %>%
   mutate(
-    winning_party = if_else(STATENAME == "district of columbia" & is.na(winning_party), "DEMOCRAT", winning_party)
+    allocated_ec_votes = round(EC * vote_percentage)
   ) %>%
-  select(STATENAME, winning_party, EC)
+  select(year, state, candidate, party_simplified, EC, vote_percentage, allocated_ec_votes)
 
-# Rename columns to match `usmap` requirements
-EC_1988 <- EC_1988 %>%
-  rename(state = STATENAME)
+# Step 5: Calculate total allocated EC votes by year and party
+total_ec_votes_by_party <- proportional_ec_votes %>%
+  group_by(year, party_simplified) %>%
+  summarise(total_allocated_ec_votes = sum(allocated_ec_votes, na.rm = TRUE), .groups = "drop")
 
-# Merge the state abbreviations with EC_2000 data
-EC_1988 <- left_join(EC_1988, state_abbreviations, by = "state") %>%
-  rename(Abbreviation = abbreviation)  # Rename 'abbreviation' to 'Abbreviation'
+# Step 6: Create bar chart for EC votes by year and party
+ec_votes_bar_chart <- ggplot(total_ec_votes_by_party, aes(x = factor(year), y = total_allocated_ec_votes, fill = party_simplified)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Total Allocated Electoral Votes by Party (1976 to 2012)",
+    x = "Year",
+    y = "Total Allocated EC Votes",
+    fill = "Party"
+  ) +
+  scale_fill_manual(values = c("DEMOCRAT" = "blue", "REPUBLICAN" = "red")) +
+  theme_minimal()
 
-# Create electoral college votes column
-CD_112 <- ucla_shapefiles[["districts112.shp"]] %>%
-  mutate(STATENAME = tolower(STATENAME)) %>%
-  select(-geometry) %>%
-  as.data.frame() %>%
-  group_by(STATENAME) %>%
-  summarize(EC = n() + 2)
+# Display the bar chart
+print(ec_votes_bar_chart)
 
-# Show winning party for each state for the year 2000
-vote_results_2012 <- president_data %>%
-  filter(year == 2012) %>%
-  mutate(state = tolower(state)) %>%
-  group_by(state) %>%
-  summarize(
-    winning_party = party_simplified[which.max(candidatevotes)],
-    total_votes = max(totalvotes)
+
+```
+
+#Task 7 - National Proportional
+```{r}
+# Step 3: Calculate vote percentage for Democrat and Republican parties in each state and year
+party_percentage <- filtered_data %>%
+  filter(party_simplified %in% c("DEMOCRAT", "REPUBLICAN")) %>%
+  group_by(year, state, party_simplified) %>%
+  summarise(
+    total_party_votes = sum(candidatevotes, na.rm = TRUE),
+    total_state_votes = max(totalvotes, na.rm = TRUE),
+    .groups = "drop"
   ) %>%
-  ungroup()
+  mutate(vote_percentage = total_party_votes / total_state_votes)
 
-# Combine EC with winning party
-EC_2012 <- CD_112 %>%
-  left_join(vote_results_2012, by = c("STATENAME" = "state")) %>%
+# Ensure consistent formatting of state names
+party_percentage <- party_percentage %>%
+  mutate(state = str_to_title(state))
+
+ec_data <- ec_data %>%
+  mutate(state = str_to_title(state))
+
+# Step 4: Join with EC data and calculate allocated EC votes for each party by vote percentage
+proportional_ec_votes <- party_percentage %>%
+  left_join(ec_data, by = c("year", "state")) %>%
   mutate(
-    winning_party = if_else(STATENAME == "district of columbia" & is.na(winning_party), "DEMOCRAT", winning_party)
+    allocated_ec_votes = round(EC * vote_percentage)
   ) %>%
-  select(STATENAME, winning_party, EC)
+  select(year, state, party_simplified, EC, vote_percentage, allocated_ec_votes)
 
-# Rename columns to match `usmap` requirements
-EC_2012 <- EC_2012 %>%
-  rename(state = STATENAME)
+# Step 5: Calculate total allocated EC votes by year and party
+total_ec_votes_by_party <- proportional_ec_votes %>%
+  group_by(year, party_simplified) %>%
+  summarise(total_allocated_ec_votes = sum(allocated_ec_votes, na.rm = TRUE), .groups = "drop")
 
-# Merge the state abbreviations with EC_2000 data
-EC_2012 <- left_join(EC_2012, state_abbreviations, by = "state") %>%
-  rename(Abbreviation = abbreviation)  # Rename 'abbreviation' to 'Abbreviation'
+# Step 6: Create bar chart for EC votes by year and party
+ec_votes_bar_chart <- ggplot(total_ec_votes_by_party, aes(x = factor(year), y = total_allocated_ec_votes, fill = party_simplified)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Total Allocated Electoral Votes by Party (1976 to 2012)",
+    x = "Year",
+    y = "Total Allocated EC Votes",
+    fill = "Party"
+  ) +
+  scale_fill_manual(values = c("DEMOCRAT" = "blue", "REPUBLICAN" = "red")) +
+  theme_minimal()
 
+# Display the bar chart
+print(ec_votes_bar_chart)
+
+```
+
+
+```{r}
 
 ```
