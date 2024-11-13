@@ -2,6 +2,8 @@
 title: "Analysis of the U.S. Electoral College system"
 editor: visual
 ---
+
+
 The Electoral College, established by Article II, Section 1 of the U.S. Constitution, serves as the mechanism for electing the President of the United States. Each state is granted a number of electors equal to its representation in Congress—comprising both Senators and Representatives. Over time, the states have developed their own methods for allocating these electoral votes (ECVs), often opting for a "winner-takes-all" system based on the state's popular vote. Notably, Maine and Nebraska allocate their ECVs differently, by congressional district.
 
 In this mini-project, we examine the impact of alternative electoral allocation methods on U.S. presidential election outcomes, specifically investigating whether different methods could affect perceived biases in the Electoral College system. Our analysis will simulate alternative ECV allocations using historical voting data, assessing how proportional or district-based allocations might alter electoral outcomes.
@@ -9,6 +11,8 @@ In this mini-project, we examine the impact of alternative electoral allocation 
 ## Data Set-Up and Initial Exploration
 
 To prepare the data, I wrote R code that automates the download of U.S. congressional shapefiles from 1976 to 2022, organized into two main tasks. For 1976-2012, the code downloads files from the UCLA Political Science website, using a systematic naming convention to save each file in a designated "shapefiles" directory. For 2014-2022, it pulls files from the U.S. Census Bureau and saves them in a separate "census_shapefiles" directory. The code checks for existing files locally to prevent redundant downloads, optimizing server load and storage efficiency. Additionally, I manually downloaded U.S. House election vote data and statewide presidential vote counts from 1976 to 2022 from the MIT Election Data Science Lab to incorporate into the project.
+
+
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -142,9 +146,13 @@ download_shapefiles_census(shapefile_urls, "data/census_shapefiles")
 
 ```
 
+
+
 ## Initial Exploration of Vote Count Data
 
 To analyze which states gained or lost the most seats in the U.S. House of Representatives between 1976 and 2022, I first filtered the House data to include only those years. Then, I grouped the data by year and state to calculate the number of seats per state. After determining the seat changes, I identified the top 5 states with the most significant gains and lost as follows:
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -194,9 +202,13 @@ list(gained_plot, lost_plot)
 ```
 
 
+
+
 In New York State, the "fusion" voting system allows a candidate to appear on multiple party lines, with their votes across all lines being totaled. This system can sometimes affect the outcome of elections. The goal of this analysis is to determine if the outcome of any U.S. House elections in New York would have changed if the fusion system had not been used, meaning candidates would only receive votes from their major party lines (Democrat or Republican).
 
 This R code analyzes U.S. House elections in New York State to identify instances where the fusion voting system might have changed the election outcome. It filters the data for New York House races, focusing on candidates from the Democrat and Republican parties. The code calculates total votes across all lines (fusion) and major party votes only (non-fusion) for each candidate. It then determines the winner in both scenarios and compares them to highlight elections where the fusion system resulted in a different winner. The results are displayed in a formatted table using the gt package.
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -271,7 +283,11 @@ election_outcomes_table
 
 
 
+
+
 In exploring U.S. voting trends from 1976 to 2012, the code examines whether presidential candidates typically receive more votes than their party’s congressional candidates within the same state. It filters and aggregates vote data for both presidential and congressional races by year, then calculates the percentage difference between the total votes for presidential and congressional candidates. The results are presented in a formatted table using the gt package, and a line plot visualizes the vote percentage difference over time. The analysis reveals a general trend of decreasing presidential vote share relative to congressional vote share over the years, highlighting variations in the relationship between presidential and congressional vote shares across different election years and states.
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -332,7 +348,11 @@ ggplot(vote_comparison, aes(x = year, y = vote_percentage_difference)) +
 vote_table
 ```
 
+
+
 I also analyze voting patterns for presidential and congressional candidates by party from 1976 to 2012. The code aggregates the vote totals by year and party for both presidential and congressional races, then merges the datasets to facilitate comparison. The data is reshaped into a long format for easier visualization, and a stacked area chart is created to display the number of votes for each party in both presidential and congressional elections over time. The chart highlights a consistent trend of presidential candidates receiving more votes than congressional candidates, helping to identify shifts in party performance across years and races.
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -373,7 +393,11 @@ ggplot(party_vote_long, aes(x = year, y = votes, fill = party)) +
   theme(legend.position = "top")
 
 ```
+
+
 I also analyze the total votes by state in presidential and congressional elections from 1976 to 2012. The code aggregates vote totals by year and state for both races, then merges the datasets for comparison. The data is reshaped into a long format for better visualization, and a grouped bar chart is created to display the total votes for presidential and congressional candidates by state. The chart highlights that states with larger populations, such as California and New York, have higher vote totals, with presidential candidates consistently receiving more votes than congressional candidates in these states.
+
+
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -415,11 +439,15 @@ ggplot(state_votes_long, aes(x = reorder(state, -votes), y = votes, fill = vote_
 
 ```
 
+
+
 ## Importing and Plotting Shape File Data
 
 Next, we extract and read shapefiles from zip archives using R's `sf` library, which is designed for handling spatial data in visualization and analysis. The code defines two functions: `read_ucla_shapefiles` and `read_census_shapefiles`. The first function extracts and reads all `.shp` files from zip archives in a specified directory, while the second function focuses on specific Census shapefiles based on a list of filenames. Both functions utilize `sf::st_read` to load the shapefiles and handle any errors, returning a list of successfully read shapefiles for further analysis.
 
 Reading Data 1
+
+
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -481,7 +509,11 @@ ucla_dir <- "data/shapefiles"
 ucla_shapefiles <- read_ucla_shapefiles(ucla_dir)
 
 ```
+
+
 Reading data II
+
+
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -538,7 +570,11 @@ census_shapefiles <- read_census_shapefiles(census_dir, desired_filenames)
 
 
 
+
+
 Using the data previously downloaded, here is the choropleth visualization of the 2000 U.S. Presidential Election Electoral College results.
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -626,7 +662,11 @@ ggplot(map_data_with_geom_sf) +
 
 ```
 
+
+
 The faceted version showing election results over time is as follows:
+
+
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -713,10 +753,14 @@ ggplot(data = all_years_data) +
   facet_wrap(~ year)
 ```
 
+
+
 ## Comparing the Effects of ECV Allocation Rules
 The following code includes different historical voting data and assigns each state’s Electoral College votes (ECVs) according to various strategies:
 ### Task 7 - State-Wide Winner-Take-All
 This strategy and code focuses on filtering U.S. presidential election data between 1976 and 2020, identifying the candidate with the highest vote in each state for each election year. This is done using the dplyr package to group and filter the data based on the maximum vote count per state, followed by summarizing to capture the winner, their party, and the highest votes. The results are displayed in a formatted table using the gt package and a bar chart is created to show the count of each party winning by state across the years.
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -789,7 +833,11 @@ ggplot(party_count_per_year, aes(x = factor(year), y = n, fill = party)) +
 
 ```
 
+
+
 #Task 7 - District-Wide Winner-Take-All + State-Wide “At Large” Votes
+
+
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -862,7 +910,11 @@ ggplot(party_count_per_year, aes(x = factor(year), y = n, fill = party_simplifie
 
 ```
 
+
+
 # EC1988+2012
+
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -933,7 +985,11 @@ names(ec_tables) <- paste0("EC_", sapply(years_and_districts, `[[`, 1))
 
 
 
+
+
 #Task 7 - State-Wide Proportional
+
+
 ```{r}
 library(dplyr)
 library(ggplot2)
@@ -1000,7 +1056,11 @@ print(ec_votes_bar_chart)
 
 ```
 
+
+
 #Task 7 - National Proportional
+
+
 ```{r}
 # Step 3: Calculate vote percentage for Democrat and Republican parties in each state and year
 party_percentage <- filtered_data %>%
@@ -1049,7 +1109,6 @@ ec_votes_bar_chart <- ggplot(total_ec_votes_by_party, aes(x = factor(year), y = 
 print(ec_votes_bar_chart)
 
 ```
-
 
 ```{r}
 
