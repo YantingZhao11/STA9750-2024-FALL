@@ -737,7 +737,7 @@ state_winner <- president_data %>%
     .groups = "drop"
   )
 
-# Display in a formatted gt table
+# Display in a formatted gt table for Quarto
 gt_table <- state_winner %>%
   arrange(year, state) %>%  # Arrange by year and state for readability
   gt() %>%
@@ -765,8 +765,8 @@ gt_table <- state_winner %>%
     locations = cells_column_labels(columns = c(year, state, winner, party, highest_votes))
   )
 
-# Display the gt table
-print(gt_table)
+# Return the table directly for Quarto to render it correctly
+gt_table
 
 # Calculate party counts per year for the bar chart
 party_count_per_year <- state_winner %>%
@@ -789,12 +789,15 @@ ggplot(party_count_per_year, aes(x = factor(year), y = n, fill = party)) +
 
 ```
 
-#Task 7 - District-Wide Winner-Take-All + State-Wide “At Large” Votes
-
+### Task 7 - District-Wide Winner-Take-All + State-Wide “At Large” Votes
+This code starts similarly by filtering data from the same period, but it focuses on calculating the total candidate votes for each party in each state, rather than identifying a single candidate's vote. The party with the highest total votes is considered the winner for that state in each election year. The results are again shown in a gt table and visualized with a bar chart that counts the number of states won by each party for every election year, providing insights into the distribution of electoral outcomes across the U.S.
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
 
+
+#| code-fold: true
+#| code-summary: "Show the code"
 
 library(dplyr)
 library(gt)
@@ -839,8 +842,8 @@ gt_table <- state_winners_atlarge %>%
     locations = cells_column_labels(columns = c(year, state, party_simplified, total_votes))
   )
 
-# Display the gt table
-print(gt_table)
+# Return the gt table object for Quarto to render it
+gt_table
 
 # Step 4: Bar chart for party count per year
 party_count_per_year <- state_winners_atlarge %>%
@@ -860,13 +863,15 @@ ggplot(party_count_per_year, aes(x = factor(year), y = n, fill = party_simplifie
   theme_minimal() +
   theme(legend.position = "top")
 
+
 ```
 
-# EC1988+2012
+
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
 
+#EC Tables
 
 library(dplyr)
 library(stringr)
@@ -932,9 +937,11 @@ names(ec_tables) <- paste0("EC_", sapply(years_and_districts, `[[`, 1))
 ```
 
 
-
-#Task 7 - State-Wide Proportional
-```{r}
+### Task 7 - State-Wide Proportional
+Next, this strategy and code focuses on filtering U.S. presidential election data between 1976 and 2020, identifying the candidate with the highest vote in each state for each election year. This is done using the dplyr package to group and filter the data based on the maximum vote count per state, followed by summarizing to capture the winner, their party, and the highest votes. The results are displayed in a formatted table using the gt package and a bar chart is created to show the count of each party winning by state across the years.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 library(dplyr)
 library(ggplot2)
 
@@ -1001,7 +1008,10 @@ print(ec_votes_bar_chart)
 ```
 
 #Task 7 - National Proportional
-```{r}
+Lastly, the code starts similarly by filtering data from the same period, but it focuses on calculating the total candidate votes for each party in each state, rather than identifying a single candidate's vote. The party with the highest total votes is considered the winner for that state in each election year. The results are again shown in a gt table and visualized with a bar chart that counts the number of states won by each party for every election year, providing insights into the distribution of electoral outcomes across the U.S.
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
 # Step 3: Calculate vote percentage for Democrat and Republican parties in each state and year
 party_percentage <- filtered_data %>%
   filter(party_simplified %in% c("DEMOCRAT", "REPUBLICAN")) %>%
@@ -1047,10 +1057,5 @@ ec_votes_bar_chart <- ggplot(total_ec_votes_by_party, aes(x = factor(year), y = 
 
 # Display the bar chart
 print(ec_votes_bar_chart)
-
-```
-
-
-```{r}
 
 ```
