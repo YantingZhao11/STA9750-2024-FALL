@@ -715,15 +715,33 @@ ggplot(data = all_years_data) +
 
 ## Comparing the Effects of ECV Allocation Rules
 The following code includes different historical voting data and assigns each state’s Electoral College votes (ECVs) according to various strategies:
+
 ### Task 7 - State-Wide Winner-Take-All
 This strategy and code focuses on filtering U.S. presidential election data between 1976 and 2020, identifying the candidate with the highest vote in each state for each election year. This is done using the dplyr package to group and filter the data based on the maximum vote count per state, followed by summarizing to capture the winner, their party, and the highest votes. The results are displayed in a formatted table using the gt package and a bar chart is created to show the count of each party winning by state across the years.
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
 
+#| code-fold: true
+#| code-summary: "Show the code"
+
 library(dplyr)
-library(gt)
+library(DT)
 library(ggplot2)
+
+# Sample 1000 rows or fewer from each table for display
+display_sample <- function(data, table_name) {
+  sample_data <- data[sample(nrow(data), min(1000, nrow(data))), ]  # Sample 1000 rows or fewer
+  datatable(
+    sample_data,
+    options = list(
+      pageLength = 10,            # Display 10 rows per page
+      scrollX = TRUE,             # Enable horizontal scrolling
+      dom = 'tip'                 # Only show table, input filter, and pagination
+    ),
+    caption = paste("Sample of", table_name, "(Up to 1000 rows)")
+  )
+}
 
 # Filter data for all presidential election years from 1976 to 2020
 state_winner <- president_data %>%
@@ -737,36 +755,8 @@ state_winner <- president_data %>%
     .groups = "drop"
   )
 
-# Display in a formatted gt table for Quarto
-gt_table <- state_winner %>%
-  arrange(year, state) %>%  # Arrange by year and state for readability
-  gt() %>%
-  tab_header(
-    title = "US Presidential Election Winners by State (1976 - 2020)",
-    subtitle = "Candidate with the Highest Votes for Each State and Their Party"
-  ) %>%
-  cols_label(
-    year = "Year",
-    state = "State",
-    winner = "Winner",
-    party = "Party",
-    highest_votes = "Highest Votes"
-  ) %>%
-  fmt_number(
-    columns = c(highest_votes),
-    decimals = 0
-  ) %>%
-  tab_options(
-    table.font.size = px(14),
-    heading.align = "center"
-  ) %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels(columns = c(year, state, winner, party, highest_votes))
-  )
-
-# Return the table directly for Quarto to render it correctly
-gt_table
+# Display a sample of the state_winner table
+display_sample(state_winner, "State Winners")
 
 # Calculate party counts per year for the bar chart
 party_count_per_year <- state_winner %>%
@@ -795,12 +785,9 @@ This code starts similarly by filtering data from the same period, but it focuse
 #| code-fold: true
 #| code-summary: "Show the code"
 
-
-#| code-fold: true
-#| code-summary: "Show the code"
-
+# Load necessary libraries
 library(dplyr)
-library(gt)
+library(DT)
 library(ggplot2)
 
 # Filter for presidential data in all election years from 1976 to 2020
@@ -819,33 +806,10 @@ state_winners_atlarge <- highest_votes_per_party %>%
   slice(1) %>%  # Select first in case of ties
   ungroup()
 
-# Step 3: Create a gt table for the results
-gt_table <- state_winners_atlarge %>%
-  arrange(year, state) %>%  # Arrange by year and state for readability
-  gt() %>%
-  tab_header(
-    title = "Winning Party by State in US Presidential Elections (1976 - 2020)",
-    subtitle = "Party with Highest Total Candidate Votes per State and Year"
-  ) %>%
-  cols_label(
-    year = "Year",
-    state = "State",
-    party_simplified = "Winning Party",
-    total_votes = "Total Votes"
-  ) %>%
-  fmt_number(
-    columns = c(total_votes),
-    decimals = 0
-  ) %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels(columns = c(year, state, party_simplified, total_votes))
-  )
+# Display the winning party data sample using display_sample function
+display_sample(state_winners_atlarge, "Winning Party by State in US Presidential Elections (1976 - 2020)")
 
-# Return the gt table object for Quarto to render it
-gt_table
-
-# Step 4: Bar chart for party count per year
+# Step 3: Bar chart for party count per year
 party_count_per_year <- state_winners_atlarge %>%
   count(year, party_simplified) %>%
   arrange(year, desc(n))  # Arrange the data for better display in the bar chart
@@ -1007,7 +971,7 @@ print(ec_votes_bar_chart)
 
 ```
 
-#Task 7 - National Proportional
+### Task 7 - National Proportional
 Lastly, the code starts similarly by filtering data from the same period, but it focuses on calculating the total candidate votes for each party in each state, rather than identifying a single candidate's vote. The party with the highest total votes is considered the winner for that state in each election year. The results are again shown in a gt table and visualized with a bar chart that counts the number of states won by each party for every election year, providing insights into the distribution of electoral outcomes across the U.S.
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -1059,3 +1023,11 @@ ec_votes_bar_chart <- ggplot(total_ec_votes_by_party, aes(x = factor(year), y = 
 print(ec_votes_bar_chart)
 
 ```
+
+## Evaluating Fairness of ECV Allocation Schemes
+
+In evaluating the fairness of different Electoral College Vote (ECV) allocation schemes, I considered several methods: State-Wide Winner-Take-All, District-Wide Winner-Take-All + State-Wide “At Large” Votes, State-Wide Proportional, and National Proportional. After analyzing the results, I determined that the State-Wide Proportional method is the fairest. This is because, when applied across various election years, there is no significant variance in the results, and it seems to provide a more balanced representation of the popular vote relative to the electoral vote.
+
+The District-Wide Winner-Take-All + State-Wide “At Large” Votes method, however, exhibits a notable shift in the 1984 election, showing the largest impact and variance. This method tends to amplify the margin of victory for the candidate with a slight statewide edge. In contrast, under the State-Wide Proportional method, the bar chart for 1984 reveals much less variance, reflecting a more equitable distribution of votes.
+
+From this analysis, it is clear that the State-Wide Proportional allocation scheme provides the most consistent and balanced results across elections, while the District-Wide Winner-Take-All method can lead to more dramatic swings in electoral outcomes.
