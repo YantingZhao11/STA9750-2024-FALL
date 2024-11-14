@@ -8,7 +8,7 @@ In this mini-project, we examine the impact of alternative electoral allocation 
 
 ## Data Set-Up and Initial Exploration
 
-To prepare the data, I wrote R code that automates the download of U.S. congressional shapefiles from 1976 to 2022, organized into two main tasks. For 1976-2012, the code downloads files from the UCLA Political Science website, using a systematic naming convention to save each file in a designated "shapefiles" directory. For 2014-2022, it pulls files from the U.S. Census Bureau and saves them in a separate "census_shapefiles" directory. The code checks for existing files locally to prevent redundant downloads, optimizing server load and storage efficiency. Additionally, I manually downloaded U.S. House election vote data and statewide presidential vote counts from 1976 to 2022 from the MIT Election Data Science Lab to incorporate into the project.
+To prepare the data, I wrote R code that automates the download of U.S. congressional shapefiles[^3] from 1976 to 2022, organized into two main tasks. For 1976-2012, the code downloads files from the UCLA Political Science website, using a systematic naming convention to save each file in a designated "shapefiles" directory. For 2014-2022, it pulls files from the U.S. Census Bureau[^4] and saves them in a separate "census_shapefiles" directory. The code checks for existing files locally to prevent redundant downloads, optimizing server load and storage efficiency. Additionally, I manually downloaded U.S. House election vote data[^1] and statewide presidential vote[^2] counts from 1976 to 2022 from the MIT Election Data Science Lab to incorporate into the project.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -196,7 +196,7 @@ list(gained_plot, lost_plot)
 
 In New York State, the "fusion" voting system allows a candidate to appear on multiple party lines, with their votes across all lines being totaled. This system can sometimes affect the outcome of elections. The goal of this analysis is to determine if the outcome of any U.S. House elections in New York would have changed if the fusion system had not been used, meaning candidates would only receive votes from their major party lines (Democrat or Republican).
 
-This R code analyzes U.S. House elections in New York State to identify instances where the fusion voting system might have changed the election outcome. It filters the data for New York House races, focusing on candidates from the Democrat and Republican parties. The code calculates total votes across all lines (fusion) and major party votes only (non-fusion) for each candidate. It then determines the winner in both scenarios and compares them to highlight elections where the fusion system resulted in a different winner. The results are displayed in a formatted table using the gt package.
+This code analyzes U.S. House elections in New York State to identify instances where the fusion voting system might have changed the election outcome. It filters the data for New York House races, focusing on candidates from the Democrat and Republican parties. The code calculates total votes across all lines (fusion) and major party votes only (non-fusion) for each candidate. It then determines the winner in both scenarios and compares them to highlight elections where the fusion system resulted in a different winner. The results are displayed in a formatted table using the gt package.
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -373,7 +373,7 @@ ggplot(party_vote_long, aes(x = year, y = votes, fill = party)) +
   theme(legend.position = "top")
 
 ```
-I also analyze the total votes by state in presidential and congressional elections from 1976 to 2012. The code aggregates vote totals by year and state for both races, then merges the datasets for comparison. The data is reshaped into a long format for better visualization, and a grouped bar chart is created to display the total votes for presidential and congressional candidates by state. The chart highlights that states with larger populations, such as California and New York, have higher vote totals, with presidential candidates consistently receiving more votes than congressional candidates in these states.
+Additionally, I analyze the total votes by state in presidential and congressional elections from 1976 to 2012. The code aggregates vote totals by year and state for both races, then merges the datasets for comparison. The data is reshaped into a long format for better visualization, and a grouped bar chart is created to display the total votes for presidential and congressional candidates by state. The chart highlights that states with larger populations, such as California and New York, have higher vote totals, with presidential candidates consistently receiving more votes than congressional candidates in these states.
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -417,9 +417,9 @@ ggplot(state_votes_long, aes(x = reorder(state, -votes), y = votes, fill = vote_
 
 ## Importing and Plotting Shape File Data
 
-Next, we extract and read shapefiles from zip archives using R's `sf` library, which is designed for handling spatial data in visualization and analysis. The code defines two functions: `read_ucla_shapefiles` and `read_census_shapefiles`. The first function extracts and reads all `.shp` files from zip archives in a specified directory, while the second function focuses on specific Census shapefiles based on a list of filenames. Both functions utilize `sf::st_read` to load the shapefiles and handle any errors, returning a list of successfully read shapefiles for further analysis.
+Next, I extract and read shapefiles from zip archives using R's `sf` library, which is designed for handling spatial data in visualization and analysis. The code defines two functions: `read_ucla_shapefiles` and `read_census_shapefiles`. The first function extracts and reads all `.shp` files from zip archives in a specified directory, while the second function focuses on specific Census shapefiles based on a list of filenames. Both functions utilize `sf::st_read` to load the shapefiles and handle any errors, returning a list of successfully read shapefiles for further analysis.
 
-Reading Data 1
+Reading Data I[^5]
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: true
@@ -1031,3 +1031,13 @@ In evaluating the fairness of different Electoral College Vote (ECV) allocation 
 The District-Wide Winner-Take-All + State-Wide “At Large” Votes method, however, exhibits a notable shift in the 1984 election, showing the largest impact and variance. This method tends to amplify the margin of victory for the candidate with a slight statewide edge. In contrast, under the State-Wide Proportional method, the bar chart for 1984 reveals much less variance, reflecting a more equitable distribution of votes.
 
 From this analysis, it is clear that the State-Wide Proportional allocation scheme provides the most consistent and balanced results across elections, while the District-Wide Winner-Take-All method can lead to more dramatic swings in electoral outcomes.
+
+[^1]: MIT Election Data and Science Lab, 2017, "U.S. House 1976-2022," https://doi.org/10.7910/DVN/IGOUN2, Harvard Dataverse, v13, UNF:6: Ky5FkettbvohjTSN/IvldA== [fileUNF].
+
+[^2]: MIT Election Data and Science Lab, 2017, "U.S. President 1976-2020," https://doi.org/10.7910/DVN/42MVDX, Harvard Dataverse, v8, UNF:6:F0opd1IRbeY190yVfzglUw== [fileUNF].
+
+[^3]: https://cdmaps.polisci.ucla.edu/
+
+[^4]: https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html
+
+[^5]: Partial code was collaborated with Chloe Zhou.
