@@ -1040,4 +1040,4 @@ From this analysis, it is clear that the State-Wide Proportional allocation sche
 
 [^4]: https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html
 
-[^5]: Partial code was collaborated with Chloe Zhou.
+[^5]: Partial code was collaborated with Chloe Yu.
