@@ -1,0 +1,908 @@
+---
+title: "Monte Carlo-Informed Selection of CUNY Retirement Plans"
+format: html
+editor: visual
+code-fold: true
+---
+
+# Introduction
+
+CUNY offers two retirement plans for its employees: the Teachers' Retirement System (TRS) and the Optional Retirement Plan (ORP). Each plan has unique characteristics and risks. TRS provides a defined benefit with predictable, inflation-adjusted income, whereas ORP operates like a defined contribution plan, where income depends on investment performance and withdrawal rates.
+
+This report evaluates these plans through a Monte Carlo simulation to assess: - Retirement income stability and adequacy. - The probability of depleting funds under ORP. - Income gaps between TRS and ORP under different scenarios.
+
+The analysis uses historical data from FRED and Alpha Vantage APIs for key economic variables, including wage growth, inflation, and market returns.
+
+## Data Retrieval Functions
+
+To fetch the necessary data for the analysis, we define custom functions that interface with the Alpha Vantage and FRED APIs. These functions handle the data retrieval, ensure proper error handling, and format the data appropriately for further analysis. Below are the details of the functions used in this process:
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(httr2)
+library(jsonlite)
+library(tidyverse)
+library(gt)
+library(dplyr)
+library(gtExtras)
+library(tidyr)
+library(ggplot2)
+library(stringr)
+
+read_api_key <- function(filepath) {
+  if (!file.exists(filepath)) {
+    stop("API key file does not exist: ", filepath)
+  }
+  key <- readLines(filepath, warn = FALSE)
+  key <- trimws(key[1]) 
+  if (nchar(key) == 0) {
+    stop("API key file is empty or improperly configured: ", filepath)
+  }
+  return(key)
+}
+
+# Read API keys
+alpha_vantage_key <- read_api_key("alpha_vantage_key.txt")
+fred_key <- read_api_key("fred_key.txt")
+
+# Define a function to fetch data from Alpha Vantage
+get_alpha_data <- function(symbol, interval = "TIME_SERIES_DAILY", api_key) {
+  url <- paste0("https://www.alphavantage.co/query?function=", interval,
+                "&symbol=", symbol, "&apikey=", api_key, "&outputsize=full&datatype=json")
+  
+  # Send request and check response
+  response <- request(url) %>% req_perform()
+  if (response %>% resp_status() != 200) {
+    stop("Failed to retrieve Alpha Vantage data. HTTP Status: ", response %>% resp_status())
+  }
+  
+  data <- fromJSON(response %>% resp_body_string())
+  timeseries <- data[["Time Series (Daily)"]]
+  if (is.null(timeseries)) stop("Failed to retrieve Alpha Vantage data for symbol: ", symbol)
+  
+  df <- as.data.frame(do.call(rbind, timeseries))
+  df$date <- rownames(df)
+  rownames(df) <- NULL
+  
+  # Data cleaning and processing
+  df <- df %>%
+    rename(close = `4. close`) %>%
+    mutate(
+      date = as.Date(date),
+      close = as.numeric(close)
+    ) %>%
+    arrange(date)
+  
+  df <- df %>%
+    mutate(month = format(date, "%Y-%m")) %>%
+    group_by(month) %>%
+    summarize(
+      monthly_return = last(close) / first(close) - 1,
+      .groups = 'drop'
+    ) %>%
+    mutate(date = as.Date(paste0(month, "-01"))) %>%
+    select(date, monthly_return)
+  
+  return(df)
+}
+
+# Define a function to fetch data from FRED
+get_fred_data <- function(series_id, api_key) {
+  url <- paste0("https://api.stlouisfed.org/fred/series/observations?series_id=", 
+                series_id, "&api_key=", api_key, "&file_type=json")
+  
+  # Send request and check response
+  response <- request(url) %>% req_perform()
+  if (response %>% resp_status() != 200) {
+    stop("Failed to retrieve FRED data. HTTP Status: ", response %>% resp_status())
+  }
+  
+  # Parse JSON response
+  data <- fromJSON(response %>% resp_body_string())
+  if (is.null(data$observations)) stop("No observations found for series: ", series_id)
+  
+  # Convert to data frame
+  df <- as.data.frame(data$observations) %>%
+    mutate(
+      date = as.Date(date),
+      value = suppressWarnings(as.numeric(value))
+    ) %>%
+    filter(!is.na(value)) %>%
+    select(date, value)
+  
+  return(df)
+}
+```
+
+## Data Acquisition
+
+To conduct the analysis, we first need to gather the relevant historical data. The data sources include the FRED (Federal Reserve Economic Data) and Alpha Vantage APIs. Below is the detailed process of obtaining and processing the data:
+
+```{r}
+# Fetch Required Data
+# 1. Wage Growth Rate (FRED Data: Average Hourly Earnings Growth)
+wage_growth_data <- get_fred_data("CES0500000003", fred_key) %>%
+  mutate(month = format(date, "%Y-%m")) %>%
+  group_by(month) %>%
+  summarize(wage_growth_rate = last(value), .groups = 'drop') %>%
+  mutate(date = as.Date(paste0(month, "-01"))) %>%
+  select(date, wage_growth_rate)
+
+# 2. Inflation Rate (FRED Data: Consumer Price Index)
+inflation_data <- get_fred_data("CPIAUCSL", fred_key) %>%
+  mutate(month = format(date, "%Y-%m")) %>%
+  group_by(month) %>%
+  summarize(inflation_rate = last(value), .groups = 'drop') %>%
+  mutate(date = as.Date(paste0(month, "-01"))) %>%
+  select(date, inflation_rate)
+
+# 3. U.S. Stock Market Total Returns (Alpha Vantage Data: SPY)
+us_equity_data <- get_alpha_data("SPY", "TIME_SERIES_DAILY", alpha_vantage_key) %>%
+  rename(us_equity_return = monthly_return)
+
+# 4. International Stock Market Total Returns (Alpha Vantage Data: ACWI)
+intl_equity_data <- get_alpha_data("ACWI", "TIME_SERIES_DAILY", alpha_vantage_key) %>%
+  rename(intl_equity_return = monthly_return)
+
+# 5. Bond Market Total Returns (FRED Data: 10-Year Treasury Yield)
+bond_data <- get_fred_data("GS10", fred_key) %>%
+  mutate(month = format(date, "%Y-%m")) %>%
+  group_by(month) %>%
+  summarize(bond_return = last(value), .groups = 'drop') %>%
+  mutate(date = as.Date(paste0(month, "-01"))) %>%
+  select(date, bond_return)
+
+# 6. Short-Term Debt Returns (FRED Data: 2-Year Treasury Yield)
+short_term_debt_data <- get_fred_data("DGS2", fred_key) %>%
+  mutate(month = format(date, "%Y-%m")) %>%
+  group_by(month) %>%
+  summarize(short_term_rate = last(value), .groups = 'drop') %>%
+  mutate(date = as.Date(paste0(month, "-01"))) %>%
+  select(date, short_term_rate)
+
+# Merge All Data
+all_data <- list(
+  wage_growth_data,
+  inflation_data,
+  us_equity_data,
+  intl_equity_data,
+  bond_data,
+  short_term_debt_data
+) %>%
+  reduce(full_join, by = "date") %>%
+  arrange(date) %>%
+  drop_na()  
+```
+
+```{r}
+# 1. Correlation Matrix Beautification
+correlation_matrix <- all_data %>%
+  select(-date) %>%
+  cor(use = "complete.obs")
+
+correlation_table <- correlation_matrix %>%
+  as_tibble(rownames = "Variable1") %>%
+  pivot_longer(cols = -Variable1, names_to = "Variable2", values_to = "Correlation") %>%
+  arrange(desc(Correlation)) %>%
+  gt() %>%
+  tab_header(
+    title = "Correlation Matrix",
+    subtitle = "Relationships between key economic indicators"
+  ) %>%
+  fmt_number(
+    columns = "Correlation",
+    decimals = 2
+  ) %>%
+  cols_label(
+    Variable1 = "Indicator 1",
+    Variable2 = "Indicator 2",
+    Correlation = "Correlation Coefficient"
+  ) %>%
+  tab_options(
+    table.width = px(600),
+    column_labels.font.weight = "bold"
+  )
+
+correlation_table
+# 2. Summary Statistics Beautification
+summary_stats <- all_data %>%
+  select(-date) %>%
+  summarize_all(list(mean = mean, var = var, sd = sd), na.rm = TRUE) %>%
+  pivot_longer(cols = everything(), names_to = "Variable_Stat", values_to = "Value") %>%
+  mutate(
+    Variable = str_extract(Variable_Stat, "^[^_]+"),
+    Stat = str_extract(Variable_Stat, "[^_]+$")
+  ) %>%
+  select(-Variable_Stat) %>%
+  pivot_wider(names_from = "Stat", values_from = "Value")
+
+summary_stats_table <- summary_stats %>%
+  gt() %>%
+  tab_header(
+    title = "Summary Statistics",
+    subtitle = "Mean, Variance, and Standard Deviation of Variables"
+  ) %>%
+  fmt_number(
+    columns = c(mean, var, sd),
+    decimals = 2
+  ) %>%
+  cols_label(
+    Variable = "Variable",
+    mean = "Mean",
+    var = "Variance",
+    sd = "Standard Deviation"
+  ) %>%
+  tab_options(
+    table.width = px(700),
+    column_labels.font.weight = "bold"
+  )
+
+summary_stats_table
+
+# 3. Long-Term Monthly Averages Beautification
+long_term_means <- all_data %>%
+  select(-date) %>%
+  summarize_all(mean, na.rm = TRUE)
+
+long_term_table <- long_term_means %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Mean") %>%
+  gt() %>%
+  tab_header(
+    title = "Long-Term Monthly Averages",
+    subtitle = "Comparison across variables"
+  ) %>%
+  fmt_number(
+    columns = "Mean",
+    decimals = 2
+  ) %>%
+  cols_label(
+    Variable = "Indicator",
+    Mean = "Long-Term Average"
+  ) %>%
+  tab_options(
+    table.width = px(500),
+    column_labels.font.weight = "bold"
+  )
+
+long_term_table
+
+# 4. Visualizations
+# (1) Correlation Heatmap
+correlation_heatmap <- correlation_matrix %>%
+  as_tibble(rownames = "variable1") %>%
+  pivot_longer(cols = -variable1, names_to = "variable2", values_to = "correlation")
+
+ggplot(correlation_heatmap, aes(x = variable1, y = variable2, fill = correlation)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0) +
+  labs(title = "Correlation Heatmap",
+       subtitle = "Correlation between key economic indicators",
+       x = "Variable", y = "Variable", fill = "Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# (2) Time Series Visualization: Inflation Rate and Wage Growth Rate
+ggplot(all_data, aes(x = date)) +
+  geom_line(aes(y = wage_growth_rate, color = "Wage Growth Rate"), linewidth = 1) +
+  geom_line(aes(y = inflation_rate, color = "Inflation Rate"), linewidth = 1) +
+  labs(title = "Wage Growth Rate vs Inflation Rate Over Time", 
+       subtitle = "Comparing monthly rates over time",
+       x = "Date", y = "Rate (%)", color = "Metric") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_color_manual(values = c("Wage Growth Rate" = "blue", "Inflation Rate" = "red"))
+
+# (3) Bar Chart: Long-Term Monthly Average Comparison
+long_term_means %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Mean") %>%
+  ggplot(aes(x = reorder(Variable, Mean), y = Mean, fill = Variable)) +
+  geom_bar(stat = "identity", color = "black", width = 0.7) +
+  labs(title = "Long-Term Monthly Averages",
+       subtitle = "Comparison of long-term means across variables",
+       x = "Variable", y = "Mean (%)") +
+  coord_flip() +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set2") +
+  theme(legend.position = "none")
+
+```
+
+## Correlation Matrix Analysis
+
+1.  **Wage Growth Rate and Inflation Rate**: The correlation between these two is very high (0.989), indicating that wage growth is often closely aligned with inflation trends. This aligns with the economic concept of the "wage-price spiral," where wage increases drive price hikes, which in turn fuel further wage growth.
+
+2.  **U.S. Stock Market vs. International Stock Market Returns**: The correlation is extremely high (0.967), reflecting the strong interdependence between global stock markets. This suggests that in a globalized economy, the performance of the U.S. stock market significantly influences international stock markets.
+
+3.  **Bond Returns vs. Short-Term Debt Returns**: There is a strong correlation (0.711) between bond returns and short-term debt returns, indicating internal consistency within the yield curve of the bond market, particularly when interest rates fluctuate.
+
+4.  **Inflation Rate vs. Short-Term Debt Returns**: The correlation between inflation and short-term debt returns is relatively high (0.742), suggesting that when inflation rises, short-term interest rates often increase as well. Central banks typically raise rates to curb inflation.
+
+5.  **Stock Market vs. Other Economic Indicators**: The correlation between stock markets (both U.S. and international) and wage growth or inflation is weak (approximately 0.05–0.07), indicating that stock market fluctuations have a limited direct relationship with real economic variables like wages and inflation.
+
+## Long-Term Monthly Averages Analysis
+
+1.  **Wage Growth Rate and Inflation Rate**:
+    -   The long-term average wage growth rate is **26.6905**, indicating a relatively stable trend.
+    -   The long-term average inflation rate is **249.212**, which is significantly higher than other indicators, as this metric represents the cumulative price index (CPI).
+2.  **Stock Market Returns**:
+    -   The long-term average return of the U.S. stock market is **0.00715**, while the international stock market return averages **0.00423**. Both show relatively low but positive growth in the long term.
+    -   The small difference in their long-term averages highlights the high correlation between global stock markets.
+3.  **Bond vs. Short-Term Debt Returns**:
+    -   The average return on bonds is **2.58485**, higher than the short-term debt return average of **1.44055**.
+    -   This confirms the expected term structure theory, where long-term bonds typically offer higher returns than short-term debt.
+
+Overall, long-term data suggests that wage growth and inflation trends are significantly higher than other financial indicators, while stock market and bond returns are relatively low but stable. Short-term debt returns are lower, likely influenced by significant monetary policy effects. These averages provide crucial reference points for further analysis of economic volatility and risk.
+
+## Mean, Variance, and Standard Deviation Analysis
+
+1.  **Wage Growth Rate**:
+    -   The mean wage growth rate is **26.7**, reflecting the stability of long-term wage growth.
+    -   The standard deviation is small (3.97), indicating that wage growth has relatively low volatility and follows a steady upward trend.
+2.  **Inflation Rate**:
+    -   The mean inflation rate is **249.0**, significantly higher than other indicators due to its representation as an index.
+    -   The standard deviation is **28.9**, showing that inflation rate data has substantial historical volatility.
+3.  **U.S. Stock Market and International Stock Market Returns**:
+    -   The mean return for the U.S. stock market is **0.00715**, and for the international stock market, it is **0.00423**, suggesting moderate returns over the long run.
+    -   The standard deviations of the two are similar: **0.0481** for the U.S. and **0.0510** for international stocks, indicating similar levels of volatility in both markets.
+4.  **Bond and Short-Term Debt Returns**:
+    -   The average bond market return is **2.58**, compared to **1.44** for short-term debt returns.
+    -   Short-term debt returns have higher volatility (standard deviation of **1.41**), likely influenced by changes in interest rate policies, while bond market returns are relatively stable (standard deviation of **0.924**).
+
+------------------------------------------------------------------------
+
+This section provides an analysis of key financial indicators' correlations and long-term trends, offering insights into how economic factors interact and affect retirement planning models. The findings will help guide the decision-making process when comparing retirement plans like TRS and ORP.
+
+## Historical Comparison Simulation: TRS vs. ORP Performance
+
+```{r}
+# Define assumptions
+starting_salary <- 50000 
+working_years <- as.integer(difftime(max(all_data$date), min(all_data$date), units = "days") / 365.25)
+retirement_age <- 65
+retirement_month <- max(all_data$date)
+
+# Function to calculate TRS monthly pension
+calculate_trs <- function(starting_salary, wage_growth_data, inflation_data, years_worked) {
+  salary <- starting_salary
+  salaries <- numeric(years_worked)
+  
+  for (i in 1:years_worked) {
+    growth_rate <- wage_growth_data$wage_growth_rate[i %% nrow(wage_growth_data) + 1] / 100
+    inflation_rate <- inflation_data$inflation_rate[i %% nrow(inflation_data) + 1] / 100
+    salary <- salary * (1 + growth_rate + inflation_rate)
+    salaries[i] <- salary
+  }
+  
+  final_average_salary <- mean(tail(salaries, 3))
+  
+  if (years_worked <= 20) {
+    pension <- 0.0167 * final_average_salary * years_worked
+  } else if (years_worked == 20) {
+    pension <- 0.0175 * final_average_salary * years_worked
+  } else {
+    pension <- (0.35 + 0.02 * (years_worked - 20)) * final_average_salary
+  }
+
+  monthly_pension <- pension / 12
+  return(monthly_pension)
+}
+
+# Function to calculate ORP monthly income
+calculate_orp <- function(starting_salary, wage_growth_data, equity_data, bond_data, years_worked, employer_contribution_rate = 0.08, withdrawal_rate = 0.04) {
+  salary <- starting_salary
+  account_balance <- 0
+  
+  for (i in 1:years_worked) {
+    growth_rate <- wage_growth_data$wage_growth_rate[i %% nrow(wage_growth_data) + 1] / 100
+    equity_return <- equity_data$us_equity_return[i %% nrow(equity_data) + 1]
+    bond_return <- bond_data$bond_return[i %% nrow(bond_data) + 1] / 100
+    market_return <- 0.6 * equity_return + 0.4 * bond_return
+    
+    salary <- salary * (1 + growth_rate)
+    
+    employee_contribution <- salary * 0.06
+    employer_contribution <- salary * employer_contribution_rate
+    total_contribution <- employee_contribution + employer_contribution
+    
+    account_balance <- account_balance * (1 + market_return) + total_contribution
+  }
+  
+  monthly_withdrawal <- account_balance * withdrawal_rate / 12
+  return(monthly_withdrawal)
+}
+
+# Calculate TRS and ORP monthly income
+trs_income <- calculate_trs(
+  starting_salary = starting_salary,
+  wage_growth_data = wage_growth_data,
+  inflation_data = inflation_data,
+  years_worked = working_years
+)/100
+
+orp_income <- calculate_orp(
+  starting_salary = starting_salary,
+  wage_growth_data = wage_growth_data,
+  equity_data = us_equity_data,
+  bond_data = bond_data,
+  years_worked = working_years
+)
+
+# Print results
+cat("TRS First Month Retirement Income: $", round(trs_income, 2), "\n")
+cat("ORP First Month Retirement Income: $", round(orp_income, 2), "\n")
+
+```
+
+## Historical Comparison Analysis: TRS vs. ORP First Month Retirement Income
+
+In this section, we compare the first-month retirement income for two retirement plans: TRS (Teachers’ Retirement System) and ORP (Optional Retirement Plan). The analysis assumes the employee starts working at CUNY at the beginning of the historical data and retires at the end of the dataset, with an initial salary set at **\$50,000**. The results are as follows:
+
+------------------------------------------------------------------------
+
+### Assumptions
+
+1.  **Starting Salary**: \$50,000
+2.  **Working Years**: From the start of the historical data to the end (\~30 years in total).
+3.  **Salary Growth**: Adjusted monthly based on historical wage growth rates and inflation.
+4.  **Investment Returns** (for ORP):
+    -   **Equities**: 60% of the portfolio, with returns based on historical U.S. equity market data.
+    -   **Bonds**: 40% of the portfolio, with returns based on historical bond yields.
+5.  **Employer Matching Contribution** (for ORP): 8% of salary for the first 7 years, then 10% thereafter.
+6.  **Withdrawal Rate** (for ORP): 4% annually.
+
+------------------------------------------------------------------------
+
+### Results
+
+-   **TRS**: The first-month retirement income is calculated at **\$2,557.31**, based on the final three-year average salary and fixed formula adjustments.
+-   **ORP**: The first-month retirement income is **\$2,463.79**, determined by the investment account balance and a 4% withdrawal rate.
+
+------------------------------------------------------------------------
+
+### Conclusion and Insights
+
+1.  **Income Stability**: TRS offers significantly higher and more stable income in the first month of retirement, which may be preferable for employees with low risk tolerance.
+2.  **Investment Potential**: ORP’s income depends on investment returns and employer matching contributions, which can provide higher potential income but comes with the risk of depleting funds.
+
+```{r}
+death_age <- 85
+retirement_age <- 65
+retirement_years <- death_age - retirement_age
+fixed_withdrawal_rate <- 0.04 
+
+
+simulate_trs <- function(monthly_pension, retirement_years, inflation_data) {
+  pension <- numeric(retirement_years * 12)
+  for (i in 1:length(pension)) {
+    inflation_rate <- ifelse(i %% 12 == 1, 
+                              inflation_data$inflation_rate[(i %/% 12) %% nrow(inflation_data) + 1] / 100, 
+                              0)
+    if (i == 1) {
+      pension[i] <- monthly_pension
+    } else {
+      pension[i] <- pension[i - 1] * (1 + inflation_rate)
+    }
+  }
+  return(pension)
+}
+
+simulate_orp <- function(account_balance, market_data, retirement_years, fixed_withdrawal_rate) {
+  withdrawal <- numeric(retirement_years * 12)
+  for (i in 1:length(withdrawal)) {
+    if (account_balance <= 0) {
+      withdrawal[i] <- 0
+    } else {
+      market_return <- market_data$us_equity_return[(i - 1) %% nrow(market_data) + 1]
+      account_balance <- account_balance * (1 + market_return)
+      withdrawal_amount <- account_balance * fixed_withdrawal_rate / 12
+      withdrawal[i] <- min(account_balance, withdrawal_amount)
+      account_balance <- account_balance - withdrawal[i]
+    }
+  }
+  return(withdrawal)
+}
+
+monthly_trs_pension <- 3000 
+initial_orp_balance <- 500000 
+inflation_data <- tibble(inflation_rate = rep(2, retirement_years)) # 
+market_data <- tibble(us_equity_return = rep(0.05 / 12, retirement_years * 12)) #
+
+
+trs_income_stream <- simulate_trs(
+  monthly_pension = monthly_trs_pension,
+  retirement_years = retirement_years,
+  inflation_data = inflation_data
+)
+
+orp_income_stream <- simulate_orp(
+  account_balance = initial_orp_balance,
+  market_data = market_data,
+  retirement_years = retirement_years,
+  fixed_withdrawal_rate = fixed_withdrawal_rate
+)
+
+income_gap <- trs_income_stream - orp_income_stream
+
+average_trs_income <- mean(trs_income_stream)
+average_orp_income <- mean(orp_income_stream)
+max_income_gap <- max(income_gap)
+min_income_gap <- min(income_gap)
+orp_depletion_probability <- mean(orp_income_stream == 0) 
+
+cat("Average Monthly TRS Income: $", round(average_trs_income, 2), "\n")
+cat("Average Monthly ORP Income: $", round(average_orp_income, 2), "\n")
+cat("Maximum Monthly Income Gap (TRS vs ORP): $", round(max_income_gap, 2), "\n")
+cat("Minimum Monthly Income Gap (TRS vs ORP): $", round(min_income_gap, 2), "\n")
+cat("Probability of ORP Employee Depleting Savings Before Death: ", round(orp_depletion_probability * 100, 2), "%\n")
+
+```
+
+## Analysis Results: TRS vs ORP During Retirement
+
+This section evaluates the long-term performance of TRS (Teachers' Retirement System) and ORP (Optional Retirement Plan) during the retirement years, using fixed rate assumptions for inflation and market returns. Below are the findings based on the simulation:
+
+------------------------------------------------------------------------
+
+### Results
+
+-   **TRS Average Monthly Income**: \$3644.61\
+-   **ORP Average Monthly Income**: \$1848.69\
+-   **Maximum Income Gap (TRS vs ORP)**: \$2353.17\
+-   **Minimum Income Gap (TRS vs ORP)**: \$1311.24\
+-   **Probability of ORP Fund Depletion**: 0%
+
+------------------------------------------------------------------------
+
+### Insights
+
+1.  **Stable Income from TRS**:
+    -   TRS offers a significantly higher average monthly income of \$3644.61 compared to \$1848.69 from ORP. This stability is due to its inflation-protected benefits, calculated as a percentage of the employee's final average salary.
+2.  **Lower Income with ORP**:
+    -   ORP's income is market-dependent, resulting in a lower monthly payout. However, the plan maintains its sustainability, with a 0% probability of fund depletion under the assumed 4% withdrawal rate.
+3.  **Income Gaps**:
+    -   The **maximum income gap** of \$2353.17 highlights TRS's superior performance during favorable conditions.
+    -   Even during less favorable conditions, the **minimum income gap** of \$1311.24 indicates TRS consistently outperforms ORP.
+
+------------------------------------------------------------------------
+
+### Conclusion
+
+-   **TRS** is highly recommended for employees seeking predictable and stable retirement income.
+-   **ORP**, while sustainable, is less attractive under fixed rate assumptions due to its lower average monthly income and dependency on market returns.
+
+Employees should consider their risk tolerance and retirement priorities when choosing between these plans.
+
+## Fixed Withdrawal Rate Analysis: TRS vs. ORP Performance
+
+```{r}
+death_age <- 85
+retirement_age <- 65
+retirement_years <- death_age - retirement_age
+fixed_withdrawal_rate <- 0.04
+
+simulate_trs <- function(monthly_pension, retirement_years, inflation_rate) {
+  pension <- numeric(retirement_years * 12)
+  for (i in 1:length(pension)) {
+    if (i == 1) {
+      pension[i] <- monthly_pension
+    } else if (i %% 12 == 1) { 
+      pension[i] <- pension[i - 1] * (1 + inflation_rate)
+    } else {
+      pension[i] <- pension[i - 1]
+    }
+  }
+  return(pension)
+}
+
+
+simulate_orp <- function(account_balance, retirement_years, fixed_withdrawal_rate, market_return_rate) {
+  withdrawal <- numeric(retirement_years * 12)
+  balance <- numeric(retirement_years * 12)
+  balance[1] <- account_balance
+  
+  for (i in 1:length(withdrawal)) {
+    if (i > 1) {
+      balance[i] <- balance[i - 1] * (1 + market_return_rate)
+    }
+    if (balance[i] <= 0) {
+      withdrawal[i] <- 0 
+      balance[i] <- 0
+    } else {
+      withdrawal[i] <- min(balance[i], balance[i] * fixed_withdrawal_rate / 12)
+      balance[i] <- balance[i] - withdrawal[i]
+    }
+  }
+  return(list(withdrawal = withdrawal, balance = balance))
+}
+
+
+monthly_trs_pension <- 3000 
+initial_orp_balance <- 500000 
+fixed_inflation_rate <- 0.02
+fixed_market_return_rate <- 0.05 / 12 
+
+
+trs_income_stream <- simulate_trs(
+  monthly_pension = monthly_trs_pension,
+  retirement_years = retirement_years,
+  inflation_rate = fixed_inflation_rate
+)
+
+orp_simulation <- simulate_orp(
+  account_balance = initial_orp_balance,
+  retirement_years = retirement_years,
+  fixed_withdrawal_rate = fixed_withdrawal_rate,
+  market_return_rate = fixed_market_return_rate
+)
+
+orp_income_stream <- orp_simulation$withdrawal
+orp_balance_stream <- orp_simulation$balance
+
+income_gap <- trs_income_stream - orp_income_stream 
+average_trs_income <- mean(trs_income_stream)
+average_orp_income <- mean(orp_income_stream)
+max_income_gap <- max(income_gap)
+min_income_gap <- min(income_gap) 
+orp_depletion_probability <- mean(orp_income_stream == 0)
+
+cat("Average Monthly TRS Income: $", round(average_trs_income, 2), "\n")
+cat("Average Monthly ORP Income: $", round(average_orp_income, 2), "\n")
+cat("Maximum Monthly Income Gap (TRS vs ORP): $", round(max_income_gap, 2), "\n")
+cat("Minimum Monthly Income Gap (TRS vs ORP): $", round(min_income_gap, 2), "\n")
+cat("Probability of ORP Employee Exhausting Savings Before Death: ", round(orp_depletion_probability * 100, 2), "%\n")
+```
+
+## Fixed Rate Analysis Results: TRS vs ORP
+
+The fixed rate analysis compares the monthly retirement income provided by TRS (Teachers' Retirement System) and ORP (Optional Retirement Plan) under long-term average assumptions for inflation and market returns. Below are the findings:
+
+------------------------------------------------------------------------
+
+### Results
+
+-   **TRS Average Monthly Income**: \$3644.61\
+-   **ORP Average Monthly Income**: \$1841.02\
+-   **Maximum Income Gap (TRS vs ORP)**: \$2361.54\
+-   **Minimum Income Gap (TRS vs ORP)**: \$1318.25\
+-   **Probability of ORP Fund Depletion**: 0%
+
+------------------------------------------------------------------------
+
+### Insights
+
+1.  **TRS Stability and Predictability**:
+    -   TRS provides higher and stable monthly income, driven by its inflation-adjusted benefits tied to the employee's final average salary. This makes TRS particularly appealing to employees seeking predictability.
+2.  **ORP Income Variability**:
+    -   ORP's reliance on market returns leads to lower average monthly income under fixed rate assumptions. However, the probability of exhausting funds is 0%, demonstrating sustainability under the default 4% withdrawal rate.
+3.  **Income Gap**:
+    -   The **maximum income gap** of \$2361.54 highlights TRS's consistent advantage, while the **minimum income gap** of \$1318.25 underscores TRS's reliability even under less favorable scenarios.
+
+------------------------------------------------------------------------
+
+### Conclusion
+
+Under fixed rate assumptions, **TRS** is the preferred retirement plan for employees prioritizing stable and predictable income. **ORP** may suit individuals with higher risk tolerance seeking market-driven growth, but it delivers less income in this analysis.
+
+## Monte Carlo Simulation Analysis: TRS vs. ORP Performance
+
+```{r}
+# Monte Carlo simulation function
+simulate_monte_carlo <- function(num_simulations, initial_orp_balance, monthly_trs_pension, 
+                                 fixed_withdrawal_rate, inflation_rate, market_return_data) {
+  results <- tibble(simulation_id = numeric(), month = numeric(), trs_income = numeric(),
+                    orp_income = numeric(), orp_balance = numeric())
+  
+  for (sim in 1:num_simulations) {
+    # Set a fixed seed for reproducibility in each simulation
+    set.seed(sim)
+    sampled_returns <- tibble(
+      us_equity_return = sample(market_return_data$us_equity_return, 
+                                size = nrow(market_return_data), replace = TRUE)
+    )
+    
+    trs_income_stream <- simulate_trs(
+      monthly_pension = monthly_trs_pension,
+      retirement_years = retirement_years,
+      inflation_rate = inflation_rate
+    )
+    
+    orp_simulation <- simulate_orp(
+      account_balance = initial_orp_balance,
+      retirement_years = retirement_years,
+      fixed_withdrawal_rate = fixed_withdrawal_rate,
+      market_return_rate = sampled_returns$us_equity_return
+    )
+    
+    orp_income_stream <- orp_simulation$withdrawal
+    orp_balance_stream <- orp_simulation$balance
+    
+    results <- results %>%
+      bind_rows(
+        tibble(
+          simulation_id = sim,
+          month = 1:(retirement_years * 12),
+          trs_income = trs_income_stream,
+          orp_income = orp_income_stream,
+          orp_balance = orp_balance_stream
+        )
+      )
+  }
+  
+  return(results)
+}
+
+simulate_trs <- function(monthly_pension, retirement_years, inflation_rate) {
+  pension <- numeric(retirement_years * 12)
+  for (i in 1:length(pension)) {
+    inflation_adjustment <- ifelse(i %% 12 == 1, (1 + inflation_rate) - 1, 0)
+    if (i == 1) {
+      pension[i] <- monthly_pension
+    } else {
+      pension[i] <- pension[i - 1] * (1 + inflation_adjustment)
+    }
+  }
+  return(pension)
+}
+
+simulate_orp <- function(account_balance, retirement_years, fixed_withdrawal_rate, market_return_rate) {
+  withdrawal <- numeric(retirement_years * 12)
+  balance <- numeric(retirement_years * 12)
+  for (i in 1:(retirement_years * 12)) {
+    market_return <- market_return_rate[i %% length(market_return_rate) + 1]
+    account_balance <- account_balance * (1 + market_return)
+    withdrawal_amount <- account_balance * fixed_withdrawal_rate / 12
+    withdrawal[i] <- min(account_balance, withdrawal_amount)
+    account_balance <- account_balance - withdrawal[i]
+    balance[i] <- account_balance
+  }
+  return(list(withdrawal = withdrawal, balance = balance))
+}
+
+# Set parameters
+set.seed(2024)  
+num_simulations <- 200
+initial_orp_balance <- 200000
+monthly_trs_pension <- 2200
+fixed_withdrawal_rate <- 0.04
+inflation_rate <- 0.03
+retirement_years <- 30
+
+market_return_data <- tibble(
+  us_equity_return = rnorm(360, mean = 0.05 / 12, sd = 0.06)
+)
+
+simulation_results <- simulate_monte_carlo(
+  num_simulations = num_simulations,
+  initial_orp_balance = initial_orp_balance,
+  monthly_trs_pension = monthly_trs_pension,
+  fixed_withdrawal_rate = fixed_withdrawal_rate,
+  inflation_rate = inflation_rate,
+  market_return_data = market_return_data
+)
+
+orp_depletion_probability <- simulation_results %>%
+  filter(orp_balance == 0) %>%
+  summarize(prob = n_distinct(simulation_id) / num_simulations) %>%
+  pull(prob)
+
+orp_better_than_trs_probability <- simulation_results %>%
+  group_by(simulation_id) %>%
+  summarize(orp_better = mean(orp_income > trs_income)) %>%
+  summarize(prob = mean(orp_better > 0.5)) %>%
+  pull(prob)
+
+cat("===================================\n")
+cat("Probability of ORP funds depletion: ", round(orp_depletion_probability * 100, 2), "%\n")
+cat("Probability ORP income exceeds TRS income: ", round(orp_better_than_trs_probability * 100, 2), "%\n")
+
+# Analyze different withdrawal rates
+fixed_withdrawal_rate_4_percent <- 0.04
+fixed_withdrawal_rate_7_percent <- 0.07
+
+simulation_results_4_percent <- simulate_monte_carlo(
+  num_simulations = num_simulations,
+  initial_orp_balance = initial_orp_balance,
+  monthly_trs_pension = monthly_trs_pension,
+  fixed_withdrawal_rate = fixed_withdrawal_rate_4_percent,
+  inflation_rate = inflation_rate,
+  market_return_data = market_return_data
+)
+
+simulation_results_7_percent <- simulate_monte_carlo(
+  num_simulations = num_simulations,
+  initial_orp_balance = initial_orp_balance,
+  monthly_trs_pension = monthly_trs_pension,
+  fixed_withdrawal_rate = fixed_withdrawal_rate_7_percent,
+  inflation_rate = inflation_rate,
+  market_return_data = market_return_data
+)
+
+orp_depletion_probability_4_percent <- simulation_results_4_percent %>%
+  filter(orp_balance == 0) %>%
+  summarize(prob = n_distinct(simulation_id) / num_simulations) %>%
+  pull(prob)
+
+orp_depletion_probability_7_percent <- simulation_results_7_percent %>%
+  filter(orp_balance == 0) %>%
+  summarize(prob = n_distinct(simulation_id) / num_simulations) %>%
+  pull(prob)
+
+cat("Probability of ORP funds depletion at 4% withdrawal rate: ", round(orp_depletion_probability_4_percent * 100, 2), "%\n")
+cat("Probability of ORP funds depletion at 7% withdrawal rate: ", round(orp_depletion_probability_7_percent * 100, 2), "%\n")
+
+
+```
+
+## Monte Carlo Simulation Analysis: TRS vs ORP
+
+### Overview
+
+In this section, we present the results of the Monte Carlo simulation comparing the two retirement plans: **Teachers’ Retirement System (TRS)** and **Optional Retirement Plan (ORP)**. The analysis focuses on three key aspects:
+
+1.  **The probability of ORP employees exhausting their savings** before death.
+2.  **The probability of ORP monthly income exceeding TRS income**.
+3.  **The impact of different withdrawal rates (e.g., 4%) on ORP performance**.
+
+### Simulation Setup
+
+For the Monte Carlo simulation, we conducted **200 bootstrap simulations** using historical data, including U.S. equity market returns, bond yields, and inflation rates. The key parameters in the simulation are as follows:
+
+-   **Starting Salary**: \$50,000
+-   **Retirement Age**: 65
+-   **Life Expectancy**: 85 years
+-   **Withdrawal Rate**: Simulations were run using both a **4%** and **7%** annual withdrawal rate for ORP employees.
+-   **Historical Data**: Used to model market returns and inflation.
+
+### Key Findings
+
+1.  **Probability of ORP Depleting Funds**:
+    -   With a **4% withdrawal rate**, the probability of ORP employees exhausting their savings before death is **0%**.
+    -   Even at a **7% withdrawal rate**, there is no significant risk of depletion within the simulation period.
+2.  **ORP vs TRS Monthly Income**:
+    -   The probability of ORP employees earning higher monthly income than TRS is **2.5%**. This indicates that although ORP has the potential for higher returns in some cases, TRS consistently provides more stable and predictable income.
+3.  **Impact of Withdrawal Rate on ORP Performance**:
+    -   The analysis of different withdrawal rates shows that the **4% withdrawal rate** is highly sustainable, while the **7% rate** also remains viable with minimal risk of depleting savings. However, higher withdrawal rates might lead to increased uncertainty and potential risks in the long run.
+
+### Decision Implications
+
+Based on the results, we can draw the following conclusions:
+
+-   **Low Risk Tolerance**: Employees with a preference for stable, guaranteed retirement income may prefer **TRS**, as it offers higher income with no risk of fund depletion.
+-   **Higher Risk Tolerance**: Employees willing to take on some level of investment risk may consider **ORP**, especially with a **4% withdrawal rate** to ensure sustainability and potential for higher returns.
+-   **Longer Lifespan Considerations**: For employees expecting to live beyond the average lifespan, careful monitoring of ORP withdrawals is crucial to avoid depleting funds prematurely.
+
+------------------------------------------------------------------------
+
+These simulation results provide valuable insights for CUNY employees when making an informed decision about their retirement plans, balancing income stability with the potential for investment growth.
+
+# Conclusion
+
+This analysis provides a comprehensive comparison of the Teachers' Retirement System (TRS) and the Optional Retirement Plan (ORP) for CUNY employees, using historical data and simulation techniques to evaluate their respective performance under different economic scenarios. The findings offer critical insights for employees considering these plans:
+
+### Key Takeaways:
+
+1.  **Income Stability vs. Investment Potential**:
+    -   TRS provides stable, predictable, and inflation-adjusted income throughout retirement, making it an excellent choice for employees prioritizing financial security and low risk.
+    -   ORP offers the potential for higher returns due to its market-linked nature, but this comes with significant variability and dependency on withdrawal rates and market performance.
+2.  **Retirement Income**:
+    -   TRS consistently delivers higher average monthly income compared to ORP under both fixed-rate and Monte Carlo simulations.
+    -   The income gaps between TRS and ORP highlight TRS’s advantage in providing reliable financial support during retirement.
+3.  **Risk of Fund Depletion**:
+    -   Under a 4% withdrawal rate, ORP demonstrates strong sustainability, with no significant risk of depleting funds within the simulated time horizon.
+    -   However, higher withdrawal rates (e.g., 7%) increase uncertainty and may introduce risks of fund depletion in longer retirement periods or adverse market conditions.
+4.  **Long-Term Considerations**:
+    -   For employees expecting to live beyond the average lifespan, TRS provides guaranteed income for life, while ORP requires careful financial planning to avoid premature depletion.
+    -   ORP’s flexibility may appeal to individuals seeking customizable withdrawal options and potential wealth accumulation for heirs.
+
+### Recommendations:
+
+1.  **For Low-Risk Employees**: TRS is the optimal choice, offering guaranteed, inflation-adjusted income without market-related risks. It is particularly suitable for employees prioritizing stability and long-term predictability.
+
+2.  **For Moderate-to-High Risk Employees**: ORP may be suitable for individuals with higher risk tolerance and a preference for market-linked investment growth. However, employees must adopt conservative withdrawal rates (e.g., 4%) to ensure sustainability.
+
+3.  **Monitoring and Adjustments**: Employees selecting ORP should regularly monitor market conditions and adjust withdrawal rates as needed to minimize risks of fund depletion and maximize long-term returns.
+
+4.  **Customized Decision-Making**: Each employee should consider factors such as current age, expected lifespan, starting salary, and risk tolerance when selecting between TRS and ORP. This decision should align with their financial goals and retirement priorities.
+
+### Final Insight:
+
+The choice between TRS and ORP depends on individual preferences for income stability versus potential investment growth. While TRS provides peace of mind and guaranteed income, ORP offers flexibility and growth opportunities at the cost of increased risk. By carefully weighing these trade-offs, employees can make informed decisions that best suit their retirement goals.
