@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Incident Trends on NYC Subway Lines During and Post-COVID – STA 9750 2024 Submission Material 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
+
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">STA 9750 2024 Submission Material 1</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Incident Trends on NYC Subway Lines During and Post-COVID</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The COVID-19 pandemic profoundly impacted urban public transportation systems worldwide, and New York City’s subway network was no exception. The Metropolitan Transportation Authority (MTA) faced unprecedented challenges as ridership plummeted, operational demands shifted, and new patterns of incidents emerged during and after the pandemic. Understanding these changes is critical for enhancing the resilience and safety of this vital transit system. This report explores the most common categories of incidents reported on New York City subway lines during and after the COVID-19 pandemic, spanning from 2020 to 2024. Leveraging a comprehensive dataset from the NYC Open Data platform, the analysis examines incidents categorized by line, division, month, day type, and delay category. Through this granular examination, the report identifies key trends, highlights significant operational challenges, and provides insights into shifting patterns of subway incidents over time.</p>
+<section id="overview-of-incident-trends" class="level2">
+<h2 class="anchored" data-anchor-id="overview-of-incident-trends">Overview of Incident Trends</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install required packages if not already installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"tidytext"</span>)) <span class="fu">install.packages</span>(<span class="st">"tidytext"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"RColorBrewer"</span>)) <span class="fu">install.packages</span>(<span class="st">"RColorBrewer"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"lubridate"</span>)) <span class="fu">install.packages</span>(<span class="st">"lubridate"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"stringr"</span>)) <span class="fu">install.packages</span>(<span class="st">"stringr"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"gt"</span>)) <span class="fu">install.packages</span>(<span class="st">"gt"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"dplyr"</span>)) <span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"ggplot2"</span>)) <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"tidyverse"</span>)) <span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"DT"</span>)) <span class="fu">install.packages</span>(<span class="st">"DT"</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"plotly"</span>)) <span class="fu">install.packages</span>(<span class="st">"plotly"</span>)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to load data</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>mtaincident_file <span class="ot">&lt;-</span> <span class="cf">function</span>(filepath) {</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>(readr<span class="sc">::</span><span class="fu">read_csv</span>(filepath, <span class="at">lazy =</span> <span class="cn">FALSE</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># File path</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">w3038</span><span class="sc">\\</span><span class="st">Downloads</span><span class="sc">\\</span><span class="st">STA 9750</span><span class="sc">\\</span><span class="st">Final Project</span><span class="sc">\\</span><span class="st">MTA_Subway_Major_Incidents__Beginning_2020_20241026.csv"</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>mtaincident <span class="ot">&lt;-</span> <span class="fu">mtaincident_file</span>(path)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the data by removing empty rows in 'line' column</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>mtaincident <span class="ot">&lt;-</span> mtaincident <span class="sc">%&gt;%</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(line <span class="sc">!=</span> <span class="st">""</span>, line <span class="sc">!=</span> <span class="st">"Systemwide"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">division =</span> <span class="fu">case_when</span>(</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    division <span class="sc">==</span> <span class="st">"A DIVISION"</span> <span class="sc">~</span> <span class="st">"Number Line"</span>,</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    division <span class="sc">==</span> <span class="st">"B DIVISION"</span> <span class="sc">~</span> <span class="st">"Letter Line"</span>,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> division  <span class="co"># Retain other values</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the 'month' column to Date format</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>mtaincident<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(mtaincident<span class="sc">$</span>month, <span class="at">format =</span> <span class="st">"%m/%d/%Y"</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate the data to get total complaints by month and category</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>monthly_category_Incidents <span class="ot">&lt;-</span> mtaincident <span class="sc">%&gt;%</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month, category) <span class="sc">%&gt;%</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_Incidents =</span> <span class="fu">sum</span>(count)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a static stacked area chart using ggplot</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>static_area_chart <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(monthly_category_Incidents, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> total_Incidents, <span class="at">fill =</span> category)) <span class="sc">+</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Incidents by Category Over Time"</span>,</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Incidents"</span>,</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Incidents Category"</span>) <span class="sc">+</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set3"</span>) <span class="sc">+</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the static chart to an interactive chart using plotly</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>interactive_area_chart <span class="ot">&lt;-</span> <span class="fu">ggplotly</span>(static_area_chart)</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the interactive chart</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>interactive_area_chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-fd5bf6fb4fad21fbe865" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-fd5bf6fb4fad21fbe865">{"x":{"data":[{"x":[18260.294999999998,18262,18263.705000000002,18291.294999999998,18293,18294.705000000002,18320.294999999998,18322,18323.705000000002,18351.294999999998,18353,18354.705000000002,18381.294999999998,18383,18384.705000000002,18412.294999999998,18414,18415.705000000002,18442.294999999998,18444,18445.705000000002,18473.294999999998,18475,18476.705000000002,18504.294999999998,18506,18507.705000000002,18534.294999999998,18536,18537.705000000002,18565.294999999998,18567,18568.705000000002,18595.294999999998,18597,18598.705000000002,18626.294999999998,18628,18629.705000000002,18657.294999999998,18659,18660.705000000002,18685.294999999998,18687,18688.705000000002,18716.294999999998,18718,18719.705000000002,18746.294999999998,18748,18749.705000000002,18777.294999999998,18779,18780.705000000002,18807.294999999998,18809,18810.705000000002,18838.294999999998,18840,18841.705000000002,18869.294999999998,18871,18872.705000000002,18899.294999999998,18901,18902.705000000002,18930.294999999998,18932,18933.705000000002,18960.294999999998,18962,18963.705000000002,18991.294999999998,18993,18994.705000000002,19022.294999999998,19024,19025.705000000002,19050.294999999998,19052,19053.705000000002,19081.294999999998,19083,19084.705000000002,19111.294999999998,19113,19114.705000000002,19142.294999999998,19144,19145.705000000002,19172.294999999998,19174,19175.705000000002,19203.294999999998,19205,19206.705000000002,19234.294999999998,19236,19237.705000000002,19264.294999999998,19266,19267.705000000002,19295.294999999998,19297,19298.705000000002,19325.294999999998,19327,19328.705000000002,19356.294999999998,19358,19359.705000000002,19387.294999999998,19389,19390.705000000002,19415.294999999998,19417,19418.705000000002,19446.294999999998,19448,19449.705000000002,19476.294999999998,19478,19479.705000000002,19507.294999999998,19509,19510.705000000002,19537.294999999998,19539,19540.705000000002,19568.294999999998,19570,19571.705000000002,19599.294999999998,19601,19602.705000000002,19629.294999999998,19631,19632.705000000002,19660.294999999998,19662,19663.705000000002,19690.294999999998,19692,19693.705000000002,19721.294999999998,19723,19724.705000000002,19752.294999999998,19754,19755.705000000002,19781.294999999998,19783,19784.705000000002,19812.294999999998,19814,19815.705000000002,19842.294999999998,19844,19845.705000000002,19873.294999999998,19875,19876.705000000002,19903.294999999998,19905,19906.705000000002,19934.294999999998,19936,19937.705000000002,19965.294999999998,19967,19968.705000000002,19968.705000000002,19967,19965.294999999998,19937.705000000002,19936,19934.294999999998,19906.705000000002,19905,19903.294999999998,19876.705000000002,19875,19873.294999999998,19845.705000000002,19844,19842.294999999998,19815.705000000002,19814,19812.294999999998,19784.705000000002,19783,19781.294999999998,19755.705000000002,19754,19752.294999999998,19724.705000000002,19723,19721.294999999998,19693.705000000002,19692,19690.294999999998,19663.705000000002,19662,19660.294999999998,19632.705000000002,19631,19629.294999999998,19602.705000000002,19601,19599.294999999998,19571.705000000002,19570,19568.294999999998,19540.705000000002,19539,19537.294999999998,19510.705000000002,19509,19507.294999999998,19479.705000000002,19478,19476.294999999998,19449.705000000002,19448,19446.294999999998,19418.705000000002,19417,19415.294999999998,19390.705000000002,19389,19387.294999999998,19359.705000000002,19358,19356.294999999998,19328.705000000002,19327,19325.294999999998,19298.705000000002,19297,19295.294999999998,19267.705000000002,19266,19264.294999999998,19237.705000000002,19236,19234.294999999998,19206.705000000002,19205,19203.294999999998,19175.705000000002,19174,19172.294999999998,19145.705000000002,19144,19142.294999999998,19114.705000000002,19113,19111.294999999998,19084.705000000002,19083,19081.294999999998,19053.705000000002,19052,19050.294999999998,19025.705000000002,19024,19022.294999999998,18994.705000000002,18993,18991.294999999998,18963.705000000002,18962,18960.294999999998,18933.705000000002,18932,18930.294999999998,18902.705000000002,18901,18899.294999999998,18872.705000000002,18871,18869.294999999998,18841.705000000002,18840,18838.294999999998,18810.705000000002,18809,18807.294999999998,18780.705000000002,18779,18777.294999999998,18749.705000000002,18748,18746.294999999998,18719.705000000002,18718,18716.294999999998,18688.705000000002,18687,18685.294999999998,18660.705000000002,18659,18657.294999999998,18629.705000000002,18628,18626.294999999998,18598.705000000002,18597,18595.294999999998,18568.705000000002,18567,18565.294999999998,18537.705000000002,18536,18534.294999999998,18507.705000000002,18506,18504.294999999998,18476.705000000002,18475,18473.294999999998,18445.705000000002,18444,18442.294999999998,18415.705000000002,18414,18412.294999999998,18384.705000000002,18383,18381.294999999998,18354.705000000002,18353,18351.294999999998,18323.705000000002,18322,18320.294999999998,18294.705000000002,18293,18291.294999999998,18263.705000000002,18262,18260.294999999998,18260.294999999998],"y":[0,27,27.220000000000226,30.779999999999774,32,31.190987460814217,19.048681960673385,18.239669421487605,17.777292939273693,10.295200772548084,9.8328242903341714,10.149614474787723,15.09005494669988,15.406845131153432,15.54946864894014,17.857376482213294,18,19.307166666668007,39.69283333333199,41,40.339999999999328,29.660000000000679,29,28.614999999999604,22.385000000000396,22,21.886333333333216,20.113666666666784,20,20.110000000000113,21.889999999999887,22,22.966166666667657,38.033833333332346,39,38.394999999999378,28.605000000000619,28,28.715000000000732,40.284999999999265,41,40.42925847457569,32.19786016949211,31.627118644067796,31.482627118643922,29.144491525423877,29,29.341000000000349,34.658999999999651,35,36.265000000001294,56.734999999998699,58,57.090666666665733,42.909333333334267,42,41.174999999999159,27.825000000000845,27,27.330000000000336,32.669999999999661,33,32.829499999999825,30.170500000000175,30,30.440000000000452,37.559999999999548,38,38.227333333333569,41.772666666666431,42,42.055000000000057,42.944999999999943,43,43.110000000000113,44.889999999999887,45,45.243571428571677,48.756428571428323,49,48.614999999999604,42.385000000000396,42,41.886333333333212,40.113666666666788,40,39.83499999999983,37.16500000000017,37,36.886333333333219,35.113666666666781,35,34.944999999999943,34.055000000000057,34,34.330000000000339,39.669999999999661,40,40.45466666666713,47.545333333332863,48,48.16500000000017,50.83499999999983,51,51.056833333333394,51.943166666666606,52,51.284999999999272,39.715000000000735,39,38.504999999999491,30.495000000000509,30,30.791607142857952,42.208392857142044,43,42.614999999999604,36.385000000000396,36,36.90933333333426,51.090666666665733,52,51.229999999999208,38.770000000000792,38,38.682000000000698,49.317999999999302,50,49.229999999999208,36.770000000000792,36,36.495000000000509,44.504999999999491,45,45,45,45,44.475245901638807,35.983770491803817,35.459016393442624,36.342262295082875,50.116754098359749,51,51.880000000000898,66.119999999999095,67,66.394999999999385,56.605000000000622,56,56.529137931035024,64.470862068964976,65,64.834999999999837,62.16500000000017,62,61.09066666666574,46.90933333333426,46,46.055000000000057,46.944999999999943,47,47.795666666667479,60.204333333332514,61,61.385000000000396,67.614999999999611,68,67.834999999999823,65.165000000000177,65,0,0,69,69.27500000000029,73.72499999999971,74,73.614999999999611,67.385000000000389,67,66.090666666665726,51.90933333333426,51,51,51,51,51.852500000000873,65.147499999999127,66,66.110000000000113,67.889999999999887,68,67.412068965516639,58.587931034483361,58,58.880000000000905,73.119999999999095,74,73.064999999999046,57.935000000000954,57,55.946254098359574,39.51276229508305,38.459016393442624,38.983770491803817,47.475245901638807,48,48,48,48,47.449999999999434,38.550000000000566,38,38.770000000000792,51.229999999999208,52,51.317999999999302,40.682000000000698,40,40.825000000000848,54.174999999999152,55,54.147499999999127,40.852500000000873,40,40.440000000000452,47.559999999999548,48,47.025714285713285,32.974285714286708,32,32.495000000000509,40.504999999999491,41,41.715000000000735,53.284999999999272,54,54.113666666666781,55.886333333333219,56,55.724999999999717,51.275000000000283,51,50.602166666666257,44.397833333333743,44,43.559999999999548,36.440000000000452,36,36.16500000000017,38.83499999999983,39,39.056833333333394,39.943166666666606,40,40.110000000000113,41.889999999999887,42,42.225469945355421,45.741743169398674,45.967213114754095,46.464016393443131,54.503196721310971,55,54.573749999999563,48.426250000000437,48,47.889999999999887,46.110000000000113,46,45.917049180327787,44.574754098360742,44.491803278688522,44.236519125682797,40.255284153005725,40,39.587950819671704,32.920245901639767,32.508196721311478,32.706647540983809,35.801549180327662,36,35.614999999999604,29.385000000000392,29,29.825000000000845,43.174999999999159,44,44.852500000000873,58.147499999999127,59,58.119999999999095,43.880000000000905,43,42.49129508196669,34.557885245902156,34.049180327868854,34.025966935259774,33.650332036676879,33.627118644067799,34.685003026635464,49.942115617432329,51,49.954999999998932,33.045000000001068,32,32.715000000000735,44.284999999999265,45,43.976999999998952,28.023000000001048,27,26.908532608695559,25.428423913043574,25.336956521739133,25.469155797101585,27.530844202898415,27.663043478260867,28.066576086956935,34.596467391303932,35,35.385000000000396,41.614999999999611,42,41.011349816848799,25.593045787546799,24.604395604395606,24.780288570125709,27.626556561027723,27.802449526757826,27.804175825821083,27.831097991270916,27.832824290334173,27.525200772547297,22.547292939274477,22.239669421487605,23.107475064121722,36.132194357365883,37,35.944999999999943,35.055000000000057,35,0,0],"text":"month: 2020-01-01<br />total_Incidents:  8<br />category: Other","type":"scatter","mode":"lines","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,0.8)","dash":"solid"},"fill":"toself","fillcolor":"rgba(141,211,199,0.8)","hoveron":"points","name":"Other","legendgroup":"Other","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18260.294999999998,18262,18263.705000000002,18291.294999999998,18293,18294.705000000002,18320.294999999998,18322,18323.705000000002,18351.294999999998,18353,18354.705000000002,18381.294999999998,18383,18384.705000000002,18412.294999999998,18414,18415.705000000002,18442.294999999998,18444,18445.705000000002,18473.294999999998,18475,18476.705000000002,18504.294999999998,18506,18507.705000000002,18534.294999999998,18536,18537.705000000002,18565.294999999998,18567,18568.705000000002,18595.294999999998,18597,18598.705000000002,18626.294999999998,18628,18629.705000000002,18657.294999999998,18659,18660.705000000002,18685.294999999998,18687,18688.705000000002,18716.294999999998,18718,18719.705000000002,18746.294999999998,18748,18749.705000000002,18777.294999999998,18779,18780.705000000002,18807.294999999998,18809,18810.705000000002,18838.294999999998,18840,18841.705000000002,18869.294999999998,18871,18872.705000000002,18899.294999999998,18901,18902.705000000002,18930.294999999998,18932,18933.705000000002,18960.294999999998,18962,18963.705000000002,18991.294999999998,18993,18994.705000000002,19022.294999999998,19024,19025.705000000002,19050.294999999998,19052,19053.705000000002,19081.294999999998,19083,19084.705000000002,19111.294999999998,19113,19114.705000000002,19142.294999999998,19144,19145.705000000002,19172.294999999998,19174,19175.705000000002,19203.294999999998,19205,19206.705000000002,19234.294999999998,19236,19237.705000000002,19264.294999999998,19266,19267.705000000002,19295.294999999998,19297,19298.705000000002,19325.294999999998,19327,19328.705000000002,19356.294999999998,19358,19359.705000000002,19387.294999999998,19389,19390.705000000002,19415.294999999998,19417,19418.705000000002,19446.294999999998,19448,19449.705000000002,19476.294999999998,19478,19479.705000000002,19507.294999999998,19509,19510.705000000002,19537.294999999998,19539,19540.705000000002,19568.294999999998,19570,19571.705000000002,19599.294999999998,19601,19602.705000000002,19629.294999999998,19631,19632.705000000002,19660.294999999998,19662,19663.705000000002,19690.294999999998,19692,19693.705000000002,19721.294999999998,19723,19724.705000000002,19752.294999999998,19754,19755.705000000002,19781.294999999998,19783,19784.705000000002,19812.294999999998,19814,19815.705000000002,19842.294999999998,19844,19845.705000000002,19873.294999999998,19875,19876.705000000002,19903.294999999998,19905,19906.705000000002,19934.294999999998,19936,19937.705000000002,19965.294999999998,19967,19968.705000000002,19968.705000000002,19967,19965.294999999998,19937.705000000002,19936,19934.294999999998,19906.705000000002,19905,19903.294999999998,19876.705000000002,19875,19873.294999999998,19845.705000000002,19844,19842.294999999998,19815.705000000002,19814,19812.294999999998,19784.705000000002,19783,19781.294999999998,19755.705000000002,19754,19752.294999999998,19724.705000000002,19723,19721.294999999998,19693.705000000002,19692,19690.294999999998,19663.705000000002,19662,19660.294999999998,19632.705000000002,19631,19629.294999999998,19602.705000000002,19601,19599.294999999998,19571.705000000002,19570,19568.294999999998,19540.705000000002,19539,19537.294999999998,19510.705000000002,19509,19507.294999999998,19479.705000000002,19478,19476.294999999998,19449.705000000002,19448,19446.294999999998,19418.705000000002,19417,19415.294999999998,19390.705000000002,19389,19387.294999999998,19359.705000000002,19358,19356.294999999998,19328.705000000002,19327,19325.294999999998,19298.705000000002,19297,19295.294999999998,19267.705000000002,19266,19264.294999999998,19237.705000000002,19236,19234.294999999998,19206.705000000002,19205,19203.294999999998,19175.705000000002,19174,19172.294999999998,19145.705000000002,19144,19142.294999999998,19114.705000000002,19113,19111.294999999998,19084.705000000002,19083,19081.294999999998,19053.705000000002,19052,19050.294999999998,19025.705000000002,19024,19022.294999999998,18994.705000000002,18993,18991.294999999998,18963.705000000002,18962,18960.294999999998,18933.705000000002,18932,18930.294999999998,18902.705000000002,18901,18899.294999999998,18872.705000000002,18871,18869.294999999998,18841.705000000002,18840,18838.294999999998,18810.705000000002,18809,18807.294999999998,18780.705000000002,18779,18777.294999999998,18749.705000000002,18748,18746.294999999998,18719.705000000002,18718,18716.294999999998,18688.705000000002,18687,18685.294999999998,18660.705000000002,18659,18657.294999999998,18629.705000000002,18628,18626.294999999998,18598.705000000002,18597,18595.294999999998,18568.705000000002,18567,18565.294999999998,18537.705000000002,18536,18534.294999999998,18507.705000000002,18506,18504.294999999998,18476.705000000002,18475,18473.294999999998,18445.705000000002,18444,18442.294999999998,18415.705000000002,18414,18412.294999999998,18384.705000000002,18383,18381.294999999998,18354.705000000002,18353,18351.294999999998,18323.705000000002,18322,18320.294999999998,18294.705000000002,18293,18291.294999999998,18263.705000000002,18262,18260.294999999998,18260.294999999998],"y":[0,17,17.110000000000113,18.889999999999887,20,19.426159874607563,10.813509546880042,10.239669421487603,10.162292939274085,8.9102007725476895,8.8328242903341714,8.8654478081207664,9.3742216133668368,9.4068451311534318,9.6594686489402513,13.747376482213181,14,14.682000000000698,25.317999999999302,26,25.614999999999608,19.385000000000396,19,18.669999999999661,13.330000000000339,13,12.886333333333216,11.113666666666784,11,11.16500000000017,13.83499999999983,14,14.795666666667481,27.204333333332517,28,27.394999999999378,17.605000000000619,17,17.605000000000619,27.394999999999381,28,27.429258474575686,19.19786016949211,18.627118644067796,18.702627118644145,19.924491525423651,20,20.284166666666955,24.715833333333045,25,26.210000000001241,45.789999999998756,47,46.147499999999127,32.852500000000873,32,31.449999999999438,22.550000000000566,22,22.220000000000226,25.779999999999774,26,25.772666666666431,22.227333333333569,22,21.944999999999943,21.055000000000057,21,21.05683333333339,21.94316666666661,22,22.16500000000017,24.83499999999983,25,25.220000000000226,28.779999999999774,29,29,29,29,28.669999999999664,23.330000000000339,23,23.341000000000349,28.658999999999651,29,28.944999999999943,28.055000000000057,28,27.772666666666435,24.227333333333565,24,23.83499999999983,21.16500000000017,21,21.275000000000283,25.724999999999717,26,26.284166666666959,30.715833333333041,31,31.440000000000452,38.559999999999548,39,39,39,39,38.174999999999159,24.825000000000845,24,23.669999999999661,18.330000000000339,18,18.608928571429196,27.391071428570804,28,27.724999999999721,23.275000000000283,23,23.625166666667305,33.374833333332695,34,33.504999999999491,25.495000000000505,25,25.738833333334089,37.261166666665908,38,37.284999999999265,25.715000000000732,25,25.110000000000113,26.889999999999887,27,26.829499999999825,24.170500000000175,24,23.860245901639203,21.598770491803421,21.459016393442624,21.432928961748608,21.026087431694016,21,22.155000000001184,40.844999999998812,42,41.559999999999548,34.440000000000452,34,34.470344827586686,41.529655172413307,42,41.944999999999943,41.055000000000057,41,40.147499999999127,26.852500000000873,26,26.16500000000017,28.83499999999983,29,29.909333333334263,44.090666666665733,45,45.055000000000057,45.944999999999943,46,45.889999999999887,44.110000000000113,44,0,0,65,65.165000000000177,67.834999999999823,68,67.614999999999611,61.385000000000396,61,60.204333333332514,47.795666666667479,47,46.944999999999943,46.055000000000057,46,46.90933333333426,61.09066666666574,62,62.16500000000017,64.834999999999837,65,64.470862068964976,56.529137931035024,56,56.605000000000622,66.394999999999385,67,66.119999999999095,51.880000000000898,51,50.116754098359749,36.342262295082875,35.459016393442624,35.983770491803817,44.475245901638807,45,45,45,45,44.504999999999491,36.495000000000509,36,36.770000000000792,49.229999999999208,50,49.317999999999302,38.682000000000698,38,38.770000000000792,51.229999999999208,52,51.090666666665733,36.90933333333426,36,36.385000000000396,42.614999999999604,43,42.208392857142044,30.791607142857952,30,30.495000000000509,38.504999999999491,39,39.715000000000735,51.284999999999272,52,51.943166666666606,51.056833333333394,51,50.83499999999983,48.16500000000017,48,47.545333333332863,40.45466666666713,40,39.669999999999661,34.330000000000339,34,34.055000000000057,34.944999999999943,35,35.113666666666781,36.886333333333219,37,37.16500000000017,39.83499999999983,40,40.113666666666788,41.886333333333212,42,42.385000000000396,48.614999999999604,49,48.756428571428323,45.243571428571677,45,44.889999999999887,43.110000000000113,43,42.944999999999943,42.055000000000057,42,41.772666666666431,38.227333333333569,38,37.559999999999548,30.440000000000452,30,30.170500000000175,32.829499999999825,33,32.669999999999661,27.330000000000336,27,27.825000000000845,41.174999999999159,42,42.909333333334267,57.090666666665733,58,56.734999999998699,36.265000000001294,35,34.658999999999651,29.341000000000349,29,29.144491525423877,31.482627118643922,31.627118644067796,32.19786016949211,40.42925847457569,41,40.284999999999265,28.715000000000732,28,28.605000000000619,38.394999999999378,39,38.033833333332346,22.966166666667657,22,21.889999999999887,20.110000000000113,20,20.113666666666784,21.886333333333216,22,22.385000000000396,28.614999999999604,29,29.660000000000679,40.339999999999328,41,39.69283333333199,19.307166666668007,18,17.857376482213294,15.54946864894014,15.406845131153432,15.09005494669988,10.149614474787723,9.8328242903341714,10.295200772548084,17.777292939273693,18.239669421487605,19.048681960673385,31.190987460814217,32,30.779999999999774,27.220000000000226,27,0,0],"text":"month: 2020-01-01<br />total_Incidents: 10<br />category: Persons on Trackbed/Police/Medical","type":"scatter","mode":"lines","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,0.8)","dash":"solid"},"fill":"toself","fillcolor":"rgba(255,255,179,0.8)","hoveron":"points","name":"Persons on Trackbed/Police/Medical","legendgroup":"Persons on Trackbed/Police/Medical","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18260.294999999998,18262,18263.705000000002,18291.294999999998,18293,18294.705000000002,18320.294999999998,18322,18323.705000000002,18351.294999999998,18353,18354.705000000002,18381.294999999998,18383,18384.705000000002,18412.294999999998,18414,18415.705000000002,18442.294999999998,18444,18445.705000000002,18473.294999999998,18475,18476.705000000002,18504.294999999998,18506,18507.705000000002,18534.294999999998,18536,18537.705000000002,18565.294999999998,18567,18568.705000000002,18595.294999999998,18597,18598.705000000002,18626.294999999998,18628,18629.705000000002,18657.294999999998,18659,18660.705000000002,18685.294999999998,18687,18688.705000000002,18716.294999999998,18718,18719.705000000002,18746.294999999998,18748,18749.705000000002,18777.294999999998,18779,18780.705000000002,18807.294999999998,18809,18810.705000000002,18838.294999999998,18840,18841.705000000002,18869.294999999998,18871,18872.705000000002,18899.294999999998,18901,18902.705000000002,18930.294999999998,18932,18933.705000000002,18960.294999999998,18962,18963.705000000002,18991.294999999998,18993,18994.705000000002,19022.294999999998,19024,19025.705000000002,19050.294999999998,19052,19053.705000000002,19081.294999999998,19083,19084.705000000002,19111.294999999998,19113,19114.705000000002,19142.294999999998,19144,19145.705000000002,19172.294999999998,19174,19175.705000000002,19203.294999999998,19205,19206.705000000002,19234.294999999998,19236,19237.705000000002,19264.294999999998,19266,19267.705000000002,19295.294999999998,19297,19298.705000000002,19325.294999999998,19327,19328.705000000002,19356.294999999998,19358,19359.705000000002,19387.294999999998,19389,19390.705000000002,19415.294999999998,19417,19418.705000000002,19446.294999999998,19448,19449.705000000002,19476.294999999998,19478,19479.705000000002,19507.294999999998,19509,19510.705000000002,19537.294999999998,19539,19540.705000000002,19568.294999999998,19570,19571.705000000002,19599.294999999998,19601,19602.705000000002,19629.294999999998,19631,19632.705000000002,19660.294999999998,19662,19663.705000000002,19690.294999999998,19692,19693.705000000002,19721.294999999998,19723,19724.705000000002,19752.294999999998,19754,19755.705000000002,19781.294999999998,19783,19784.705000000002,19812.294999999998,19814,19815.705000000002,19842.294999999998,19844,19845.705000000002,19873.294999999998,19875,19876.705000000002,19903.294999999998,19905,19906.705000000002,19934.294999999998,19936,19937.705000000002,19965.294999999998,19967,19968.705000000002,19968.705000000002,19967,19965.294999999998,19937.705000000002,19936,19934.294999999998,19906.705000000002,19905,19903.294999999998,19876.705000000002,19875,19873.294999999998,19845.705000000002,19844,19842.294999999998,19815.705000000002,19814,19812.294999999998,19784.705000000002,19783,19781.294999999998,19755.705000000002,19754,19752.294999999998,19724.705000000002,19723,19721.294999999998,19693.705000000002,19692,19690.294999999998,19663.705000000002,19662,19660.294999999998,19632.705000000002,19631,19629.294999999998,19602.705000000002,19601,19599.294999999998,19571.705000000002,19570,19568.294999999998,19540.705000000002,19539,19537.294999999998,19510.705000000002,19509,19507.294999999998,19479.705000000002,19478,19476.294999999998,19449.705000000002,19448,19446.294999999998,19418.705000000002,19417,19415.294999999998,19390.705000000002,19389,19387.294999999998,19359.705000000002,19358,19356.294999999998,19328.705000000002,19327,19325.294999999998,19298.705000000002,19297,19295.294999999998,19267.705000000002,19266,19264.294999999998,19237.705000000002,19236,19234.294999999998,19206.705000000002,19205,19203.294999999998,19175.705000000002,19174,19172.294999999998,19145.705000000002,19144,19142.294999999998,19114.705000000002,19113,19111.294999999998,19084.705000000002,19083,19081.294999999998,19053.705000000002,19052,19050.294999999998,19025.705000000002,19024,19022.294999999998,18994.705000000002,18993,18991.294999999998,18963.705000000002,18962,18960.294999999998,18933.705000000002,18932,18930.294999999998,18902.705000000002,18901,18899.294999999998,18872.705000000002,18871,18869.294999999998,18841.705000000002,18840,18838.294999999998,18810.705000000002,18809,18807.294999999998,18780.705000000002,18779,18777.294999999998,18749.705000000002,18748,18746.294999999998,18719.705000000002,18718,18716.294999999998,18688.705000000002,18687,18685.294999999998,18660.705000000002,18659,18657.294999999998,18629.705000000002,18628,18626.294999999998,18598.705000000002,18597,18595.294999999998,18568.705000000002,18567,18565.294999999998,18537.705000000002,18536,18534.294999999998,18507.705000000002,18506,18504.294999999998,18476.705000000002,18475,18473.294999999998,18445.705000000002,18444,18442.294999999998,18415.705000000002,18414,18412.294999999998,18384.705000000002,18383,18381.294999999998,18354.705000000002,18353,18351.294999999998,18323.705000000002,18322,18320.294999999998,18294.705000000002,18293,18291.294999999998,18263.705000000002,18262,18260.294999999998,18260.294999999998],"y":[0,7,7,7,8,7.9552978056425872,7.284371615845016,7.2396694214876032,7.2722929392741982,7.8002007725475773,7.8328242903341714,7.8654478081207664,8.3742216133668368,8.4068451311534318,8.4394686489400268,8.967376482213405,9,9.2273333333335668,12.772666666666433,13,12.834999999999832,10.16500000000017,10,9.7799999999997738,6.2200000000002262,6,5.8294999999998254,3.1705000000001746,3,3,3,3,3.2841666666669576,7.7158333333330411,8,7.7799999999997747,4.2200000000002253,4,4.4950000000005073,12.504999999999493,13,12.977294188861961,12.649824455205835,12.627118644067796,12.372627118643807,8.2544915254239903,8,8.3410000000003492,13.658999999999651,14,14.660000000000675,25.339999999999321,26,25.488499999999476,17.511500000000524,17,16.449999999999438,7.5500000000005638,7,7.2200000000002253,10.779999999999774,11,11,11,11,10.889999999999887,9.1100000000001131,9,8.9431666666666079,8.0568333333333904,8,8.275000000000281,12.724999999999717,13,13.275000000000283,17.724999999999717,18,18.121785714285839,19.878214285714161,20,19.614999999999608,13.385000000000394,13,13.227333333333567,16.772666666666431,17,17.055000000000057,17.944999999999943,18,17.886333333333216,16.113666666666784,16,15.724999999999717,11.275000000000283,11,11.275000000000281,15.724999999999717,16,16.227333333333565,19.772666666666431,20,19.944999999999943,19.055000000000057,19,19.227333333333565,22.772666666666431,23,22.669999999999661,17.330000000000339,17,16.779999999999774,13.220000000000226,13,13.18267857142876,15.817321428571242,16,15.614999999999608,9.3850000000003941,9,9.8525000000008731,23.147499999999127,24,23.284999999999268,11.715000000000732,11,11.568333333333914,20.431666666666082,21,20.669999999999661,15.330000000000339,15,15.165000000000168,17.83499999999983,18,17.829499999999825,15.170500000000175,15,14.860245901639201,12.598770491803421,12.459016393442623,12.262428961748432,9.1965874316941907,9,9.7700000000007883,22.229999999999212,23,22.889999999999887,21.110000000000113,21,20.823620689654991,18.176379310345009,18,18.220000000000226,21.779999999999774,22,21.715833333333045,17.284166666666955,17,16.83499999999983,14.16500000000017,14,14.795666666667481,27.204333333332517,28,27.944999999999943,27.055000000000057,27,27.055000000000057,27.944999999999943,28,0,0,44,44.110000000000113,45.889999999999887,46,45.944999999999943,45.055000000000057,45,44.090666666665733,29.909333333334263,29,28.83499999999983,26.16500000000017,26,26.852500000000873,40.147499999999127,41,41.055000000000057,41.944999999999943,42,41.529655172413307,34.470344827586686,34,34.440000000000452,41.559999999999548,42,40.844999999998812,22.155000000001184,21,21.026087431694016,21.432928961748608,21.459016393442624,21.598770491803421,23.860245901639203,24,24.170500000000175,26.829499999999825,27,26.889999999999887,25.110000000000113,25,25.715000000000732,37.284999999999265,38,37.261166666665908,25.738833333334089,25,25.495000000000505,33.504999999999491,34,33.374833333332695,23.625166666667305,23,23.275000000000283,27.724999999999721,28,27.391071428570804,18.608928571429196,18,18.330000000000339,23.669999999999661,24,24.825000000000845,38.174999999999159,39,39,39,39,38.559999999999548,31.440000000000452,31,30.715833333333041,26.284166666666959,26,25.724999999999717,21.275000000000283,21,21.16500000000017,23.83499999999983,24,24.227333333333565,27.772666666666435,28,28.055000000000057,28.944999999999943,29,28.658999999999651,23.341000000000349,23,23.330000000000339,28.669999999999664,29,29,29,29,28.779999999999774,25.220000000000226,25,24.83499999999983,22.16500000000017,22,21.94316666666661,21.05683333333339,21,21.055000000000057,21.944999999999943,22,22.227333333333569,25.772666666666431,26,25.779999999999774,22.220000000000226,22,22.550000000000566,31.449999999999438,32,32.852500000000873,46.147499999999127,47,45.789999999998756,26.210000000001241,25,24.715833333333045,20.284166666666955,20,19.924491525423651,18.702627118644145,18.627118644067796,19.19786016949211,27.429258474575686,28,27.394999999999381,17.605000000000619,17,17.605000000000619,27.394999999999378,28,27.204333333332517,14.795666666667481,14,13.83499999999983,11.16500000000017,11,11.113666666666784,12.886333333333216,13,13.330000000000339,18.669999999999661,19,19.385000000000396,25.614999999999608,26,25.317999999999302,14.682000000000698,14,13.747376482213181,9.6594686489402513,9.4068451311534318,9.3742216133668368,8.8654478081207664,8.8328242903341714,8.9102007725476895,10.162292939274085,10.239669421487603,10.813509546880042,19.426159874607563,20,18.889999999999887,17.110000000000113,17,0,0],"text":"month: 2020-01-01<br />total_Incidents: 10<br />category: Signals","type":"scatter","mode":"lines","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,0.8)","dash":"solid"},"fill":"toself","fillcolor":"rgba(190,186,218,0.8)","hoveron":"points","name":"Signals","legendgroup":"Signals","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18291.294999999998,18293,18294.705000000002,18320.294999999998,18322,18323.705000000002,18351.294999999998,18353,18354.705000000002,18381.294999999998,18383,18384.705000000002,18412.294999999998,18414,18415.705000000002,18442.294999999998,18444,18445.705000000002,18473.294999999998,18475,18476.705000000002,18504.294999999998,18506,18507.705000000002,18534.294999999998,18536,18537.705000000002,18565.294999999998,18567,18568.705000000002,18595.294999999998,18597,18598.705000000002,18626.294999999998,18628,18629.705000000002,18657.294999999998,18659,18660.705000000002,18685.294999999998,18687,18688.705000000002,18716.294999999998,18718,18719.705000000002,18746.294999999998,18748,18749.705000000002,18777.294999999998,18779,18780.705000000002,18807.294999999998,18809,18810.705000000002,18838.294999999998,18840,18841.705000000002,18869.294999999998,18871,18872.705000000002,18899.294999999998,18901,18902.705000000002,18930.294999999998,18932,18933.705000000002,18960.294999999998,18962,18963.705000000002,18991.294999999998,18993,18994.705000000002,19022.294999999998,19024,19025.705000000002,19050.294999999998,19052,19053.705000000002,19081.294999999998,19083,19084.705000000002,19111.294999999998,19113,19114.705000000002,19142.294999999998,19144,19145.705000000002,19172.294999999998,19174,19175.705000000002,19203.294999999998,19205,19206.705000000002,19234.294999999998,19236,19237.705000000002,19264.294999999998,19266,19267.705000000002,19295.294999999998,19297,19298.705000000002,19325.294999999998,19327,19328.705000000002,19356.294999999998,19358,19359.705000000002,19387.294999999998,19389,19390.705000000002,19415.294999999998,19417,19418.705000000002,19446.294999999998,19448,19449.705000000002,19476.294999999998,19478,19479.705000000002,19507.294999999998,19509,19510.705000000002,19537.294999999998,19539,19540.705000000002,19568.294999999998,19570,19571.705000000002,19599.294999999998,19601,19602.705000000002,19629.294999999998,19631,19632.705000000002,19660.294999999998,19662,19663.705000000002,19690.294999999998,19692,19693.705000000002,19721.294999999998,19723,19724.705000000002,19752.294999999998,19754,19755.705000000002,19781.294999999998,19783,19784.705000000002,19812.294999999998,19814,19815.705000000002,19842.294999999998,19844,19845.705000000002,19873.294999999998,19875,19876.705000000002,19903.294999999998,19905,19906.705000000002,19934.294999999998,19936,19937.705000000002,19965.294999999998,19967,19968.705000000002,19968.705000000002,19967,19965.294999999998,19937.705000000002,19936,19934.294999999998,19906.705000000002,19905,19903.294999999998,19876.705000000002,19875,19873.294999999998,19845.705000000002,19844,19842.294999999998,19815.705000000002,19814,19812.294999999998,19784.705000000002,19783,19781.294999999998,19755.705000000002,19754,19752.294999999998,19724.705000000002,19723,19721.294999999998,19693.705000000002,19692,19690.294999999998,19663.705000000002,19662,19660.294999999998,19632.705000000002,19631,19629.294999999998,19602.705000000002,19601,19599.294999999998,19571.705000000002,19570,19568.294999999998,19540.705000000002,19539,19537.294999999998,19510.705000000002,19509,19507.294999999998,19479.705000000002,19478,19476.294999999998,19449.705000000002,19448,19446.294999999998,19418.705000000002,19417,19415.294999999998,19390.705000000002,19389,19387.294999999998,19359.705000000002,19358,19356.294999999998,19328.705000000002,19327,19325.294999999998,19298.705000000002,19297,19295.294999999998,19267.705000000002,19266,19264.294999999998,19237.705000000002,19236,19234.294999999998,19206.705000000002,19205,19203.294999999998,19175.705000000002,19174,19172.294999999998,19145.705000000002,19144,19142.294999999998,19114.705000000002,19113,19111.294999999998,19084.705000000002,19083,19081.294999999998,19053.705000000002,19052,19050.294999999998,19025.705000000002,19024,19022.294999999998,18994.705000000002,18993,18991.294999999998,18963.705000000002,18962,18960.294999999998,18933.705000000002,18932,18930.294999999998,18902.705000000002,18901,18899.294999999998,18872.705000000002,18871,18869.294999999998,18841.705000000002,18840,18838.294999999998,18810.705000000002,18809,18807.294999999998,18780.705000000002,18779,18777.294999999998,18749.705000000002,18748,18746.294999999998,18719.705000000002,18718,18716.294999999998,18688.705000000002,18687,18685.294999999998,18660.705000000002,18659,18657.294999999998,18629.705000000002,18628,18626.294999999998,18598.705000000002,18597,18595.294999999998,18568.705000000002,18567,18565.294999999998,18537.705000000002,18536,18534.294999999998,18507.705000000002,18506,18504.294999999998,18476.705000000002,18475,18473.294999999998,18445.705000000002,18444,18442.294999999998,18415.705000000002,18414,18412.294999999998,18384.705000000002,18383,18381.294999999998,18354.705000000002,18353,18351.294999999998,18323.705000000002,18322,18320.294999999998,18294.705000000002,18293,18291.294999999998,18291.294999999998],"y":[7,7,6.9412068965516642,6.0587931034483358,6,6.0185326086956712,6.3184239130434587,6.3369565217391299,6.3554891304348011,6.6445108695651989,6.6630434782608692,6.6815760869565413,6.9814673913043288,7,7.284166666666958,11.715833333333041,12,11.834999999999832,9.1650000000001697,9,8.7799999999997738,5.2200000000002262,5,4.8294999999998254,2.1705000000001746,2,2,2,2,2.2841666666669576,6.7158333333330411,7,6.7799999999997747,3.2200000000002253,3,3.330000000000338,8.6699999999996624,9,9.0639891041162883,9.9868583535108311,10.050847457627118,9.8830508474574561,7.1677966101696633,7,7.1705000000001746,9.8294999999998254,10,10.275000000000283,14.724999999999717,15,14.943166666666608,14.056833333333392,14,13.504999999999493,5.4950000000005073,5,5,5,5,5.2841666666669571,9.7158333333330429,10,9.8349999999998303,7.1650000000001688,7,6.9431666666666079,6.0568333333333912,6,6.2200000000002253,9.7799999999997738,10,10.220000000000226,13.779999999999774,14,14.060892857142919,14.939107142857081,15,14.724999999999719,10.275000000000283,10,10,10,10,10.110000000000113,11.889999999999887,12,11.886333333333216,10.113666666666784,10,10,10,10,10.110000000000113,11.889999999999887,12,12.170500000000175,14.829499999999825,15,14.944999999999943,14.055000000000057,14,14.170500000000175,16.829499999999825,17,16.83499999999983,14.16500000000017,14,13.83499999999983,11.16500000000017,11,11.121785714285839,12.878214285714161,13,12.669999999999662,7.3300000000003376,7,7.6251666666673064,17.374833333332692,18,17.504999999999495,9.4950000000005073,9,9.2841666666669571,13.715833333333041,14,13.669999999999661,8.3300000000003394,8,8.4400000000004507,15.559999999999549,16,15.60216666666626,9.3978333333337396,9,9,9,9,8.9431666666666079,8.0568333333333921,8,8.6600000000006752,19.339999999999325,20,19.669999999999661,14.330000000000339,14,14,14,14,13.944999999999943,13.055000000000057,13,13.056833333333392,13.943166666666608,14,13.889999999999889,12.110000000000113,12,12.738833333334089,24.261166666665908,25,24.669999999999661,19.330000000000339,19,19.330000000000339,24.669999999999661,25,0,0,28,27.944999999999943,27.055000000000057,27,27.055000000000057,27.944999999999943,28,27.204333333332517,14.795666666667481,14,14.16500000000017,16.83499999999983,17,17.284166666666955,21.715833333333045,22,21.779999999999774,18.220000000000226,18,18.176379310345009,20.823620689654991,21,21.110000000000113,22.889999999999887,23,22.229999999999212,9.7700000000007883,9,9.1965874316941907,12.262428961748432,12.459016393442623,12.598770491803421,14.860245901639201,15,15.170500000000175,17.829499999999825,18,17.83499999999983,15.165000000000168,15,15.330000000000339,20.669999999999661,21,20.431666666666082,11.568333333333914,11,11.715000000000732,23.284999999999268,24,23.147499999999127,9.8525000000008731,9,9.3850000000003941,15.614999999999608,16,15.817321428571242,13.18267857142876,13,13.220000000000226,16.779999999999774,17,17.330000000000339,22.669999999999661,23,22.772666666666431,19.227333333333565,19,19.055000000000057,19.944999999999943,20,19.772666666666431,16.227333333333565,16,15.724999999999717,11.275000000000281,11,11.275000000000283,15.724999999999717,16,16.113666666666784,17.886333333333216,18,17.944999999999943,17.055000000000057,17,16.772666666666431,13.227333333333567,13,13.385000000000394,19.614999999999608,20,19.878214285714161,18.121785714285839,18,17.724999999999717,13.275000000000283,13,12.724999999999717,8.275000000000281,8,8.0568333333333904,8.9431666666666079,9,9.1100000000001131,10.889999999999887,11,11,11,11,10.779999999999774,7.2200000000002253,7,7.5500000000005638,16.449999999999438,17,17.511500000000524,25.488499999999476,26,25.339999999999321,14.660000000000675,14,13.658999999999651,8.3410000000003492,8,8.2544915254239903,12.372627118643807,12.627118644067796,12.649824455205835,12.977294188861961,13,12.504999999999493,4.4950000000005073,4,4.2200000000002253,7.7799999999997747,8,7.7158333333330411,3.2841666666669576,3,3,3,3,3.1705000000001746,5.8294999999998254,6,6.2200000000002262,9.7799999999997738,10,10.16500000000017,12.834999999999832,13,12.772666666666433,9.2273333333335668,9,8.967376482213405,8.4394686489400268,8.4068451311534318,8.3742216133668368,7.8654478081207664,7.8328242903341714,7.8002007725475773,7.2722929392741982,7.2396694214876032,7.284371615845016,7.9552978056425872,8,7,7],"text":"month: 2020-02-01<br />total_Incidents:  1<br />category: Stations and Structure","type":"scatter","mode":"lines","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,0.8)","dash":"solid"},"fill":"toself","fillcolor":"rgba(251,128,114,0.8)","hoveron":"points","name":"Stations and Structure","legendgroup":"Stations and Structure","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18260.294999999998,18262,18263.705000000002,18291.294999999998,18293,18294.705000000002,18320.294999999998,18322,18323.705000000002,18351.294999999998,18353,18354.705000000002,18381.294999999998,18383,18384.705000000002,18412.294999999998,18414,18415.705000000002,18442.294999999998,18444,18445.705000000002,18473.294999999998,18475,18476.705000000002,18504.294999999998,18506,18507.705000000002,18534.294999999998,18536,18537.705000000002,18565.294999999998,18567,18568.705000000002,18595.294999999998,18597,18598.705000000002,18626.294999999998,18628,18629.705000000002,18657.294999999998,18659,18660.705000000002,18685.294999999998,18687,18688.705000000002,18716.294999999998,18718,18719.705000000002,18746.294999999998,18748,18749.705000000002,18777.294999999998,18779,18780.705000000002,18807.294999999998,18809,18810.705000000002,18838.294999999998,18840,18841.705000000002,18869.294999999998,18871,18872.705000000002,18899.294999999998,18901,18902.705000000002,18930.294999999998,18932,18933.705000000002,18960.294999999998,18962,18963.705000000002,18991.294999999998,18993,18994.705000000002,19022.294999999998,19024,19025.705000000002,19050.294999999998,19052,19053.705000000002,19081.294999999998,19083,19084.705000000002,19111.294999999998,19113,19114.705000000002,19142.294999999998,19144,19145.705000000002,19172.294999999998,19174,19175.705000000002,19203.294999999998,19205,19206.705000000002,19234.294999999998,19236,19237.705000000002,19264.294999999998,19266,19267.705000000002,19295.294999999998,19297,19298.705000000002,19325.294999999998,19327,19328.705000000002,19356.294999999998,19358,19359.705000000002,19387.294999999998,19389,19390.705000000002,19415.294999999998,19417,19418.705000000002,19446.294999999998,19448,19449.705000000002,19476.294999999998,19478,19479.705000000002,19507.294999999998,19509,19510.705000000002,19537.294999999998,19539,19540.705000000002,19568.294999999998,19570,19571.705000000002,19599.294999999998,19601,19602.705000000002,19629.294999999998,19631,19632.705000000002,19660.294999999998,19662,19663.705000000002,19690.294999999998,19692,19693.705000000002,19721.294999999998,19723,19724.705000000002,19752.294999999998,19754,19755.705000000002,19781.294999999998,19783,19784.705000000002,19812.294999999998,19814,19815.705000000002,19842.294999999998,19844,19845.705000000002,19873.294999999998,19875,19876.705000000002,19903.294999999998,19905,19906.705000000002,19934.294999999998,19936,19937.705000000002,19965.294999999998,19967,19968.705000000002,19968.705000000002,19967,19965.294999999998,19937.705000000002,19936,19934.294999999998,19906.705000000002,19905,19903.294999999998,19876.705000000002,19875,19873.294999999998,19845.705000000002,19844,19842.294999999998,19815.705000000002,19814,19812.294999999998,19784.705000000002,19783,19781.294999999998,19755.705000000002,19754,19752.294999999998,19724.705000000002,19723,19721.294999999998,19693.705000000002,19692,19690.294999999998,19663.705000000002,19662,19660.294999999998,19632.705000000002,19631,19629.294999999998,19602.705000000002,19601,19599.294999999998,19571.705000000002,19570,19568.294999999998,19540.705000000002,19539,19537.294999999998,19510.705000000002,19509,19507.294999999998,19479.705000000002,19478,19476.294999999998,19449.705000000002,19448,19446.294999999998,19418.705000000002,19417,19415.294999999998,19390.705000000002,19389,19387.294999999998,19359.705000000002,19358,19356.294999999998,19328.705000000002,19327,19325.294999999998,19298.705000000002,19297,19295.294999999998,19267.705000000002,19266,19264.294999999998,19237.705000000002,19236,19234.294999999998,19206.705000000002,19205,19203.294999999998,19175.705000000002,19174,19172.294999999998,19145.705000000002,19144,19142.294999999998,19114.705000000002,19113,19111.294999999998,19084.705000000002,19083,19081.294999999998,19053.705000000002,19052,19050.294999999998,19025.705000000002,19024,19022.294999999998,18994.705000000002,18993,18991.294999999998,18963.705000000002,18962,18960.294999999998,18933.705000000002,18932,18930.294999999998,18902.705000000002,18901,18899.294999999998,18872.705000000002,18871,18869.294999999998,18841.705000000002,18840,18838.294999999998,18810.705000000002,18809,18807.294999999998,18780.705000000002,18779,18777.294999999998,18749.705000000002,18748,18746.294999999998,18719.705000000002,18718,18716.294999999998,18688.705000000002,18687,18685.294999999998,18660.705000000002,18659,18657.294999999998,18629.705000000002,18628,18626.294999999998,18598.705000000002,18597,18595.294999999998,18568.705000000002,18567,18565.294999999998,18537.705000000002,18536,18534.294999999998,18507.705000000002,18506,18504.294999999998,18476.705000000002,18475,18473.294999999998,18445.705000000002,18444,18442.294999999998,18415.705000000002,18414,18412.294999999998,18384.705000000002,18383,18381.294999999998,18354.705000000002,18353,18351.294999999998,18323.705000000002,18322,18320.294999999998,18294.705000000002,18293,18291.294999999998,18263.705000000002,18262,18260.294999999998,18260.294999999998],"y":[0,5,5,5,5,5,5,5,4.9444021739129864,4.044728260869622,3.9891304347826084,3.9335326086955953,3.0664673913044047,3.0108695652173916,2.955271739130378,2.0555978260870136,2,2.3410000000003492,7.6589999999996508,8,7.8899999999998878,6.1100000000001131,6,5.8899999999998869,4.1100000000001131,4,3.8294999999998254,1.1705000000001746,1,1,1,1,1.0568333333333915,1.9431666666666083,2,2,2,2,2.1100000000001127,3.8899999999998873,4,4.1217857142858394,5.8782142857141615,6,5.8899999999998878,4.1100000000001131,4,4.0568333333333912,4.9431666666666088,5,5,5,5,5.3410000000003492,10.658999999999651,11,10.559999999999549,3.4400000000004507,3,3.0550000000000561,3.9449999999999434,4,3.9431666666666083,3.0568333333333917,3,3.0550000000000561,3.9449999999999434,4,3.8294999999998254,1.1705000000001746,1,1.3850000000003944,7.6149999999996059,8,8.1650000000001697,10.83499999999983,11,10.939107142857081,10.060892857142919,10,9.7799999999997755,6.2200000000002253,6,5.9431666666666088,5.0568333333333912,5,5.2200000000002253,8.7799999999997738,9,8.9431666666666079,8.0568333333333921,8,7.9449999999999434,7.0550000000000566,7,7.1100000000001122,8.8899999999998869,9,9.0568333333333921,9.9431666666666079,10,10.055000000000057,10.944999999999943,11,11.056833333333392,11.943166666666608,12,11.944999999999943,11.055000000000057,11,10.83499999999983,8.1650000000001697,8,8.0608928571429193,8.9391071428570807,9,8.7799999999997755,5.2200000000002253,5,5.5683333333339151,14.431666666666084,15,14.559999999999549,7.4400000000004507,7,7.0568333333333912,7.9431666666666088,8,7.7249999999997181,3.2750000000002819,3,3.4950000000005068,11.504999999999493,12,11.488499999999476,3.5115000000005239,3,3.1100000000001127,4.8899999999998869,5,5.0568333333333912,5.9431666666666088,6,6.4400000000004507,13.559999999999549,14,13.724999999999719,9.2750000000002828,9,9,9,9,9.0550000000000566,9.9449999999999434,10,10.056833333333392,10.943166666666608,11,10.779999999999776,7.2200000000002253,7,7.5683333333339151,16.431666666666082,17,16.889999999999887,15.110000000000113,15,14.83499999999983,12.16500000000017,12,0,0,25,24.669999999999661,19.330000000000339,19,19.330000000000339,24.669999999999661,25,24.261166666665908,12.738833333334089,12,12.110000000000113,13.889999999999889,14,13.943166666666608,13.056833333333392,13,13.055000000000057,13.944999999999943,14,14,14,14,14.330000000000339,19.669999999999661,20,19.339999999999325,8.6600000000006752,8,8.0568333333333921,8.9431666666666079,9,9,9,9,9.3978333333337396,15.60216666666626,16,15.559999999999549,8.4400000000004507,8,8.3300000000003394,13.669999999999661,14,13.715833333333041,9.2841666666669571,9,9.4950000000005073,17.504999999999495,18,17.374833333332692,7.6251666666673064,7,7.3300000000003376,12.669999999999662,13,12.878214285714161,11.121785714285839,11,11.16500000000017,13.83499999999983,14,14.16500000000017,16.83499999999983,17,16.829499999999825,14.170500000000175,14,14.055000000000057,14.944999999999943,15,14.829499999999825,12.170500000000175,12,11.889999999999887,10.110000000000113,10,10,10,10,10.113666666666784,11.886333333333216,12,11.889999999999887,10.110000000000113,10,10,10,10,10.275000000000283,14.724999999999719,15,14.939107142857081,14.060892857142919,14,13.779999999999774,10.220000000000226,10,9.7799999999997738,6.2200000000002253,6,6.0568333333333912,6.9431666666666079,7,7.1650000000001688,9.8349999999998303,10,9.7158333333330429,5.2841666666669571,5,5,5,5,5.4950000000005073,13.504999999999493,14,14.056833333333392,14.943166666666608,15,14.724999999999717,10.275000000000283,10,9.8294999999998254,7.1705000000001746,7,7.1677966101696633,9.8830508474574561,10.050847457627118,9.9868583535108311,9.0639891041162883,9,8.6699999999996624,3.330000000000338,3,3.2200000000002253,6.7799999999997747,7,6.7158333333330411,2.2841666666669576,2,2,2,2,2.1705000000001746,4.8294999999998254,5,5.2200000000002262,8.7799999999997738,9,9.1650000000001697,11.834999999999832,12,11.715833333333041,7.284166666666958,7,6.9814673913043288,6.6815760869565413,6.6630434782608692,6.6445108695651989,6.3554891304348011,6.3369565217391299,6.3184239130434587,6.0185326086956712,6,6.0587931034483358,6.9412068965516642,7,7,7,7,0,0],"text":"month: 2020-01-01<br />total_Incidents:  2<br />category: Subway Car","type":"scatter","mode":"lines","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,0.8)","dash":"solid"},"fill":"toself","fillcolor":"rgba(128,177,211,0.8)","hoveron":"points","name":"Subway Car","legendgroup":"Subway Car","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[18260.294999999998,18262,18263.705000000002,18291.294999999998,18293,18294.705000000002,18320.294999999998,18322,18323.705000000002,18351.294999999998,18353,18354.705000000002,18381.294999999998,18383,18384.705000000002,18412.294999999998,18414,18415.705000000002,18442.294999999998,18444,18445.705000000002,18473.294999999998,18475,18476.705000000002,18504.294999999998,18506,18507.705000000002,18534.294999999998,18536,18537.705000000002,18565.294999999998,18567,18568.705000000002,18595.294999999998,18597,18598.705000000002,18626.294999999998,18628,18629.705000000002,18657.294999999998,18659,18660.705000000002,18685.294999999998,18687,18688.705000000002,18716.294999999998,18718,18719.705000000002,18746.294999999998,18748,18749.705000000002,18777.294999999998,18779,18780.705000000002,18807.294999999998,18809,18810.705000000002,18838.294999999998,18840,18841.705000000002,18869.294999999998,18871,18872.705000000002,18899.294999999998,18901,18902.705000000002,18930.294999999998,18932,18933.705000000002,18960.294999999998,18962,18963.705000000002,18991.294999999998,18993,18994.705000000002,19022.294999999998,19024,19025.705000000002,19050.294999999998,19052,19053.705000000002,19081.294999999998,19083,19084.705000000002,19111.294999999998,19113,19114.705000000002,19142.294999999998,19144,19145.705000000002,19172.294999999998,19174,19175.705000000002,19203.294999999998,19205,19206.705000000002,19234.294999999998,19236,19237.705000000002,19264.294999999998,19266,19267.705000000002,19295.294999999998,19297,19298.705000000002,19325.294999999998,19327,19328.705000000002,19356.294999999998,19358,19359.705000000002,19387.294999999998,19389,19390.705000000002,19415.294999999998,19417,19418.705000000002,19446.294999999998,19448,19449.705000000002,19476.294999999998,19478,19479.705000000002,19507.294999999998,19509,19510.705000000002,19537.294999999998,19539,19540.705000000002,19568.294999999998,19570,19571.705000000002,19599.294999999998,19601,19602.705000000002,19629.294999999998,19631,19632.705000000002,19660.294999999998,19662,19663.705000000002,19690.294999999998,19692,19693.705000000002,19721.294999999998,19723,19724.705000000002,19752.294999999998,19754,19755.705000000002,19781.294999999998,19783,19784.705000000002,19812.294999999998,19814,19815.705000000002,19842.294999999998,19844,19845.705000000002,19873.294999999998,19875,19876.705000000002,19903.294999999998,19905,19906.705000000002,19934.294999999998,19936,19937.705000000002,19965.294999999998,19967,19968.705000000002,19968.705000000002,19968.705000000002,19967,19965.294999999998,19937.705000000002,19936,19934.294999999998,19906.705000000002,19905,19903.294999999998,19876.705000000002,19875,19873.294999999998,19845.705000000002,19844,19842.294999999998,19815.705000000002,19814,19812.294999999998,19784.705000000002,19783,19781.294999999998,19755.705000000002,19754,19752.294999999998,19724.705000000002,19723,19721.294999999998,19693.705000000002,19692,19690.294999999998,19663.705000000002,19662,19660.294999999998,19632.705000000002,19631,19629.294999999998,19602.705000000002,19601,19599.294999999998,19571.705000000002,19570,19568.294999999998,19540.705000000002,19539,19537.294999999998,19510.705000000002,19509,19507.294999999998,19479.705000000002,19478,19476.294999999998,19449.705000000002,19448,19446.294999999998,19418.705000000002,19417,19415.294999999998,19390.705000000002,19389,19387.294999999998,19359.705000000002,19358,19356.294999999998,19328.705000000002,19327,19325.294999999998,19298.705000000002,19297,19295.294999999998,19267.705000000002,19266,19264.294999999998,19237.705000000002,19236,19234.294999999998,19206.705000000002,19205,19203.294999999998,19175.705000000002,19174,19172.294999999998,19145.705000000002,19144,19142.294999999998,19114.705000000002,19113,19111.294999999998,19084.705000000002,19083,19081.294999999998,19053.705000000002,19052,19050.294999999998,19025.705000000002,19024,19022.294999999998,18994.705000000002,18993,18991.294999999998,18963.705000000002,18962,18960.294999999998,18933.705000000002,18932,18930.294999999998,18902.705000000002,18901,18899.294999999998,18872.705000000002,18871,18869.294999999998,18841.705000000002,18840,18838.294999999998,18810.705000000002,18809,18807.294999999998,18780.705000000002,18779,18777.294999999998,18749.705000000002,18748,18746.294999999998,18719.705000000002,18718,18716.294999999998,18688.705000000002,18687,18685.294999999998,18660.705000000002,18659,18657.294999999998,18629.705000000002,18628,18626.294999999998,18598.705000000002,18597,18595.294999999998,18568.705000000002,18567,18565.294999999998,18537.705000000002,18536,18534.294999999998,18507.705000000002,18506,18504.294999999998,18476.705000000002,18475,18473.294999999998,18445.705000000002,18444,18442.294999999998,18415.705000000002,18414,18412.294999999998,18384.705000000002,18383,18381.294999999998,18354.705000000002,18353,18351.294999999998,18323.705000000002,18322,18320.294999999998,18294.705000000002,18293,18291.294999999998,18263.705000000002,18262,18260.294999999998,18260.294999999998],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,12.16500000000017,14.83499999999983,15,15.110000000000113,16.889999999999887,17,16.431666666666082,7.5683333333339151,7,7.2200000000002253,10.779999999999776,11,10.943166666666608,10.056833333333392,10,9.9449999999999434,9.0550000000000566,9,9,9,9,9.2750000000002828,13.724999999999719,14,13.559999999999549,6.4400000000004507,6,5.9431666666666088,5.0568333333333912,5,4.8899999999998869,3.1100000000001127,3,3.5115000000005239,11.488499999999476,12,11.504999999999493,3.4950000000005068,3,3.2750000000002819,7.7249999999997181,8,7.9431666666666088,7.0568333333333912,7,7.4400000000004507,14.559999999999549,15,14.431666666666084,5.5683333333339151,5,5.2200000000002253,8.7799999999997755,9,8.9391071428570807,8.0608928571429193,8,8.1650000000001697,10.83499999999983,11,11.055000000000057,11.944999999999943,12,11.943166666666608,11.056833333333392,11,10.944999999999943,10.055000000000057,10,9.9431666666666079,9.0568333333333921,9,8.8899999999998869,7.1100000000001122,7,7.0550000000000566,7.9449999999999434,8,8.0568333333333921,8.9431666666666079,9,8.7799999999997738,5.2200000000002253,5,5.0568333333333912,5.9431666666666088,6,6.2200000000002253,9.7799999999997755,10,10.060892857142919,10.939107142857081,11,10.83499999999983,8.1650000000001697,8,7.6149999999996059,1.3850000000003944,1,1.1705000000001746,3.8294999999998254,4,3.9449999999999434,3.0550000000000561,3,3.0568333333333917,3.9431666666666083,4,3.9449999999999434,3.0550000000000561,3,3.4400000000004507,10.559999999999549,11,10.658999999999651,5.3410000000003492,5,5,5,5,4.9431666666666088,4.0568333333333912,4,4.1100000000001131,5.8899999999998878,6,5.8782142857141615,4.1217857142858394,4,3.8899999999998873,2.1100000000001127,2,2,2,2,1.9431666666666083,1.0568333333333915,1,1,1,1,1.1705000000001746,3.8294999999998254,4,4.1100000000001131,5.8899999999998869,6,6.1100000000001131,7.8899999999998878,8,7.6589999999996508,2.3410000000003492,2,2.0555978260870136,2.955271739130378,3.0108695652173916,3.0664673913044047,3.9335326086955953,3.9891304347826084,4.044728260869622,4.9444021739129864,5,5,5,5,5,5,5,0,0],"text":"month: 2020-01-01<br />total_Incidents:  5<br />category: Track","type":"scatter","mode":"lines","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,0.8)","dash":"solid"},"fill":"toself","fillcolor":"rgba(253,180,98,0.8)","hoveron":"points","name":"Track","legendgroup":"Track","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826491,"l":37.260273972602747},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Monthly Incidents by Category Over Time","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0.5,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[18174.874499999998,20054.125500000002],"tickmode":"array","ticktext":["2020","2021","2022","2023","2024"],"tickvals":[18262,18628,18993,19358,19723],"categoryorder":"array","categoryarray":["2020","2021","2022","2023","2024"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Month","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-3.7000000000000002,77.700000000000003],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20.000000000000004,40,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Total Incidents","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Incidents Category","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"579c71dd5a82":{"x":{},"y":{},"fill":{},"type":"scatter"}},"cur_data":"579c71dd5a82","visdat":{"579c71dd5a82":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>From 2020 to 2024, NYC subway incidents exhibit a noticeable upward trend across all categories. An interactive stacked area chart will visualize the distribution of incidents by category over time, illustrating the dynamics of subway operations. Among the categories, incidents related to “persons on trackbed/police/medical” consistently represent the highest counts, posing a significant challenge for the MTA. Other high-frequency categories include signals, track, and subway car-related incidents. In contrast, incidents categorized under stations and structure show relatively lower counts, indicating fewer disruptions in these areas.</p>
+<p>The upward trend in incidents, particularly during the post-COVID period, underscores the critical need for targeted interventions and resource allocation. The interactive chart will allow users to isolate specific trends, hover over data points to view incident counts, and explore seasonal or monthly patterns. This functionality enhances the depth of analysis and supports data-driven decision-making for improving subway performance and safety.</p>
+</section>
+<section id="comparative-analysis-covid-vs.-post-covid-incident-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="comparative-analysis-covid-vs.-post-covid-incident-distribution">Comparative Analysis: COVID vs.&nbsp;Post-COVID Incident Distribution</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and clean MTA incident data</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>mtaincident<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(mtaincident<span class="sc">$</span>month)  <span class="co"># Ensure month column is in Date format</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate total incidents for each category during the COVID period (2020-2021)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>covid_incident_reasons <span class="ot">&lt;-</span> mtaincident <span class="sc">%&gt;%</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2020-01-01"</span>) <span class="sc">&amp;</span> month <span class="sc">&lt;</span> <span class="fu">as.Date</span>(<span class="st">"2022-01-01"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(category) <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_incidents =</span> <span class="fu">sum</span>(count, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percentage =</span> total_incidents <span class="sc">/</span> <span class="fu">sum</span>(total_incidents) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot pie chart for COVID period</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>covid_pie <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(covid_incident_reasons, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> total_incidents, <span class="at">fill =</span> category)) <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(percentage, <span class="dv">1</span>), <span class="st">"%"</span>)), </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Incident Reasons During COVID Period (2020-2021)"</span>, <span class="at">fill =</span> <span class="st">"Incident Category"</span>) <span class="sc">+</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Display COVID pie chart</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(covid_pie)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="individualreport_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate total incidents for each category during the post-COVID period (2022-2023)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>post_covid_incident_reasons <span class="ot">&lt;-</span> mtaincident <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2022-01-01"</span>) <span class="sc">&amp;</span> month <span class="sc">&lt;</span> <span class="fu">as.Date</span>(<span class="st">"2024-01-01"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(category) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_incidents =</span> <span class="fu">sum</span>(count, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percentage =</span> total_incidents <span class="sc">/</span> <span class="fu">sum</span>(total_incidents) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot pie chart for post-COVID period</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>post_covid_pie <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(post_covid_incident_reasons, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> total_incidents, <span class="at">fill =</span> category)) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">"y"</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(percentage, <span class="dv">1</span>), <span class="st">"%"</span>)), </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Incident Reasons Post-COVID Period (2022-2023)"</span>, <span class="at">fill =</span> <span class="st">"Incident Category"</span>) <span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Display post-COVID pie chart</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(post_covid_pie)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="individualreport_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To ensure a balanced analysis, both the COVID (2020-2021) and post-COVID (2022-2023) periods are scaled to two years each. Pie charts will illustrate the distribution of incident categories for each period. During the COVID period, signal-related incidents were most prevalent, comprising 33.2% of all incidents, followed by persons on trackbed/police/medical incidents at 30.2%. Other notable categories included track-related incidents (10.8%), subway car incidents (8.9%), and a smaller share for stations and structure (5.7%). These distributions highlight the operational challenges of maintaining reliability and addressing immediate safety concerns during the pandemic.</p>
+<p>Post-COVID, the distribution shifts significantly. Persons on trackbed/police/medical incidents rose to 33.6%, becoming the largest category, while signal-related incidents decreased to 24.6%. Track-related incidents surged to 18.2%, reflecting emerging infrastructure maintenance challenges. Categories such as subway car (8.0%), stations and structure (8.8%), and other (6.8%) incidents showed relatively smaller changes. These shifts indicate evolving priorities for MTA as the system transitions to a recovery phase, emphasizing the need for focused interventions to address rising safety and infrastructure issues.</p>
+</section>
+<section id="incident-trends-by-subway-line" class="level2">
+<h2 class="anchored" data-anchor-id="incident-trends-by-subway-line">Incident Trends by Subway Line</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load and clean MTA incident data</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mtaincident<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(mtaincident<span class="sc">$</span>month)  <span class="co"># Ensure month column is in Date format</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data for COVID (2020-2021) and post-COVID (2022-2023) periods</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>covid_data <span class="ot">&lt;-</span> mtaincident <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2020-01-01"</span>) <span class="sc">&amp;</span> month <span class="sc">&lt;</span> <span class="fu">as.Date</span>(<span class="st">"2022-01-01"</span>))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>post_covid_data <span class="ot">&lt;-</span> mtaincident <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2022-01-01"</span>) <span class="sc">&amp;</span> month <span class="sc">&lt;</span> <span class="fu">as.Date</span>(<span class="st">"2024-01-01"</span>))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate total incidents by line and division for COVID period</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>line_incident_covid <span class="ot">&lt;-</span> covid_data <span class="sc">%&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(line, division) <span class="sc">%&gt;%</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_incident =</span> <span class="fu">sum</span>(count, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_incident))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate total incidents by line and division for post-COVID period</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>line_incident_post <span class="ot">&lt;-</span> post_covid_data <span class="sc">%&gt;%</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(line, division) <span class="sc">%&gt;%</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_incident =</span> <span class="fu">sum</span>(count, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_incident))</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine COVID and post-COVID datasets for mirrored plotting</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>line_incidents_combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  line_incident_covid <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">period =</span> <span class="st">"COVID (2020-2021)"</span>),</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  line_incident_post <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">period =</span> <span class="st">"Post-COVID (2022-2023)"</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate data by division</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>number_line_data <span class="ot">&lt;-</span> line_incidents_combined <span class="sc">%&gt;%</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(division <span class="sc">==</span> <span class="st">"Number Line"</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>letter_line_data <span class="ot">&lt;-</span> line_incidents_combined <span class="sc">%&gt;%</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(division <span class="sc">==</span> <span class="st">"Letter Line"</span>)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Create mirrored chart for Number Line</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>number_line_graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(number_line_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(line, total_incident), <span class="at">y =</span> <span class="fu">ifelse</span>(period <span class="sc">==</span> <span class="st">"COVID (2020-2021)"</span>, <span class="sc">-</span>total_incident, total_incident), <span class="at">fill =</span> period)) <span class="sc">+</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">abs</span>(total_incident)), </span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span>  <span class="co"># Display total incidents as text</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> abs) <span class="sc">+</span>  <span class="co"># Show absolute values on y-axis</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Incidents by Number Line (COVID vs. Post-COVID)"</span>,</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Subway Line"</span>,</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Incidents"</span>) <span class="sc">+</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"lightgreen"</span>))</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Create mirrored chart for Letter Line</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>letter_line_graph <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(letter_line_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(line, total_incident), <span class="at">y =</span> <span class="fu">ifelse</span>(period <span class="sc">==</span> <span class="st">"COVID (2020-2021)"</span>, <span class="sc">-</span>total_incident, total_incident), <span class="at">fill =</span> period)) <span class="sc">+</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">abs</span>(total_incident)), </span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>            <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), </span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span>  <span class="co"># Display total incidents as text</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> abs) <span class="sc">+</span>  <span class="co"># Show absolute values on y-axis</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Total Incidents by Letter Line (COVID vs. Post-COVID)"</span>,</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Subway Line"</span>,</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Total Incidents"</span>) <span class="sc">+</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"lightblue"</span>, <span class="st">"lightgreen"</span>))</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plots</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(number_line_graph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="individualreport_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(letter_line_graph)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="individualreport_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A detailed line graph analysis compares incident trends on NYC subway lines during the COVID and post-COVID periods. Separate graphs for lettered and numbered lines reveal significant increases in total incidents post-COVID, suggesting a correlation with ridership recovery and operational adjustments.</p>
+<section id="letter-subway-lines" class="level3">
+<h3 class="anchored" data-anchor-id="letter-subway-lines"><strong>Letter Subway Lines</strong>:</h3>
+<ul>
+<li><strong>Notable Increases</strong>: Lines like N, E, and F show sharp rises in incidents post-COVID. For example, N line incidents increased from 69 during COVID to 85 post-COVID, while E and F lines recorded jumps of +35 and +20 incidents, respectively.</li>
+<li><strong>Minimal Changes</strong>: S Franklin and S Rockaway lines experienced consistently low incidents, highlighting their relatively stable performance.</li>
+</ul>
+</section>
+<section id="number-subway-lines" class="level3">
+<h3 class="anchored" data-anchor-id="number-subway-lines"><strong>Number Subway Lines</strong>:</h3>
+<ul>
+<li><strong>Significant Rises</strong>: The 2 line saw the largest increase among all lines, jumping from 48 incidents during COVID to 92 post-COVID (+44 incidents). The 6 line also recorded a substantial rise (+19 incidents), while the 1 line’s incidents nearly doubled from 30 to 58.</li>
+<li><strong>Low-Incident Outliers</strong>: Lines like S 42nd St showed minimal change, maintaining very low incidents across both periods. These findings suggest that the increase in incidents is linked to higher service activity and ridership levels post-pandemic. Lines with the highest increases, such as the 2 and N lines, may require additional attention to address operational and safety challenges. Conversely, consistently low-incident lines could offer insights into effective practices that can be replicated across the network.</li>
+</ul>
+</section>
+</section>
+<section id="key-insights-and-implications" class="level2">
+<h2 class="anchored" data-anchor-id="key-insights-and-implications">Key Insights and Implications</h2>
+<ul>
+<li><strong>The analysis highlights several key patterns</strong>: Overall Increase in Incidents: The post-COVID period saw a marked rise in incidents, likely driven by increased ridership and operational demands.</li>
+<li><strong>Shifting Categories</strong>: The rise in “persons on trackbed/police/medical” incidents post-COVID indicates a growing safety concern, while the decrease in signal-related incidents suggests operational improvements in this area.</li>
+<li><strong>Infrastructure Challenges</strong>: The increase in track-related incidents underscores the need for enhanced maintenance strategies.</li>
+</ul>
+<p>These insights are critical for addressing the overarching question: “How have delays, on-time performance, and safety incidents influenced the efficiency of subway lines across NYC boroughs from 2020 to 2024?” By identifying the most common incident categories and their variations over time, this report contributes to a broader understanding of the factors impacting subway performance. The findings emphasize the importance of targeted safety measures, infrastructure investment, and data-driven planning to improve the efficiency and resilience of NYC’s subway system.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The COVID-19 pandemic brought unprecedented challenges to NYC’s subway system, shaping the patterns and dynamics of reported incidents. As ridership recovers, the post-COVID period reveals new safety and operational challenges, with rising incidents across several lines and categories. This analysis provides valuable insights for the MTA to prioritize interventions, allocate resources effectively, and enhance system performance in a post-pandemic world.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/<YantingZhao11>\.github\.io\/STA9750-2024-FALL\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

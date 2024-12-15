@@ -1,0 +1,254 @@
+---
+title: "Incident Trends on NYC Subway Lines During and Post-COVID"
+editor: visual
+---
+The COVID-19 pandemic profoundly impacted urban public transportation systems worldwide, and New York City’s subway network was no exception. The Metropolitan Transportation Authority (MTA) faced unprecedented challenges as ridership plummeted, operational demands shifted, and new patterns of incidents emerged during and after the pandemic. Understanding these changes is critical for enhancing the resilience and safety of this vital transit system.
+This report explores the most common categories of incidents reported on New York City subway lines during and after the COVID-19 pandemic, spanning from 2020 to 2024. Leveraging a comprehensive dataset from the NYC Open Data platform, the analysis examines incidents categorized by line, division, month, day type, and delay category. Through this granular examination, the report identifies key trends, highlights significant operational challenges, and provides insights into shifting patterns of subway incidents over time.
+
+## Overview of Incident Trends
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Install required packages if not already installed
+if (!require("tidytext")) install.packages("tidytext")
+library(tidytext)
+
+if (!require("RColorBrewer")) install.packages("RColorBrewer")
+library(RColorBrewer)
+
+if (!require("lubridate")) install.packages("lubridate")
+library(lubridate)
+
+if (!require("stringr")) install.packages("stringr")
+library(stringr)
+
+if (!require("gt")) install.packages("gt")
+library(gt)
+
+if (!require("dplyr")) install.packages("dplyr")
+library(dplyr)
+
+if (!require("ggplot2")) install.packages("ggplot2")
+library(ggplot2)
+
+if (!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
+
+if (!require("DT")) install.packages("DT")
+library(DT)
+
+if (!require("plotly")) install.packages("plotly")
+library(plotly)
+
+# Function to load data
+mtaincident_file <- function(filepath) {
+  as.data.frame(readr::read_csv(filepath, lazy = FALSE, show_col_types = FALSE))
+}
+
+# File path
+path <- "C:\\Users\\w3038\\Downloads\\STA 9750\\Final Project\\MTA_Subway_Major_Incidents__Beginning_2020_20241026.csv"
+
+# Load data
+mtaincident <- mtaincident_file(path)
+
+# Clean the data by removing empty rows in 'line' column
+mtaincident <- mtaincident %>%
+  filter(line != "", line != "Systemwide") %>%
+  mutate(division = case_when(
+    division == "A DIVISION" ~ "Number Line",
+    division == "B DIVISION" ~ "Letter Line",
+    TRUE ~ division  # Retain other values
+  ))
+
+# Convert the 'month' column to Date format
+mtaincident$month <- as.Date(mtaincident$month, format = "%m/%d/%Y")
+
+# Aggregate the data to get total complaints by month and category
+monthly_category_Incidents <- mtaincident %>%
+  group_by(month, category) %>%
+  summarise(total_Incidents = sum(count)) %>%
+  ungroup()
+
+# Create a static stacked area chart using ggplot
+static_area_chart <- ggplot(monthly_category_Incidents, aes(x = month, y = total_Incidents, fill = category)) +
+  geom_area(alpha = 0.8, color = "black", size = 0.2) +
+  labs(title = "Monthly Incidents by Category Over Time",
+       x = "Month",
+       y = "Total Incidents",
+       fill = "Incidents Category") +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Set3") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Convert the static chart to an interactive chart using plotly
+interactive_area_chart <- ggplotly(static_area_chart)
+
+# Display the interactive chart
+interactive_area_chart
+
+```
+From 2020 to 2024, NYC subway incidents exhibit a noticeable upward trend across all categories. An interactive stacked area chart will visualize the distribution of incidents by category over time, illustrating the dynamics of subway operations. Among the categories, incidents related to "persons on trackbed/police/medical" consistently represent the highest counts, posing a significant challenge for the MTA. Other high-frequency categories include signals, track, and subway car-related incidents. In contrast, incidents categorized under stations and structure show relatively lower counts, indicating fewer disruptions in these areas.
+
+The upward trend in incidents, particularly during the post-COVID period, underscores the critical need for targeted interventions and resource allocation. The interactive chart will allow users to isolate specific trends, hover over data points to view incident counts, and explore seasonal or monthly patterns. This functionality enhances the depth of analysis and supports data-driven decision-making for improving subway performance and safety.
+
+
+## Comparative Analysis: COVID vs. Post-COVID Incident Distribution
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+library(scales)
+
+# Load and clean MTA incident data
+mtaincident$month <- as.Date(mtaincident$month)  # Ensure month column is in Date format
+
+
+# Calculate total incidents for each category during the COVID period (2020-2021)
+covid_incident_reasons <- mtaincident %>%
+  filter(month >= as.Date("2020-01-01") & month < as.Date("2022-01-01")) %>%
+  group_by(category) %>%
+  summarise(total_incidents = sum(count, na.rm = TRUE)) %>%
+  mutate(percentage = total_incidents / sum(total_incidents) * 100)
+
+# Plot pie chart for COVID period
+covid_pie <- ggplot(covid_incident_reasons, aes(x = "", y = total_incidents, fill = category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), color = "white") +
+  labs(title = "Incident Reasons During COVID Period (2020-2021)", fill = "Incident Category") +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Display COVID pie chart
+print(covid_pie)
+
+# Calculate total incidents for each category during the post-COVID period (2022-2023)
+post_covid_incident_reasons <- mtaincident %>%
+  filter(month >= as.Date("2022-01-01") & month < as.Date("2024-01-01")) %>%
+  group_by(category) %>%
+  summarise(total_incidents = sum(count, na.rm = TRUE)) %>%
+  mutate(percentage = total_incidents / sum(total_incidents) * 100)
+
+# Plot pie chart for post-COVID period
+post_covid_pie <- ggplot(post_covid_incident_reasons, aes(x = "", y = total_incidents, fill = category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), color = "white") +
+  labs(title = "Incident Reasons Post-COVID Period (2022-2023)", fill = "Incident Category") +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# Display post-COVID pie chart
+print(post_covid_pie)
+
+```
+
+To ensure a balanced analysis, both the COVID (2020-2021) and post-COVID (2022-2023) periods are scaled to two years each. Pie charts will illustrate the distribution of incident categories for each period. During the COVID period, signal-related incidents were most prevalent, comprising 33.2% of all incidents, followed by persons on trackbed/police/medical incidents at 30.2%. Other notable categories included track-related incidents (10.8%), subway car incidents (8.9%), and a smaller share for stations and structure (5.7%). These distributions highlight the operational challenges of maintaining reliability and addressing immediate safety concerns during the pandemic.
+
+Post-COVID, the distribution shifts significantly. Persons on trackbed/police/medical incidents rose to 33.6%, becoming the largest category, while signal-related incidents decreased to 24.6%. Track-related incidents surged to 18.2%, reflecting emerging infrastructure maintenance challenges. Categories such as subway car (8.0%), stations and structure (8.8%), and other (6.8%) incidents showed relatively smaller changes. These shifts indicate evolving priorities for MTA as the system transitions to a recovery phase, emphasizing the need for focused interventions to address rising safety and infrastructure issues.
+
+## Incident Trends by Subway Line
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Load and clean MTA incident data
+mtaincident$month <- as.Date(mtaincident$month)  # Ensure month column is in Date format
+
+# Filter data for COVID (2020-2021) and post-COVID (2022-2023) periods
+covid_data <- mtaincident %>%
+  filter(month >= as.Date("2020-01-01") & month < as.Date("2022-01-01"))
+
+post_covid_data <- mtaincident %>%
+  filter(month >= as.Date("2022-01-01") & month < as.Date("2024-01-01"))
+
+# Calculate total incidents by line and division for COVID period
+line_incident_covid <- covid_data %>%
+  group_by(line, division) %>%
+  summarise(total_incident = sum(count, na.rm = TRUE)) %>%
+  arrange(desc(total_incident))
+
+# Calculate total incidents by line and division for post-COVID period
+line_incident_post <- post_covid_data %>%
+  group_by(line, division) %>%
+  summarise(total_incident = sum(count, na.rm = TRUE)) %>%
+  arrange(desc(total_incident))
+
+# Combine COVID and post-COVID datasets for mirrored plotting
+line_incidents_combined <- bind_rows(
+  line_incident_covid %>% mutate(period = "COVID (2020-2021)"),
+  line_incident_post %>% mutate(period = "Post-COVID (2022-2023)")
+)
+
+# Separate data by division
+number_line_data <- line_incidents_combined %>%
+  filter(division == "Number Line")
+
+letter_line_data <- line_incidents_combined %>%
+  filter(division == "Letter Line")
+
+# Create mirrored chart for Number Line
+number_line_graph <- ggplot(number_line_data, aes(x = reorder(line, total_incident), y = ifelse(period == "COVID (2020-2021)", -total_incident, total_incident), fill = period)) +
+  geom_bar(stat = "identity", position = "identity") +
+  geom_text(aes(label = abs(total_incident)), 
+            position = position_stack(vjust = 0.5), 
+            color = "black", 
+            size = 3.5) +  # Display total incidents as text
+  scale_y_continuous(labels = abs) +  # Show absolute values on y-axis
+  labs(title = "Total Incidents by Number Line (COVID vs. Post-COVID)",
+       x = "Subway Line",
+       y = "Total Incidents") +
+  theme_minimal() +
+  coord_flip() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(values = c("lightblue", "lightgreen"))
+
+# Create mirrored chart for Letter Line
+letter_line_graph <- ggplot(letter_line_data, aes(x = reorder(line, total_incident), y = ifelse(period == "COVID (2020-2021)", -total_incident, total_incident), fill = period)) +
+  geom_bar(stat = "identity", position = "identity") +
+  geom_text(aes(label = abs(total_incident)), 
+            position = position_stack(vjust = 0.5), 
+            color = "black", 
+            size = 3.5) +  # Display total incidents as text
+  scale_y_continuous(labels = abs) +  # Show absolute values on y-axis
+  labs(title = "Total Incidents by Letter Line (COVID vs. Post-COVID)",
+       x = "Subway Line",
+       y = "Total Incidents") +
+  theme_minimal() +
+  coord_flip() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(values = c("lightblue", "lightgreen"))
+
+# Display the plots
+print(number_line_graph)
+print(letter_line_graph)
+
+```
+A detailed line graph analysis compares incident trends on NYC subway lines during the COVID and post-COVID periods. Separate graphs for lettered and numbered lines reveal significant increases in total incidents post-COVID, suggesting a correlation with ridership recovery and operational adjustments.
+
+### **Letter Subway Lines**:
+- **Notable Increases**: Lines like N, E, and F show sharp rises in incidents post-COVID. For example, N line incidents increased from 69 during COVID to 85 post-COVID, while E and F lines recorded jumps of +35 and +20 incidents, respectively.
+- **Minimal Changes**: S Franklin and S Rockaway lines experienced consistently low incidents, highlighting their relatively stable performance.
+
+### **Number Subway Lines**:
+- **Significant Rises**: The 2 line saw the largest increase among all lines, jumping from 48 incidents during COVID to 92 post-COVID (+44 incidents). The 6 line also recorded a substantial rise (+19 incidents), while the 1 line’s incidents nearly doubled from 30 to 58.
+- **Low-Incident Outliers**: Lines like S 42nd St showed minimal change, maintaining very low incidents across both periods.
+These findings suggest that the increase in incidents is linked to higher service activity and ridership levels post-pandemic. Lines with the highest increases, such as the 2 and N lines, may require additional attention to address operational and safety challenges. Conversely, consistently low-incident lines could offer insights into effective practices that can be replicated across the network.
+
+## Key Insights and Implications
+- **The analysis highlights several key patterns**:
+Overall Increase in Incidents: The post-COVID period saw a marked rise in incidents, likely driven by increased ridership and operational demands.
+- **Shifting Categories**: The rise in "persons on trackbed/police/medical" incidents post-COVID indicates a growing safety concern, while the decrease in signal-related incidents suggests operational improvements in this area.
+- **Infrastructure Challenges**: The increase in track-related incidents underscores the need for enhanced maintenance strategies.
+
+These insights are critical for addressing the overarching question: "How have delays, on-time performance, and safety incidents influenced the efficiency of subway lines across NYC boroughs from 2020 to 2024?" By identifying the most common incident categories and their variations over time, this report contributes to a broader understanding of the factors impacting subway performance. The findings emphasize the importance of targeted safety measures, infrastructure investment, and data-driven planning to improve the efficiency and resilience of NYC’s subway system.
+
+## Conclusion
+
+The COVID-19 pandemic brought unprecedented challenges to NYC’s subway system, shaping the patterns and dynamics of reported incidents. As ridership recovers, the post-COVID period reveals new safety and operational challenges, with rising incidents across several lines and categories. This analysis provides valuable insights for the MTA to prioritize interventions, allocate resources effectively, and enhance system performance in a post-pandemic world.
+
+
+
+
