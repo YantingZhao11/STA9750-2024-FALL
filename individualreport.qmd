@@ -238,16 +238,22 @@ A detailed line graph analysis compares incident trends on NYC subway lines duri
 These findings suggest that the increase in incidents is linked to higher service activity and ridership levels post-pandemic. Lines with the highest increases, such as the 2 and N lines, may require additional attention to address operational and safety challenges. Conversely, consistently low-incident lines could offer insights into effective practices that can be replicated across the network.
 
 ## Key Insights and Implications
-- **The analysis highlights several key patterns**:
-Overall Increase in Incidents: The post-COVID period saw a marked rise in incidents, likely driven by increased ridership and operational demands.
-- **Shifting Categories**: The rise in "persons on trackbed/police/medical" incidents post-COVID indicates a growing safety concern, while the decrease in signal-related incidents suggests operational improvements in this area.
-- **Infrastructure Challenges**: The increase in track-related incidents underscores the need for enhanced maintenance strategies.
+- **Dominance of “Persons on Trackbed/Police/Medical” Incidents**:
+During the COVID-19 pandemic, signal-related incidents were the most prevalent (33.2%). However, post-COVID, the share of "persons on trackbed/police/medical" incidents increased significantly, becoming the largest category at 33.6%.
+This shift underscores the growing safety and security concerns in the subway system, requiring targeted interventions.
+- **Infrastructure and Maintenance Challenges Post-COVID**: Track-related incidents experienced a sharp rise, increasing from 10.8% during COVID to 18.2% post-COVID. This highlights emerging challenges in maintaining subway infrastructure as ridership recovered.
+- **Consistent Trends Across Specific Categories**: Categories like subway car incidents remained relatively stable, with minor changes (8.9% during COVID vs. 8.0% post-COVID). Stations and structure-related incidents also stayed on the lower end of the spectrum, showing the least disruption compared to other categories.
+- **Subway Line Variability**: Certain subway lines exhibited sharp increases in incidents post-COVID, particularly the N, E, and F letter lines and the 2 and 6 numbered lines.
+Low-incident lines, such as S Franklin and S Rockaway, consistently maintained minimal disruptions, pointing to potential best practices for safety and operations.
 
-These insights are critical for addressing the overarching question: "How have delays, on-time performance, and safety incidents influenced the efficiency of subway lines across NYC boroughs from 2020 to 2024?" By identifying the most common incident categories and their variations over time, this report contributes to a broader understanding of the factors impacting subway performance. The findings emphasize the importance of targeted safety measures, infrastructure investment, and data-driven planning to improve the efficiency and resilience of NYC’s subway system.
 
 ## Conclusion
 
-The COVID-19 pandemic brought unprecedented challenges to NYC’s subway system, shaping the patterns and dynamics of reported incidents. As ridership recovers, the post-COVID period reveals new safety and operational challenges, with rising incidents across several lines and categories. This analysis provides valuable insights for the MTA to prioritize interventions, allocate resources effectively, and enhance system performance in a post-pandemic world.
+The analysis of NYC subway incidents during and post-COVID highlights significant shifts in incident types and their distribution. The rise in “persons on trackbed/police/medical” incidents post-pandemic underscores the need for enhanced safety protocols and preventive measures to address behavioral and security-related issues. Additionally, the surge in track-related incidents emphasizes the urgency of prioritizing infrastructure maintenance as ridership rebounds.
+
+Subway lines with notable incident increases, such as the N, E, and 2, require focused attention to address operational challenges and improve reliability. Meanwhile, low-incident lines, like S Franklin and S 42nd St, could serve as benchmarks for replicating effective practices system-wide.
+
+Understanding these trends enables the MTA to identify areas of concern, allocate resources strategically, and implement data-driven policies to improve safety and operational resilience. Addressing these evolving challenges will be critical in ensuring the reliability and safety of NYC’s subway system in the post-pandemic era.
 
 
 
